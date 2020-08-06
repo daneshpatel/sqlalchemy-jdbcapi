@@ -9,10 +9,7 @@ from sqlalchemy import util, exc
 from .base import MixedBinary, BaseDialect
 
 colspecs = util.update_copy(
-    OracleDialect.colspecs,
-    {
-        sqltypes.LargeBinary: MixedBinary,
-    },
+    OracleDialect.colspecs, {sqltypes.LargeBinary: MixedBinary,},
 )
 
 
@@ -43,29 +40,27 @@ class OracleJDBCDialect(BaseDialect, OracleDialect):
             driver = self.jdbc_driver_path
 
             kwargs = {
-                'jclassname': self.jdbc_driver_name,
-                'url': self._create_jdbc_url(url),
-                'driver_args': [params["username"], params["password"]],
-                'jars': driver,
+                "jclassname": self.jdbc_driver_name,
+                "url": self._create_jdbc_url(url),
+                "driver_args": [params["username"], params["password"]],
+                "jars": driver,
             }
             return ((), kwargs)
 
     def _create_jdbc_url(self, url):
         return "jdbc:oracle:thin:@{}:{}/{}".format(
-            url.host,
-            url.port or 1521,
-            url.database,
+            url.host, url.port or 1521, url.database,
         )
 
     def _get_server_version_info(self, connection):
 
         try:
-            banner = connection.execute('SELECT BANNER FROM v$version').scalar()
+            banner = connection.execute(
+                "SELECT BANNER FROM v$version"
+            ).scalar()
         except exc.DBAPIError:
             banner = None
-        version = re.search(
-            r"Release ([\d\.]+)", banner
-        ).group(1)
+        version = re.search(r"Release ([\d\.]+)", banner).group(1)
         return tuple(int(x) for x in version.split("."))
 
 

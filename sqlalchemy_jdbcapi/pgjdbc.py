@@ -9,10 +9,7 @@ from .base import BaseDialect, MixedBinary
 
 
 colspecs = util.update_copy(
-    PGDialect.colspecs,
-    {
-        sqltypes.LargeBinary: MixedBinary,
-    },
+    PGDialect.colspecs, {sqltypes.LargeBinary: MixedBinary,},
 )
 
 

@@ -1,11 +1,12 @@
 from sqlalchemy import String, TypeDecorator
 
+
 class MixedBinary(TypeDecorator):
     impl = String
 
     def process_result_value(self, value, dialect):
         if isinstance(value, str):
-            value = bytes(value, 'utf-8')
+            value = bytes(value, "utf-8")
         elif value is not None:
             value = bytes(value)
         return value
@@ -13,7 +14,7 @@ class MixedBinary(TypeDecorator):
 
 class BaseDialect(object):
     jdbc_db_name = None
-    jdbc_driver_name =  None
+    jdbc_driver_name = None
     supports_native_decimal = True
     supports_sane_rowcount = False
     supports_sane_multi_rowcount = False
