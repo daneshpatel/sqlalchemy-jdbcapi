@@ -15,16 +15,20 @@ readme = os.path.join(os.path.dirname(__file__), "README.rst")
 
 DESCRIPTION = "Python SQLAlchemy Dialect for JDBCAPI."
 
+with open("README.rst", "r") as fh:
+    long_description = fh.read()
+
 setup(
     name="sqlalchemy_jdbcapi",
     version=VERSION,
     description=DESCRIPTION,
-    long_description=open(readme).read(),
+    long_description=long_description,
+    long_description_content_type="text/x-rst",
     author="Danesh Patel",
     author_email="danesh_patel@outlook.com",
     license="Apache",
     classifiers=[
-        "Development Status :: 1.0 Development",
+        "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
