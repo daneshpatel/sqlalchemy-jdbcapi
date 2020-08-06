@@ -57,3 +57,9 @@ Contributing
 Please submit `bugs and patches
 <https://github.com/daneshpatel/sqlalchemy-jdbcapi/issues>`_.
 All contributors will be acknowledged. Thanks!
+
+Changelog
+=========
+
+- 1.0.0 - 2020-08-4
+  - Initial release.
