@@ -10,13 +10,14 @@ with open("README.rst", "r") as fh:
 
 setup(
     name="sqlalchemy_jdbcapi",
-    version='1.0.0',
+    version='1.1.0',
     description=DESCRIPTION,
     long_description=long_description,
     long_description_content_type="text/x-rst",
     author="Danesh Patel",
     author_email="danesh_patel@outlook.com",
     license="Apache",
+    url='https://github.com/daneshpatel/sqlalchemy-jdbcapi',
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
