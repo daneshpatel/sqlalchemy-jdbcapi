@@ -1,15 +1,5 @@
 import os
-import re
-
 from setuptools import setup, find_packages
-
-v = open(
-    os.path.join(
-        os.path.dirname(__file__), "sqlalchemy_jdbcapi", "__init__.py"
-    )
-)
-VERSION = re.compile(r'.*__version__ = "(.*?)"', re.S).match(v.read()).group(1)
-v.close()
 
 readme = os.path.join(os.path.dirname(__file__), "README.rst")
 
@@ -20,7 +10,7 @@ with open("README.rst", "r") as fh:
 
 setup(
     name="sqlalchemy_jdbcapi",
-    version=VERSION,
+    version='1.0.0',
     description=DESCRIPTION,
     long_description=long_description,
     long_description_content_type="text/x-rst",
