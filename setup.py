@@ -14,7 +14,7 @@ v.close()
 
 readme = os.path.join(os.path.dirname(__file__), "README.rst")
 
-DESCRIPTION = "Python DB-API and SQLAlchemy interface for JDBCAPI."
+DESCRIPTION = "Python SQLAlchemy Dialect for JDBCAPI."
 
 setup(
     name="sqlalchemy_jdbcapi",
@@ -41,6 +41,7 @@ setup(
     entry_points={
         "sqlalchemy.dialects": [
             "jdbcapi.pgjdbc = sqlalchemy_jdbcapi.pgjdbc:PGJDBCDialect",
+            "jdbcapi.oraclejdbc = sqlalchemy_jdbcapi.oraclejdbc:OracleJDBCDialect",
         ]
     },
 )
