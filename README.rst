@@ -57,6 +57,9 @@ All contributors will be acknowledged. Thanks!
 
 Changelog
 ------------
+- 1.2.1 - 2020-09-9
+  - Minor fix.
+
 - 1.2.0 - 2020-09-1
   - Issue: PGarray not iterable.
 

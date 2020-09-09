@@ -1,6 +1,6 @@
 from sqlalchemy.dialects import registry
 
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 
 registry.register(
     "jdbcapi.pgjdbc", "sqlalchemy_jdbcapi.pgjdbc", "PGJDBCDialect"
