@@ -18,16 +18,6 @@ class OracleJDBCDialect(BaseDialect, OracleDialect):
     jdbc_driver_name = "oracle.jdbc.OracleDriver"
     colspecs = colspecs
 
-    def __init__(self, *args, **kwargs):
-        super(OracleJDBCDialect, self).__init__(*args, **kwargs)
-        self.jdbc_driver_path = os.environ.get("ORACLE_JDBC_DRIVER_PATH")
-
-        if self.jdbc_driver_path is None:
-            raise Exception(
-                "To connect to DATABASE via JDBC, you must set the "
-                "ORACLE_JDBC_DRIVER_PATH path to the location of the JDBC driver"
-            )
-
     def initialize(self, connection):
         super(OracleJDBCDialect, self).initialize(connection)
 
@@ -37,13 +27,11 @@ class OracleJDBCDialect(BaseDialect, OracleDialect):
     def create_connect_args(self, url):
         if url is not None:
             params = super(OracleJDBCDialect, self).create_connect_args(url)[1]
-            driver = self.jdbc_driver_path
 
             kwargs = {
                 "jclassname": self.jdbc_driver_name,
                 "url": self._create_jdbc_url(url),
-                "driver_args": [params["username"], params["password"]],
-                "jars": driver,
+                "driver_args": [params["username"], params["password"]]
             }
             return ((), kwargs)
 
