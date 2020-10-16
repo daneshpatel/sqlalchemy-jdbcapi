@@ -25,20 +25,27 @@ class OracleJDBCDialect(BaseDialect, OracleDialect):
         return {}
 
     def create_connect_args(self, url):
-        if url is not None:
-            params = super(OracleJDBCDialect, self).create_connect_args(url)[1]
-
-            kwargs = {
-                "jclassname": self.jdbc_driver_name,
-                "url": self._create_jdbc_url(url),
-                "driver_args": [params["username"], params["password"]]
-            }
-            return ((), kwargs)
-
-    def _create_jdbc_url(self, url):
-        return "jdbc:oracle:thin:@{}:{}/{}".format(
-            url.host, url.port or 1521, url.database,
-        )
+        if url is None:
+            return
+        # dialects expect jdbc url e.g.
+        # "jdbc:oracle:thin@example.com:1521/db"
+        # if sqlalchemy create_engine() url is passed e.g.
+        # "oracle://scott:tiger@example.com/db"
+        # it is parsed wrong
+        # restore original url
+        s: str = str(url)
+        # get jdbc url
+        jdbc_url: str = s.split("//", 1)[-1]
+        # add driver information
+        if not jdbc_url.startswith("jdbc"):
+            jdbc_url = f"jdbc:oracle:thin:@{jdbc_url}"
+        kwargs = {
+            "jclassname": self.jdbc_driver_name,
+            "url": jdbc_url,
+            # pass driver args via JVM System settings
+            "driver_args": []
+        }
+        return ((), kwargs)
 
     def _get_server_version_info(self, connection):
 

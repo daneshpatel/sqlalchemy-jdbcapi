@@ -23,25 +23,27 @@ class PGJDBCDialect(BaseDialect, PGDialect):
         super(PGJDBCDialect, self).initialize(connection)
 
     def create_connect_args(self, url):
-        if url is not None:
-            params = super(PGJDBCDialect, self).create_connect_args(url)[1]
-
-            cargs = (
-                self.jdbc_driver_name,
-                self._create_jdbc_url(url),
-                [params["username"], params["password"]],
-            )
-
-            return (cargs, {})
-
-    def _create_jdbc_url(self, url):
-        """Create a JDBC url from a :class:`~sqlalchemy.engine.url.URL`"""
-        return "jdbc:%s://%s%s/%s" % (
-            self.jdbc_db_name,
-            url.host,
-            url.port is not None and ":%s" % url.port or "",
-            url.database,
-        )
+        if url is None:
+            return
+        # dialects expect jdbc url in the form of
+        # "jdbc:postgresql://example.com:1521/db"
+        # if sqlalchemy create_engine() url is passed as
+        # "postgresql://scott:tiger@example.com/db"
+        # it is parsed wrong
+        # restore original url
+        s: str = str(url)
+        # get jdbc url
+        jdbc_url: str = s.split("//", 1)[-1]
+        # add driver information
+        if not jdbc_url.startswith("jdbc"):
+            jdbc_url = f"jdbc:{self.jdbc_db_name}://{jdbc_url}"
+        kwargs = {
+            "jclassname": self.jdbc_driver_name,
+            "url": jdbc_url,
+            # pass driver args via JVM System settings
+            "driver_args": []
+        }
+        return ((), kwargs)
 
     @reflection.cache
     def get_unique_constraints(
