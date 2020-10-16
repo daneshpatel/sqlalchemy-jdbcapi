@@ -57,6 +57,9 @@ All contributors will be acknowledged. Thanks!
 
 Changelog
 ------------
+- 1.2.2 - 2020-10-16
+  - SSL Support from URL.
+  
 - 1.2.1 - 2020-09-9
   - Minor fix.
 
