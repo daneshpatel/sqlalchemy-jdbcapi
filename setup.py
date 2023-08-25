@@ -10,7 +10,7 @@ with open("README.rst", "r") as fh:
 
 setup(
     name="sqlalchemy_jdbcapi",
-    version="1.2.2",
+    version="1.3.0",
     description=DESCRIPTION,
     long_description=long_description,
     long_description_content_type="text/x-rst",
@@ -36,6 +36,7 @@ setup(
         "sqlalchemy.dialects": [
             "jdbcapi.pgjdbc = sqlalchemy_jdbcapi.pgjdbc:PGJDBCDialect",
             "jdbcapi.oraclejdbc = sqlalchemy_jdbcapi.oraclejdbc:OracleJDBCDialect",
+            "jdbcapi.oceanbasejdbc = sqlalchemy_jdbcapi.oceanbasejdbc:OceanBaseJDBCDialect",
         ]
     },
 )

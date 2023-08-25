@@ -26,6 +26,12 @@ Oracle::
 
     create_engine("jdbcapi+oraclejdbc://username:password@HOST:1521/Database")
 
+OceanBase::
+
+    from urllib.parse import quote
+    user = quote('username@tenant#cluster')
+    create_engine("jdbcapi+oceanbasejdbc://user:password@HOST:2881/Database")
+
 GenericJDBCConnection::
 
         Set an environment variable `JDBC_DRIVER_PATH`
@@ -57,6 +63,9 @@ All contributors will be acknowledged. Thanks!
 
 Changelog
 ------------
+- 1.3.0 - 2023-08-23
+  - add oceanbase's Oracle mode support.
+
 - 1.2.2 - 2020-10-16
   - SSL Support from URL.
   
