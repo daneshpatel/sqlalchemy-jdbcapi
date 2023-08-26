@@ -44,6 +44,13 @@ class OceanBaseJDBCDialect(OracleDialect, ABC):
         }
         return (), kwargs
 
+    @property
+    def _is_oracle_8(self):
+        return False
+
+    def _check_max_identifier_length(self, connection):
+        return None
+
     def _get_server_version_info(self, connection):
         try:
             ver_sql = sql.text("SELECT BANNER FROM v$version")
