@@ -2,9 +2,31 @@ import re
 from abc import ABC
 from types import ModuleType
 
+import jaydebeapi
 from sqlalchemy import exc, sql
 from sqlalchemy.dialects.oracle.base import OracleDialect
 from sqlalchemy.engine.url import make_url
+
+
+class OceanBaseCursor(jaydebeapi.Cursor):
+    """Defined private Cursor modify the Clob object value return."""
+    def __init__(self, connection, converters):
+        super(OceanBaseCursor, self).__init__(connection, converters)
+        jaydebeapi._unknownSqlTypeConverter = self._unknownSqlTypeConverter
+
+    def _unknownSqlTypeConverter(self, rs, col):
+        value = rs.getObject(col)
+        if str(type(value)) == "<java class 'com.oceanbase.jdbc.Clob'>":
+            reader = value.getCharacterStream()
+            str_value = ''
+            while True:
+                char = reader.read()
+                if char == -1:
+                    break
+                str_value += chr(char)
+            return str_value
+        else:
+            return value
 
 
 class OceanBaseJDBCDialect(OracleDialect, ABC):
@@ -24,6 +46,7 @@ class OceanBaseJDBCDialect(OracleDialect, ABC):
     @classmethod
     def dbapi(cls):
         import jaydebeapi
+        jaydebeapi.Cursor = OceanBaseCursor
         return jaydebeapi
 
     @classmethod
