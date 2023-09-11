@@ -17,16 +17,14 @@ class OceanBaseCursor(jaydebeapi.Cursor):
     def _unknownSqlTypeConverter(self, rs, col):
         value = rs.getObject(col)
         if str(type(value)) == "<java class 'com.oceanbase.jdbc.Clob'>":
-            reader = value.getCharacterStream()
-            str_value = ''
+            string, reader = '', value.getCharacterStream()
             while True:
                 char = reader.read()
                 if char == -1:
                     break
-                str_value += chr(char)
-            return str_value
-        else:
-            return value
+                string += chr(char)
+            value = string
+        return value
 
 
 class OceanBaseJDBCDialect(OracleDialect, ABC):
