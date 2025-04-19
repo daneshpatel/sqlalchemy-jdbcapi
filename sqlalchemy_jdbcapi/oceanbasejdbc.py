@@ -1,5 +1,6 @@
 import re
 from abc import ABC
+from datetime import datetime
 from types import ModuleType
 
 import jaydebeapi
@@ -25,6 +26,19 @@ class OceanBaseCursor(jaydebeapi.Cursor):
                 string += chr(char)
             value = string
         return value
+
+    def _set_stmt_parms(self, prep_stmt, parameters):
+        """Override to handle datetime conversion."""
+        for i in range(len(parameters)):
+            v = parameters[i]
+            if isinstance(v, datetime):
+                # Convert Python datetime to Java Timestamp
+                import jpype
+                Timestamp = jpype.JClass("java.sql.Timestamp")
+                v = Timestamp.valueOf(v.strftime('%Y-%m-%d %H:%M:%S.%f'))
+            # print (i, parameters[i], type(parameters[i]))
+            prep_stmt.setObject(i + 1, v)
+
 
 
 class OceanBaseJDBCDialect(OracleDialect, ABC):

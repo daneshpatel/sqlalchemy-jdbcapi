@@ -1,6 +1,6 @@
 [tool.black]
 line-length = 79
-target-version = ['py37']
+target-version = ['py38']
 exclude = '''
     /(
         \.git
@@ -22,3 +22,4 @@ exclude = '''
       | setup.cfg:
       | project.toml
     )/
+'''
