@@ -41,7 +41,7 @@ class PGJDBCDialect(BaseDialect, PGDialect):
             "jclassname": self.jdbc_driver_name,
             "url": jdbc_url,
             # pass driver args via JVM System settings
-            "driver_args": []
+            "driver_args": [],
         }
         return ((), kwargs)
 

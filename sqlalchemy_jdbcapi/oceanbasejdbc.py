@@ -1,15 +1,19 @@
 import re
 from abc import ABC
+from datetime import datetime
 from types import ModuleType
 
 import jaydebeapi
-from sqlalchemy import exc, sql
+from dateutil import parser
+from sqlalchemy import TypeDecorator, TIMESTAMP
+from sqlalchemy import exc, sql, util
 from sqlalchemy.dialects.oracle.base import OracleDialect
 from sqlalchemy.engine.url import make_url
 
 
 class OceanBaseCursor(jaydebeapi.Cursor):
     """Defined private Cursor modify the Clob object value return."""
+
     def __init__(self, connection, converters):
         super(OceanBaseCursor, self).__init__(connection, converters)
         jaydebeapi._unknownSqlTypeConverter = self._unknownSqlTypeConverter
@@ -17,7 +21,7 @@ class OceanBaseCursor(jaydebeapi.Cursor):
     def _unknownSqlTypeConverter(self, rs, col):
         value = rs.getObject(col)
         if str(type(value)) == "<java class 'com.oceanbase.jdbc.Clob'>":
-            string, reader = '', value.getCharacterStream()
+            string, reader = "", value.getCharacterStream()
             while True:
                 char = reader.read()
                 if char == -1:
@@ -27,9 +31,30 @@ class OceanBaseCursor(jaydebeapi.Cursor):
         return value
 
 
+class ObTimestamp(TypeDecorator):
+    impl = TIMESTAMP
+
+    def process_bind_param(self, value, dialect):
+        if isinstance(value, datetime):
+            import jpype
+
+            Timestamp = jpype.JClass("java.sql.Timestamp")
+            value = Timestamp.valueOf(value.strftime("%Y-%m-%d %H:%M:%S.%f"))
+        return value
+
+    def process_result_value(self, value, dialect):
+        if value is not None:
+            return parser.parse(value)
+        return None
+
+
+colspecs = util.update_copy(OracleDialect.colspecs, {TIMESTAMP: ObTimestamp})
+
+
 class OceanBaseJDBCDialect(OracleDialect, ABC):
-    name = 'oceanbase'
-    driver = 'com.alipay.oceanbase.jdbc.Driver'
+    name = "oceanbase"
+    driver = "com.alipay.oceanbase.jdbc.Driver"
+    colspecs = colspecs
 
     supports_native_decimal = True
     supports_sane_rowcount = False
@@ -44,6 +69,7 @@ class OceanBaseJDBCDialect(OracleDialect, ABC):
     @classmethod
     def dbapi(cls):
         import jaydebeapi
+
         jaydebeapi.Cursor = OceanBaseCursor
         return jaydebeapi
 
@@ -61,7 +87,7 @@ class OceanBaseJDBCDialect(OracleDialect, ABC):
         kwargs = {
             "jclassname": self.driver,
             "url": jdbc_url,
-            "driver_args": [url.username, url.password]
+            "driver_args": [url.username, url.password],
         }
         return (), kwargs
 
