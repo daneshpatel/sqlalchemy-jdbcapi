@@ -83,11 +83,13 @@ class OceanBaseJDBCDialect(OracleDialect, ABC):
     def create_connect_args(self, url):
         url = make_url(url)
         jdbc_url = f"jdbc:{self.name}://{url.host}:{url.port}/{url.database}"
-
+        connect_args = {"user": url.username, "password": url.password}
+        if url.query:
+            connect_args.update(url.query)
         kwargs = {
             "jclassname": self.driver,
             "url": jdbc_url,
-            "driver_args": [url.username, url.password],
+            "driver_args": connect_args
         }
         return (), kwargs
 
