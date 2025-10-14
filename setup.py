@@ -10,7 +10,7 @@ with open("README.rst", "r") as fh:
 
 setup(
     name="sqlalchemy_jdbcapi",
-    version="1.3.1",
+    version="1.3.2",
     description=DESCRIPTION,
     long_description=long_description,
     long_description_content_type="text/x-rst",
