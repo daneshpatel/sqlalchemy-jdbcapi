@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 # Release script for sqlalchemy-jdbcapi to PyPI
 
 set -e  # Exit on error
