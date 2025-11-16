@@ -40,7 +40,9 @@ class ObTimestamp(TypeDecorator):
 
                 if jpype.isJVMStarted():
                     Timestamp = jpype.JClass("java.sql.Timestamp")
-                    return Timestamp.valueOf(value.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3])
+                    return Timestamp.valueOf(
+                        value.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+                    )
             except Exception as e:
                 logger.debug(f"Failed to create Java Timestamp: {e}")
                 # Fall back to string representation
@@ -52,7 +54,7 @@ class ObTimestamp(TypeDecorator):
         if value is not None:
             if isinstance(value, datetime):
                 return value
-            elif isinstance(value, str):
+            if isinstance(value, str):
                 # Parse string timestamp
                 try:
                     from dateutil import parser

@@ -5,7 +5,6 @@ DB-API 2.0 type objects and constructors.
 from __future__ import annotations
 
 import datetime
-import time
 from typing import Any
 
 
@@ -33,40 +32,40 @@ DATETIME = DBAPITypeObject(datetime.datetime, datetime.date, datetime.time)
 ROWID = DBAPITypeObject(int)
 
 
-# Date/Time constructors
-def Date(year: int, month: int, day: int) -> datetime.date:
+# Date/Time constructors (DB-API 2.0 requires capitalized names)
+def Date(year: int, month: int, day: int) -> datetime.date:  # noqa: N802
     """Construct a date object."""
     return datetime.date(year, month, day)
 
 
-def Time(hour: int, minute: int, second: int) -> datetime.time:
+def Time(hour: int, minute: int, second: int) -> datetime.time:  # noqa: N802
     """Construct a time object."""
     return datetime.time(hour, minute, second)
 
 
-def Timestamp(
+def Timestamp(  # noqa: N802
     year: int, month: int, day: int, hour: int, minute: int, second: int
 ) -> datetime.datetime:
     """Construct a timestamp object."""
-    return datetime.datetime(year, month, day, hour, minute, second)
+    return datetime.datetime(year, month, day, hour, minute, second)  # noqa: DTZ001
 
 
-def DateFromTicks(ticks: float) -> datetime.date:
+def DateFromTicks(ticks: float) -> datetime.date:  # noqa: N802
     """Construct a date object from ticks since epoch."""
-    return datetime.date.fromtimestamp(ticks)
+    return datetime.date.fromtimestamp(ticks)  # noqa: DTZ012
 
 
-def TimeFromTicks(ticks: float) -> datetime.time:
+def TimeFromTicks(ticks: float) -> datetime.time:  # noqa: N802
     """Construct a time object from ticks since epoch."""
     return datetime.datetime.fromtimestamp(ticks).time()
 
 
-def TimestampFromTicks(ticks: float) -> datetime.datetime:
+def TimestampFromTicks(ticks: float) -> datetime.datetime:  # noqa: N802
     """Construct a timestamp object from ticks since epoch."""
     return datetime.datetime.fromtimestamp(ticks)
 
 
-def Binary(value: bytes | bytearray | str) -> bytes:
+def Binary(value: bytes | bytearray | str) -> bytes:  # noqa: N802
     """Construct a binary object."""
     if isinstance(value, str):
         return value.encode("utf-8")

@@ -13,23 +13,19 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, ClassVar
 
-from sqlalchemy import pool, sql
+from sqlalchemy import pool
 from sqlalchemy.engine import Connection, Dialect, reflection
 from sqlalchemy.engine.url import URL
-from sqlalchemy.sql import sqltypes
 from sqlalchemy.types import (
     BIGINT,
     BINARY,
     BOOLEAN,
     CHAR,
     DATE,
-    DATETIME,
     DECIMAL,
     FLOAT,
     INTEGER,
-    NCHAR,
     NUMERIC,
-    NVARCHAR,
     REAL,
     SMALLINT,
     TIME,
@@ -38,7 +34,6 @@ from sqlalchemy.types import (
     VARCHAR,
 )
 
-from ..jdbc import connect as jdbc_connect
 from ..jdbc.exceptions import DatabaseError, OperationalError
 
 logger = logging.getLogger(__name__)
@@ -241,9 +236,7 @@ class BaseJDBCDialect(Dialect, ABC):
         """
         ...
 
-    def is_disconnect(
-        self, e: Exception, connection: Any, cursor: Any
-    ) -> bool:
+    def is_disconnect(self, e: Exception, connection: Any, cursor: Any) -> bool:
         """
         Check if an exception indicates a database disconnect.
 
@@ -347,7 +340,6 @@ class BaseJDBCDialect(Dialect, ABC):
         """
         # This would need JDBC-specific implementation
         # Most JDBC connections support setTransactionIsolation()
-        pass
 
     # ========================================================================
     # JDBC Reflection Methods - Using DatabaseMetaData API
@@ -365,7 +357,7 @@ class BaseJDBCDialect(Dialect, ABC):
         """
         # Get the raw JDBC connection
         dbapi_conn = connection.connection.dbapi_connection
-        if hasattr(dbapi_conn, '_jdbc_connection'):
+        if hasattr(dbapi_conn, "_jdbc_connection"):
             jdbc_conn = dbapi_conn._jdbc_connection
             return jdbc_conn.getMetaData()
         raise OperationalError("Cannot access JDBC connection metadata")
@@ -505,7 +497,11 @@ class BaseJDBCDialect(Dialect, ABC):
             return []
 
     def has_table(
-        self, connection: Connection, table_name: str, schema: str | None = None, **kw: Any
+        self,
+        connection: Connection,
+        table_name: str,
+        schema: str | None = None,
+        **kw: Any,
     ) -> bool:
         """
         Check if a table exists using JDBC DatabaseMetaData.
@@ -535,7 +531,11 @@ class BaseJDBCDialect(Dialect, ABC):
 
     @reflection.cache
     def get_columns(
-        self, connection: Connection, table_name: str, schema: str | None = None, **kw: Any
+        self,
+        connection: Connection,
+        table_name: str,
+        schema: str | None = None,
+        **kw: Any,
     ) -> list[dict[str, Any]]:
         """
         Get column definitions for a table using JDBC DatabaseMetaData.
@@ -572,21 +572,27 @@ class BaseJDBCDialect(Dialect, ABC):
                 sa_type = self._jdbc_type_to_sqlalchemy(type_name, data_type)
 
                 # Apply size for character/binary types
-                if hasattr(sa_type, 'length') and column_size:
+                if hasattr(sa_type, "length") and column_size:
                     if isinstance(sa_type, (VARCHAR, CHAR, VARBINARY, BINARY)):
                         sa_type = type(sa_type)(length=column_size)
 
-                columns.append({
-                    'name': column_name,
-                    'type': sa_type,
-                    'nullable': nullable,
-                    'default': column_def,
-                    'autoincrement': is_autoincrement == 'YES' if is_autoincrement else False,
-                })
+                columns.append(
+                    {
+                        "name": column_name,
+                        "type": sa_type,
+                        "nullable": nullable,
+                        "default": column_def,
+                        "autoincrement": is_autoincrement == "YES"
+                        if is_autoincrement
+                        else False,
+                    }
+                )
 
             rs.close()
 
-            logger.debug(f"Found {len(columns)} columns for table '{schema}.{table_name}'")
+            logger.debug(
+                f"Found {len(columns)} columns for table '{schema}.{table_name}'"
+            )
             return columns
 
         except Exception as e:
@@ -595,7 +601,11 @@ class BaseJDBCDialect(Dialect, ABC):
 
     @reflection.cache
     def get_pk_constraint(
-        self, connection: Connection, table_name: str, schema: str | None = None, **kw: Any
+        self,
+        connection: Connection,
+        table_name: str,
+        schema: str | None = None,
+        **kw: Any,
     ) -> dict[str, Any]:
         """
         Get primary key constraint for a table using JDBC DatabaseMetaData.
@@ -630,8 +640,8 @@ class BaseJDBCDialect(Dialect, ABC):
             constrained_columns = [col for _, col in pk_columns]
 
             result = {
-                'name': pk_name,
-                'constrained_columns': constrained_columns,
+                "name": pk_name,
+                "constrained_columns": constrained_columns,
             }
 
             logger.debug(f"Primary key for '{schema}.{table_name}': {result}")
@@ -639,11 +649,15 @@ class BaseJDBCDialect(Dialect, ABC):
 
         except Exception as e:
             logger.warning(f"Failed to get primary key: {e}")
-            return {'name': None, 'constrained_columns': []}
+            return {"name": None, "constrained_columns": []}
 
     @reflection.cache
     def get_foreign_keys(
-        self, connection: Connection, table_name: str, schema: str | None = None, **kw: Any
+        self,
+        connection: Connection,
+        table_name: str,
+        schema: str | None = None,
+        **kw: Any,
     ) -> list[dict[str, Any]]:
         """
         Get foreign key constraints for a table using JDBC DatabaseMetaData.
@@ -677,17 +691,17 @@ class BaseJDBCDialect(Dialect, ABC):
 
                 if fk_name not in fks:
                     fks[fk_name] = {
-                        'name': fk_name,
-                        'constrained_columns': [],
-                        'referred_schema': pk_schema,
-                        'referred_table': pk_table,
-                        'referred_columns': [],
-                        '_seq': []
+                        "name": fk_name,
+                        "constrained_columns": [],
+                        "referred_schema": pk_schema,
+                        "referred_table": pk_table,
+                        "referred_columns": [],
+                        "_seq": [],
                     }
 
-                fks[fk_name]['_seq'].append(key_seq)
-                fks[fk_name]['constrained_columns'].append(fk_column)
-                fks[fk_name]['referred_columns'].append(pk_column)
+                fks[fk_name]["_seq"].append(key_seq)
+                fks[fk_name]["constrained_columns"].append(fk_column)
+                fks[fk_name]["referred_columns"].append(pk_column)
 
             rs.close()
 
@@ -696,14 +710,20 @@ class BaseJDBCDialect(Dialect, ABC):
             for fk_name, fk_data in fks.items():
                 # Sort by sequence
                 sorted_data = sorted(
-                    zip(fk_data['_seq'], fk_data['constrained_columns'], fk_data['referred_columns'])
+                    zip(
+                        fk_data["_seq"],
+                        fk_data["constrained_columns"],
+                        fk_data["referred_columns"],
+                    )
                 )
-                fk_data['constrained_columns'] = [col for _, col, _ in sorted_data]
-                fk_data['referred_columns'] = [col for _, _, col in sorted_data]
-                del fk_data['_seq']
+                fk_data["constrained_columns"] = [col for _, col, _ in sorted_data]
+                fk_data["referred_columns"] = [col for _, _, col in sorted_data]
+                del fk_data["_seq"]
                 result.append(fk_data)
 
-            logger.debug(f"Found {len(result)} foreign keys for '{schema}.{table_name}'")
+            logger.debug(
+                f"Found {len(result)} foreign keys for '{schema}.{table_name}'"
+            )
             return result
 
         except Exception as e:
@@ -712,7 +732,11 @@ class BaseJDBCDialect(Dialect, ABC):
 
     @reflection.cache
     def get_indexes(
-        self, connection: Connection, table_name: str, schema: str | None = None, **kw: Any
+        self,
+        connection: Connection,
+        table_name: str,
+        schema: str | None = None,
+        **kw: Any,
     ) -> list[dict[str, Any]]:
         """
         Get indexes for a table using JDBC DatabaseMetaData.
@@ -748,23 +772,25 @@ class BaseJDBCDialect(Dialect, ABC):
 
                 if index_name not in indexes:
                     indexes[index_name] = {
-                        'name': index_name,
-                        'column_names': [],
-                        'unique': not non_unique,
-                        '_positions': []
+                        "name": index_name,
+                        "column_names": [],
+                        "unique": not non_unique,
+                        "_positions": [],
                     }
 
-                indexes[index_name]['_positions'].append(ordinal_position)
-                indexes[index_name]['column_names'].append(column_name)
+                indexes[index_name]["_positions"].append(ordinal_position)
+                indexes[index_name]["column_names"].append(column_name)
 
             rs.close()
 
             # Sort columns by ordinal position
             result = []
             for idx_name, idx_data in indexes.items():
-                sorted_data = sorted(zip(idx_data['_positions'], idx_data['column_names']))
-                idx_data['column_names'] = [col for _, col in sorted_data]
-                del idx_data['_positions']
+                sorted_data = sorted(
+                    zip(idx_data["_positions"], idx_data["column_names"])
+                )
+                idx_data["column_names"] = [col for _, col in sorted_data]
+                del idx_data["_positions"]
                 result.append(idx_data)
 
             logger.debug(f"Found {len(result)} indexes for '{schema}.{table_name}'")
@@ -776,7 +802,11 @@ class BaseJDBCDialect(Dialect, ABC):
 
     @reflection.cache
     def get_unique_constraints(
-        self, connection: Connection, table_name: str, schema: str | None = None, **kw: Any
+        self,
+        connection: Connection,
+        table_name: str,
+        schema: str | None = None,
+        **kw: Any,
     ) -> list[dict[str, Any]]:
         """
         Get unique constraints for a table.
@@ -797,15 +827,14 @@ class BaseJDBCDialect(Dialect, ABC):
         try:
             indexes = self.get_indexes(connection, table_name, schema, **kw)
             unique_constraints = [
-                {
-                    'name': idx['name'],
-                    'column_names': idx['column_names']
-                }
+                {"name": idx["name"], "column_names": idx["column_names"]}
                 for idx in indexes
-                if idx.get('unique', False)
+                if idx.get("unique", False)
             ]
 
-            logger.debug(f"Found {len(unique_constraints)} unique constraints for '{schema}.{table_name}'")
+            logger.debug(
+                f"Found {len(unique_constraints)} unique constraints for '{schema}.{table_name}'"
+            )
             return unique_constraints
 
         except Exception as e:
@@ -814,7 +843,11 @@ class BaseJDBCDialect(Dialect, ABC):
 
     @reflection.cache
     def get_check_constraints(
-        self, connection: Connection, table_name: str, schema: str | None = None, **kw: Any
+        self,
+        connection: Connection,
+        table_name: str,
+        schema: str | None = None,
+        **kw: Any,
     ) -> list[dict[str, Any]]:
         """
         Get check constraints for a table.
@@ -836,7 +869,9 @@ class BaseJDBCDialect(Dialect, ABC):
         """
         # JDBC doesn't provide standard access to check constraints
         # Subclasses can override to query database-specific system tables
-        logger.debug(f"Check constraints not available via JDBC for '{schema}.{table_name}'")
+        logger.debug(
+            f"Check constraints not available via JDBC for '{schema}.{table_name}'"
+        )
         return []
 
     def __repr__(self) -> str:

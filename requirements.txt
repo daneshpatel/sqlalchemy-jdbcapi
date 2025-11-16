@@ -1,2 +1,14 @@
-sqlalchemy
-JayDeBeApi
+# Core dependencies - Production
+# SQLAlchemy 2.0+ with full type hint support
+sqlalchemy>=2.0.0,<3.0.0
+
+# JPype1 for native JDBC bridge (replaces JayDeBeApi)
+JPype1>=1.5.0,<2.0.0
+
+# Optional: ODBC support via pyodbc
+pyodbc>=5.0.0,<6.0.0
+
+# Optional: DataFrame integration
+pandas>=2.0.0,<3.0.0
+polars>=0.20.0,<1.0.0
+pyarrow>=14.0.0,<18.0.0

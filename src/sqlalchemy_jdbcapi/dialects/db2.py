@@ -10,8 +10,7 @@ import logging
 import re
 from typing import Any
 
-from sqlalchemy import exc, sql, util
-from sqlalchemy.dialects import registry
+from sqlalchemy import exc, sql
 from sqlalchemy.engine import Connection, Dialect
 
 from .base import BaseJDBCDialect, JDBCDriverConfig
@@ -70,10 +69,9 @@ class DB2Dialect(BaseJDBCDialect, BaseDB2Dialect):  # type: ignore
         """Initialize DB2 connection."""
         if HAS_DB2_DIALECT:
             super().initialize(connection)
-        else:
-            # Basic initialization
-            if not hasattr(self, "_server_version_info"):
-                self._server_version_info = self._get_server_version_info(connection)
+        # Basic initialization
+        elif not hasattr(self, "_server_version_info"):
+            self._server_version_info = self._get_server_version_info(connection)
 
         logger.debug("Initialized DB2 JDBC dialect")
 

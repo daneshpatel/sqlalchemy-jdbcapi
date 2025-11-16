@@ -66,7 +66,7 @@ class TypeConverter:
         2011: "NCLOB",
     }
 
-    def convert_from_jdbc(
+    def convert_from_jdbc(  # noqa: C901 - Type conversion requires complexity
         self, resultset: Any, column_index: int, sql_type: int
     ) -> Any:
         """
@@ -81,7 +81,8 @@ class TypeConverter:
             Python value
         """
         try:
-            # Check for NULL
+            # First check if the value is NULL
+            # We have to call getObject first to trigger wasNull() properly
             value = resultset.getObject(column_index)
             if value is None or resultset.wasNull():
                 return None
@@ -91,7 +92,7 @@ class TypeConverter:
                 return self._convert_string(resultset, column_index)
 
             # Numeric types
-            elif sql_type in (
+            if sql_type in (
                 -6,
                 5,
                 4,
@@ -99,49 +100,48 @@ class TypeConverter:
             ):  # TINYINT, SMALLINT, INTEGER, BIGINT
                 return self._convert_int(resultset, column_index)
 
-            elif sql_type in (2, 3):  # NUMERIC, DECIMAL
+            if sql_type in (2, 3):  # NUMERIC, DECIMAL
                 return self._convert_decimal(resultset, column_index)
 
-            elif sql_type in (6, 7, 8):  # FLOAT, REAL, DOUBLE
+            if sql_type in (6, 7, 8):  # FLOAT, REAL, DOUBLE
                 return self._convert_float(resultset, column_index)
 
             # Boolean
-            elif sql_type == -7:  # BIT
+            if sql_type == -7:  # BIT
                 return self._convert_boolean(resultset, column_index)
 
             # Date/Time types
-            elif sql_type == 91:  # DATE
+            if sql_type == 91:  # DATE
                 return self._convert_date(resultset, column_index)
 
-            elif sql_type == 92:  # TIME
+            if sql_type == 92:  # TIME
                 return self._convert_time(resultset, column_index)
 
-            elif sql_type == 93:  # TIMESTAMP
+            if sql_type == 93:  # TIMESTAMP
                 return self._convert_timestamp(resultset, column_index)
 
             # Binary types
-            elif sql_type in (-4, -3, -2):  # LONGVARBINARY, VARBINARY, BINARY
+            if sql_type in (-4, -3, -2):  # LONGVARBINARY, VARBINARY, BINARY
                 return self._convert_binary(resultset, column_index)
 
             # LOB types
-            elif sql_type == 2004:  # BLOB
+            if sql_type == 2004:  # BLOB
                 return self._convert_blob(resultset, column_index)
 
-            elif sql_type in (2005, 2011):  # CLOB, NCLOB
+            if sql_type in (2005, 2011):  # CLOB, NCLOB
                 return self._convert_clob(resultset, column_index)
 
             # Array type (PostgreSQL, Oracle)
-            elif hasattr(value, "getArray"):
+            if hasattr(value, "getArray"):
                 return self._convert_array(value)
 
             # Default: return as-is
-            else:
-                logger.debug(
-                    f"Unknown SQL type {sql_type} "
-                    f"({self.JDBC_TYPES.get(sql_type, 'UNKNOWN')}), "
-                    f"returning as-is"
-                )
-                return value
+            logger.debug(
+                f"Unknown SQL type {sql_type} "
+                f"({self.JDBC_TYPES.get(sql_type, 'UNKNOWN')}), "
+                f"returning as-is"
+            )
+            return value
 
         except Exception as e:
             logger.warning(
@@ -180,9 +180,7 @@ class TypeConverter:
         value = resultset.getBoolean(column_index)
         return value if not resultset.wasNull() else None
 
-    def _convert_date(
-        self, resultset: Any, column_index: int
-    ) -> datetime.date | None:
+    def _convert_date(self, resultset: Any, column_index: int) -> datetime.date | None:
         """Convert to Python date."""
         value = resultset.getDate(column_index)
         if value is None or resultset.wasNull():
@@ -200,9 +198,7 @@ class TypeConverter:
             logger.warning(f"Date conversion failed: {e}")
             return None
 
-    def _convert_time(
-        self, resultset: Any, column_index: int
-    ) -> datetime.time | None:
+    def _convert_time(self, resultset: Any, column_index: int) -> datetime.time | None:
         """Convert to Python time."""
         value = resultset.getTime(column_index)
         if value is None or resultset.wasNull():

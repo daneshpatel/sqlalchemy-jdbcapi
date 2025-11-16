@@ -10,7 +10,7 @@ import logging
 import re
 from typing import Any
 
-from sqlalchemy import exc, sql, util
+from sqlalchemy import exc, sql
 from sqlalchemy.dialects.mssql.base import MSDialect
 from sqlalchemy.engine import Connection
 

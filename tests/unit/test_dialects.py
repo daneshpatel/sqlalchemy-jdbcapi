@@ -4,7 +4,6 @@ Unit tests for dialect implementations.
 
 from __future__ import annotations
 
-import pytest
 from sqlalchemy.engine.url import make_url
 
 from sqlalchemy_jdbcapi.dialects import (
@@ -12,7 +11,6 @@ from sqlalchemy_jdbcapi.dialects import (
     MariaDBDialect,
     MSSQLDialect,
     MySQLDialect,
-    OceanBaseDialect,
     OracleDialect,
     PostgreSQLDialect,
     SQLiteDialect,
@@ -40,7 +38,7 @@ class TestPostgreSQLDialect:
         assert kwargs["jclassname"] == "org.postgresql.Driver"
         assert "jdbc:postgresql://" in kwargs["url"]
         assert kwargs["driver_args"]["user"] == "user"
-        assert kwargs["driver_args"]["password"] == "pass"
+        assert kwargs["driver_args"]["password"] == "pass"  # noqa: S105 - Test password
 
 
 class TestOracleDialect:
@@ -128,6 +126,6 @@ class TestSQLiteDialect:
         dialect = SQLiteDialect()
         url = make_url("jdbcapi+sqlite:///:memory:")
 
-        args, kwargs = dialect.create_connect_args(url)
+        _args, kwargs = dialect.create_connect_args(url)
 
         assert "jdbc:sqlite::memory:" in kwargs["url"]

@@ -13,7 +13,6 @@ from typing import Any
 from sqlalchemy import exc, sql, util
 from sqlalchemy.dialects.oracle.base import OracleDialect
 from sqlalchemy.engine import Connection
-from sqlalchemy.sql import sqltypes
 
 from .base import BaseJDBCDialect, JDBCDriverConfig
 

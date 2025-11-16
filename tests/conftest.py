@@ -4,8 +4,9 @@ Pytest configuration and fixtures for sqlalchemy-jdbcapi tests.
 
 from __future__ import annotations
 
-import pytest
 from unittest.mock import MagicMock, Mock
+
+import pytest
 
 
 @pytest.fixture

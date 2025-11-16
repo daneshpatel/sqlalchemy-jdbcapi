@@ -10,6 +10,15 @@ from __future__ import annotations
 
 from .connection import Connection, connect
 from .cursor import Cursor
+from .driver_manager import (
+    RECOMMENDED_JDBC_DRIVERS,
+    JDBCDriver,
+    clear_driver_cache,
+    download_driver,
+    get_driver_cache_dir,
+    get_driver_path,
+    list_cached_drivers,
+)
 from .exceptions import (
     DatabaseError,
     DataError,
@@ -22,6 +31,7 @@ from .exceptions import (
     ProgrammingError,
     Warning,
 )
+from .jvm import get_classpath, is_jvm_started, shutdown_jvm, start_jvm
 from .types import (
     BINARY,
     DATETIME,
@@ -40,6 +50,19 @@ from .types import (
 __all__ = [
     # Core functions
     "connect",
+    # JVM management
+    "start_jvm",
+    "is_jvm_started",
+    "shutdown_jvm",
+    "get_classpath",
+    # Driver management
+    "JDBCDriver",
+    "RECOMMENDED_JDBC_DRIVERS",
+    "download_driver",
+    "get_driver_path",
+    "get_driver_cache_dir",
+    "list_cached_drivers",
+    "clear_driver_cache",
     # Classes
     "Connection",
     "Cursor",

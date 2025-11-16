@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 from typing import Any
 
+from .driver_manager import get_classpath_with_drivers
 from .exceptions import JVMNotStartedError
 
 logger = logging.getLogger(__name__)
@@ -16,43 +17,59 @@ logger = logging.getLogger(__name__)
 _jvm_started = False
 
 
-def get_classpath() -> list[Path]:
+def get_classpath(
+    auto_download: bool = True,
+    databases: list[str] | None = None,
+) -> list[Path]:
     """
-    Get JDBC driver classpath from environment or system property.
+    Get JDBC driver classpath from environment, auto-download, or both.
+
+    Args:
+        auto_download: Whether to auto-download recommended JDBC drivers.
+        databases: List of database names for auto-download (e.g., ['postgresql', 'mysql']).
+                   If None and auto_download is True, downloads all recommended drivers.
 
     Returns:
         List of paths to JDBC driver JAR files.
     """
-    classpath = os.environ.get("CLASSPATH", "")
-    if not classpath:
-        classpath = os.environ.get("JDBC_DRIVER_PATH", "")
+    # Get manual classpath from environment
+    manual_classpath = []
+    classpath_env = os.environ.get("CLASSPATH", "")
+    if not classpath_env:
+        classpath_env = os.environ.get("JDBC_DRIVER_PATH", "")
 
-    if not classpath:
-        return []
+    if classpath_env:
+        for path_str in classpath_env.split(os.pathsep):
+            path = Path(path_str)
+            if path.exists():
+                manual_classpath.append(path)
+            else:
+                logger.warning(f"Classpath entry not found: {path}")
 
-    paths = []
-    for path_str in classpath.split(os.pathsep):
-        path = Path(path_str)
-        if path.exists():
-            paths.append(path)
-        else:
-            logger.warning(f"Classpath entry not found: {path}")
-
-    return paths
+    # Combine manual and auto-downloaded drivers
+    return get_classpath_with_drivers(
+        databases=databases,
+        auto_download=auto_download,
+        manual_classpath=manual_classpath or None,
+    )
 
 
 def start_jvm(
     classpath: list[Path] | None = None,
     jvm_path: Path | None = None,
     jvm_args: list[str] | None = None,
+    auto_download: bool = True,
+    databases: list[str] | None = None,
 ) -> None:
     """
     Start the JVM with specified classpath and arguments.
 
     Args:
-        classpath: List of paths to add to classpath. If None, uses environment.
+        classpath: List of paths to add to classpath. If None, uses environment + auto-download.
         jvm_path: Path to JVM library. If None, JPype will auto-detect.
         jvm_args: Additional JVM arguments (e.g., ['-Xmx512m']).
+        auto_download: Whether to auto-download JDBC drivers. Default: True.
+        databases: List of database names for auto-download. If None, downloads common drivers.
 
     Raises:
         JVMNotStartedError: If JVM fails to start.
@@ -77,7 +94,13 @@ def start_jvm(
 
     # Build classpath
     if classpath is None:
-        classpath = get_classpath()
+        classpath = get_classpath(auto_download=auto_download, databases=databases)
+
+    if not classpath:
+        logger.warning(
+            "No JDBC drivers found in classpath. "
+            "Set CLASSPATH environment variable or enable auto_download."
+        )
 
     classpath_str = os.pathsep.join(str(p) for p in classpath)
 
@@ -97,6 +120,8 @@ def start_jvm(
         logger.info("JVM started successfully")
         logger.debug(f"Classpath: {classpath_str}")
         logger.debug(f"JVM args: {args}")
+        if classpath:
+            logger.info(f"Loaded {len(classpath)} JDBC driver(s)")
 
     except Exception as e:
         raise JVMNotStartedError(f"Failed to start JVM: {e}") from e

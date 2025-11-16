@@ -18,13 +18,13 @@ from .sqlite import SQLiteDialect
 
 __all__ = [
     "BaseJDBCDialect",
-    "JDBCDriverConfig",
-    "PostgreSQLDialect",
-    "OracleDialect",
-    "OceanBaseDialect",
-    "MySQLDialect",
-    "MariaDBDialect",
-    "MSSQLDialect",
     "DB2Dialect",
+    "JDBCDriverConfig",
+    "MSSQLDialect",
+    "MariaDBDialect",
+    "MySQLDialect",
+    "OceanBaseDialect",
+    "OracleDialect",
+    "PostgreSQLDialect",
     "SQLiteDialect",
 ]

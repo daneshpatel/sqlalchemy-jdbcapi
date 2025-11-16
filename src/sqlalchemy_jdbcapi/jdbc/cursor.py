@@ -5,13 +5,12 @@ JDBC Cursor implementation following DB-API 2.0 specification.
 from __future__ import annotations
 
 import logging
-from typing import Any, Sequence
+from collections.abc import Sequence
+from typing import Any
 
 from .exceptions import (
     DataError,
-    DatabaseError,
     InterfaceError,
-    OperationalError,
     ProgrammingError,
 )
 from .type_converter import TypeConverter
@@ -36,11 +35,17 @@ class Cursor:
         """
         self._connection = connection
         self._jdbc_connection = jdbc_connection
+
+        # These will be set when we execute queries
         self._jdbc_statement: Any = None
         self._jdbc_resultset: Any = None
+
+        # DB-API 2.0 spec requires these attributes
         self._description: tuple[tuple[str, ...], ...] | None = None
-        self._rowcount: int = -1
-        self._arraysize: int = 1
+        self._rowcount: int = -1  # -1 means "unknown" per DB-API spec
+        self._arraysize: int = 1  # default fetch size
+
+        # We handle type conversion ourselves since JDBC types don't map 1:1 to Python
         self._type_converter = TypeConverter()
         self._closed = False
 
@@ -136,7 +141,7 @@ class Cursor:
             return self
 
         except Exception as e:
-            logger.error(f"Execute failed: {e}", exc_info=True)
+            logger.exception(f"Execute failed: {e}")
             raise ProgrammingError(f"Failed to execute operation: {e}") from e
 
     def executemany(
@@ -166,7 +171,7 @@ class Cursor:
             self._rowcount = sum(r for r in results if r >= 0)
 
         except Exception as e:
-            logger.error(f"ExecuteManyJDBC failed: {e}", exc_info=True)
+            logger.exception(f"ExecuteManyJDBC failed: {e}")
             raise ProgrammingError(f"Failed to execute batch: {e}") from e
 
     def fetchone(self) -> tuple[Any, ...] | None:
@@ -242,18 +247,21 @@ class Cursor:
 
     def setinputsizes(self, sizes: Sequence[int | None]) -> None:
         """Does nothing, for DB-API 2.0 compliance."""
-        pass
+        # JDBC handles this automatically, so we just ignore it
 
     def setoutputsize(self, size: int, column: int | None = None) -> None:
         """Does nothing, for DB-API 2.0 compliance."""
-        pass
+        # Same as above - JDBC doesn't need this hint
 
     def _bind_parameters(self, statement: Any, parameters: Sequence[Any]) -> None:
         """Bind parameters to prepared statement."""
+        # JDBC uses 1-based indexing for parameters (yeah, I know...)
         for i, param in enumerate(parameters, start=1):
             if param is None:
-                statement.setNull(i, 0)  # java.sql.Types.NULL
+                # NULL values need special handling in JDBC
+                statement.setNull(i, 0)  # 0 = java.sql.Types.NULL
             else:
+                # setObject auto-converts Python types to Java
                 statement.setObject(i, param)
 
     def _build_description(self) -> None:

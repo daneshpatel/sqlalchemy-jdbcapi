@@ -7,7 +7,6 @@ Provides SQLite support through JDBC (mainly for testing or Java interop).
 from __future__ import annotations
 
 import logging
-import re
 from typing import Any
 
 from sqlalchemy import exc, sql
@@ -42,6 +41,23 @@ class SQLiteDialect(BaseJDBCDialect, BaseSQLiteDialect):
     supports_sequences = False
     supports_native_enum = False
     supports_native_decimal = False
+
+    @classmethod
+    def import_dbapi(cls) -> Any:
+        """
+        Import JDBC module.
+
+        SQLAlchemy's SQLite dialect expects sqlite_version_info attribute,
+        so we add it as a wrapper.
+        """
+        from sqlalchemy_jdbcapi import jdbc
+
+        # Add sqlite_version_info if not present (required by SQLAlchemy's SQLite dialect)
+        if not hasattr(jdbc, "sqlite_version_info"):
+            # Use a reasonable default version
+            jdbc.sqlite_version_info = (3, 40, 0)
+
+        return jdbc
 
     @classmethod
     def get_driver_config(cls) -> JDBCDriverConfig:

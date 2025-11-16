@@ -8,7 +8,7 @@ import logging
 from typing import Any
 
 from .cursor import Cursor
-from .exceptions import DatabaseError, InterfaceError, OperationalError
+from .exceptions import DatabaseError, InterfaceError
 from .jvm import start_jvm
 
 logger = logging.getLogger(__name__)
@@ -48,50 +48,52 @@ class Connection:
         self._jdbc_connection: Any = None
         self._closed = False
 
-        # Start JVM if needed
+        # Start JVM if not already running
+        # Note: JVM can only be started once per Python process
         try:
-            start_jvm(classpath=[p for p in (jars or [])], jvm_args=None)
+            start_jvm(classpath=list(jars or []), jvm_args=None)
         except Exception as e:
             raise InterfaceError(f"Failed to start JVM: {e}") from e
 
-        # Load driver and create connection
+        # Load driver and establish connection
         try:
             import jpype
 
-            # Load JDBC driver class
-            driver_class = jpype.JClass(jclassname)
+            # Load the JDBC driver class - this registers it with DriverManager
+            # Even though we don't use the returned class, loading it has side effects
+            jpype.JClass(jclassname)
             logger.debug(f"Loaded JDBC driver: {jclassname}")
 
-            # Get DriverManager
-            driver_manager = jpype.JClass("java.sql.DriverManager")
+            # Get DriverManager - this is the main entry point for JDBC connections
+            dm = jpype.JClass("java.sql.DriverManager")
 
-            # Create connection
+            # Create connection based on driver_args format
+            # We support multiple formats for flexibility
             if driver_args is None:
-                self._jdbc_connection = driver_manager.getConnection(url)
+                # Simple connection without credentials
+                self._jdbc_connection = dm.getConnection(url)
 
             elif isinstance(driver_args, dict):
-                # Convert dict to Properties object
-                properties = jpype.JClass("java.util.Properties")()
-                for key, value in driver_args.items():
-                    properties.setProperty(str(key), str(value))
-                self._jdbc_connection = driver_manager.getConnection(url, properties)
+                # Dict format - convert to Java Properties
+                # This allows passing custom JDBC properties like SSL settings
+                props = jpype.JClass("java.util.Properties")()
+                for k, v in driver_args.items():
+                    props.setProperty(str(k), str(v))
+                self._jdbc_connection = dm.getConnection(url, props)
 
             elif isinstance(driver_args, (list, tuple)) and len(driver_args) == 2:
-                # User and password as list
-                user, password = driver_args
-                self._jdbc_connection = driver_manager.getConnection(
-                    url, str(user), str(password)
-                )
+                # List format for simple user/password auth
+                usr, pwd = driver_args
+                self._jdbc_connection = dm.getConnection(url, str(usr), str(pwd))
 
             else:
-                raise ValueError(
-                    "driver_args must be dict, [user, password], or None"
-                )
+                # TODO: Maybe support more argument formats in the future?
+                raise ValueError("driver_args must be dict, [user, password], or None")
 
             logger.info(f"Connected to database: {url}")
 
         except Exception as e:
-            logger.error(f"Connection failed: {e}", exc_info=True)
+            logger.exception(f"Connection failed: {e}")
             raise DatabaseError(f"Failed to connect to database: {e}") from e
 
     def close(self) -> None:
