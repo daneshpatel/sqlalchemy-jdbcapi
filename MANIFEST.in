@@ -1,3 +1,30 @@
-include LICENSE
+# Include documentation
 include README.md
-include sqlalchemy-jdbcapi/*.txt
+include CHANGELOG.md
+include LICENSE
+include AUTHORS
+include CONTRIBUTING.md
+
+# Include configuration files
+include pyproject.toml
+include .gitignore
+
+# Include type marker
+include src/sqlalchemy_jdbcapi/py.typed
+
+# Exclude development and CI files
+exclude .pre-commit-config.yaml
+exclude build.sh
+exclude release.sh
+exclude bump-version.sh
+exclude .bumpversion.cfg
+
+# Exclude tests from the distribution
+prune tests
+prune .github
+
+# Exclude build artifacts
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude *.so
+global-exclude .DS_Store

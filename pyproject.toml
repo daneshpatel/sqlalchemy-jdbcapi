@@ -1,25 +1,274 @@
-[tool.black]
-line-length = 79
-target-version = ['py37']
-exclude = '''
-    /(
-        \.git
-      | \.hg
-      | \.mypy_cache
-      | \.tox
-      | \.venv
-      | _build
-      | buck-out
-      | build
-      | dist
+[build-system]
+requires = ["setuptools>=68.0", "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
 
-      # The following are specific to Black, you probably don't want those.
-      | blib2to3
-      | tests/data
-      | MANIFEST.in
-      | LICENSE
-      | AUTHORS
-      | setup.cfg:
-      | project.toml
-    )/
+[project]
+name = "sqlalchemy-jdbcapi"
+dynamic = ["version"]
+description = "Modern SQLAlchemy dialect for JDBC connections with native implementation"
+readme = {file = "README.md", content-type = "text/markdown"}
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "Danesh Patel", email = "danesh_patel@outlook.com"},
+    {name = "Pavel Henrykhsen"},
+]
+maintainers = [
+    {name = "Danesh Patel", email = "danesh_patel@outlook.com"},
+]
+keywords = [
+    "sqlalchemy",
+    "jdbc",
+    "database",
+    "postgresql",
+    "oracle",
+    "mysql",
+    "sql-server",
+    "db2",
+    "oceanbase",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Database",
+    "Topic :: Database :: Front-Ends",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+
+dependencies = [
+    "sqlalchemy>=2.0.0",
+    "JPype1>=1.5.0",
+]
+
+[project.optional-dependencies]
+# Data Science & ML Integration
+dataframe = [
+    "pandas>=2.0.0",
+    "polars>=0.20.0",
+    "pyarrow>=14.0.0",
+]
+
+# Development dependencies
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-xdist>=3.5.0",
+    "mypy>=1.8.0",
+    "ruff>=0.2.0",
+    "pre-commit>=3.6.0",
+    "tox>=4.11.0",
+    "build>=1.0.0",
+    "twine>=5.0.0",
+]
+
+# Documentation
+docs = [
+    "sphinx>=7.2.0",
+    "sphinx-rtd-theme>=2.0.0",
+    "sphinx-autodoc-typehints>=1.25.0",
+    "myst-parser>=2.0.0",
+]
+
+# Type stubs
+types = [
+    "types-python-dateutil",
+]
+
+# All optional dependencies
+all = [
+    "sqlalchemy-jdbcapi[dataframe,dev,docs,types]",
+]
+
+[project.urls]
+Homepage = "https://github.com/daneshpatel/sqlalchemy-jdbcapi"
+Documentation = "https://sqlalchemy-jdbcapi.readthedocs.io"
+Repository = "https://github.com/daneshpatel/sqlalchemy-jdbcapi"
+Issues = "https://github.com/daneshpatel/sqlalchemy-jdbcapi/issues"
+Changelog = "https://github.com/daneshpatel/sqlalchemy-jdbcapi/blob/main/CHANGELOG.md"
+
+[project.entry-points."sqlalchemy.dialects"]
+"jdbcapi.postgresql" = "sqlalchemy_jdbcapi.dialects.postgresql:PostgreSQLDialect"
+"jdbcapi.pgjdbc" = "sqlalchemy_jdbcapi.dialects.postgresql:PostgreSQLDialect"  # Alias
+"jdbcapi.oracle" = "sqlalchemy_jdbcapi.dialects.oracle:OracleDialect"
+"jdbcapi.oraclejdbc" = "sqlalchemy_jdbcapi.dialects.oracle:OracleDialect"  # Alias
+"jdbcapi.oceanbase" = "sqlalchemy_jdbcapi.dialects.oceanbase:OceanBaseDialect"
+"jdbcapi.oceanbasejdbc" = "sqlalchemy_jdbcapi.dialects.oceanbase:OceanBaseDialect"  # Alias
+"jdbcapi.mysql" = "sqlalchemy_jdbcapi.dialects.mysql:MySQLDialect"
+"jdbcapi.mariadb" = "sqlalchemy_jdbcapi.dialects.mysql:MariaDBDialect"
+"jdbcapi.mssql" = "sqlalchemy_jdbcapi.dialects.mssql:MSSQLDialect"
+"jdbcapi.sqlserver" = "sqlalchemy_jdbcapi.dialects.mssql:MSSQLDialect"  # Alias
+"jdbcapi.db2" = "sqlalchemy_jdbcapi.dialects.db2:DB2Dialect"
+"jdbcapi.sqlite" = "sqlalchemy_jdbcapi.dialects.sqlite:SQLiteDialect"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+zip-safe = false
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["sqlalchemy_jdbcapi*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+sqlalchemy_jdbcapi = ["py.typed"]
+
+[tool.setuptools_scm]
+version_file = "src/sqlalchemy_jdbcapi/_version.py"
+version_scheme = "post-release"
+
+# Ruff configuration (modern linter & formatter)
+[tool.ruff]
+target-version = "py310"
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "F",     # pyflakes
+    "I",     # isort
+    "B",     # flake8-bugbear
+    "C4",    # flake8-comprehensions
+    "UP",    # pyupgrade
+    "ARG",   # flake8-unused-arguments
+    "SIM",   # flake8-simplify
+    "TID",   # flake8-tidy-imports
+    "TCH",   # flake8-type-checking
+    "RUF",   # Ruff-specific rules
+    "PL",    # pylint
+    "PERF",  # perflint
+]
+ignore = [
+    "E501",   # line too long (handled by formatter)
+    "PLR0913", # too many arguments
+    "PLR2004", # magic value comparison
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = [
+    "S101",    # assert allowed in tests
+    "ARG",     # unused arguments OK in tests
+    "PLR2004", # magic values OK in tests
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["sqlalchemy_jdbcapi"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+# MyPy configuration
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = false  # SQLAlchemy decorators
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+show_error_context = true
+pretty = true
+
+[[tool.mypy.overrides]]
+module = [
+    "jpype.*",
+    "jaydebeapi.*",
+]
+ignore_missing_imports = true
+
+# Pytest configuration
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--cov=sqlalchemy_jdbcapi",
+    "--cov-report=term-missing:skip-covered",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--cov-branch",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "requires_jvm: marks tests that require JVM",
+    "requires_jdbc: marks tests that require JDBC drivers",
+]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["src"]
+branch = true
+parallel = true
+omit = [
+    "*/tests/*",
+    "*/__pycache__/*",
+    "*/site-packages/*",
+]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+# Black configuration (backup if ruff format not used)
+[tool.black]
+line-length = 88
+target-version = ["py310", "py311", "py312"]
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
 '''
