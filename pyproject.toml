@@ -141,6 +141,8 @@ sqlalchemy_jdbcapi = ["py.typed"]
 [tool.setuptools_scm]
 version_file = "src/sqlalchemy_jdbcapi/_version.py"
 version_scheme = "post-release"
+local_scheme = "no-local-version"
+
 
 # Ruff configuration (modern linter & formatter)
 [tool.ruff]
