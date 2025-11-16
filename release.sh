@@ -12,7 +12,7 @@ if [ -z "$VERSION" ]; then
     exit 1
 fi
 
-echo "🚀 Releasing sqlalchemy-jdbcapi v${VERSION} to PyPI..."
+echo "🚀 Releasing sqlalchemy-jdbcapi ${VERSION} to PyPI..."
 echo ""
 
 # Verify git status
@@ -39,8 +39,8 @@ case "$BRANCH" in
 esac
 
 # Create git tag
-echo "🏷️  Creating git tag v${VERSION}..."
-git tag -a "v${VERSION}" -m "Release version ${VERSION}"
+echo "🏷️  Creating git tag ${VERSION}..."
+git tag -a "${VERSION}" -m "Release version ${VERSION}"
 
 # Build the package
 echo "🔨 Building package..."
@@ -49,8 +49,8 @@ echo "🔨 Building package..."
 # Ask for confirmation
 echo ""
 echo "📦 Ready to release:"
-echo "  - Version: v${VERSION}"
-echo "  - Tag: v${VERSION} (created locally)"
+echo "  - Version: ${VERSION}"
+echo "  - Tag: ${VERSION} (created locally)"
 echo "  - Artifacts:"
 ls -lh dist/
 echo ""
@@ -65,7 +65,7 @@ case "$REPLY" in
 
         # Push git tag
         echo "📌 Pushing git tag to remote..."
-        git push origin "v${VERSION}"
+        git push origin "${VERSION}"
 
         echo ""
         echo "✅ Release complete!"
@@ -79,7 +79,7 @@ case "$REPLY" in
         ;;
     *)
         echo "❌ Release cancelled"
-        echo "To delete the local tag: git tag -d v${VERSION}"
+        echo "To delete the local tag: git tag -d ${VERSION}"
         exit 1
         ;;
 esac
