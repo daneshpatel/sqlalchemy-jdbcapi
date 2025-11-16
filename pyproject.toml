@@ -1,25 +1,364 @@
-[tool.black]
-line-length = 79
-target-version = ['py37']
-exclude = '''
-    /(
-        \.git
-      | \.hg
-      | \.mypy_cache
-      | \.tox
-      | \.venv
-      | _build
-      | buck-out
-      | build
-      | dist
+[build-system]
+requires = ["setuptools>=68.0", "setuptools-scm>=8.0"]
+build-backend = "setuptools.build_meta"
 
-      # The following are specific to Black, you probably don't want those.
-      | blib2to3
-      | tests/data
-      | MANIFEST.in
-      | LICENSE
-      | AUTHORS
-      | setup.cfg:
-      | project.toml
-    )/
+[project]
+name = "sqlalchemy-jdbcapi"
+dynamic = ["version"]
+description = "Modern SQLAlchemy dialect for JDBC connections with native implementation"
+readme = {file = "README.md", content-type = "text/markdown"}
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "Danesh Patel", email = "danesh_patel@outlook.com"},
+    {name = "Pavel Henrykhsen"},
+]
+maintainers = [
+    {name = "Danesh Patel", email = "danesh_patel@outlook.com"},
+]
+keywords = [
+    "sqlalchemy",
+    "jdbc",
+    "database",
+    "postgresql",
+    "oracle",
+    "mysql",
+    "sql-server",
+    "db2",
+    "oceanbase",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Database",
+    "Topic :: Database :: Front-Ends",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+
+dependencies = [
+    "sqlalchemy>=2.0.0",
+    "JPype1>=1.5.0",
+]
+
+[project.optional-dependencies]
+# ODBC support (optional - for odbcapi+ dialects)
+odbc = [
+    "pyodbc>=5.0.0",
+]
+
+# Data Science & ML Integration
+dataframe = [
+    "pandas>=2.0.0",
+    "polars>=0.20.0",
+    "pyarrow>=14.0.0",
+]
+
+# Development dependencies
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-xdist>=3.5.0",
+    "mypy>=1.8.0",
+    "ruff>=0.2.0",
+    "pre-commit>=3.6.0",
+    "tox>=4.11.0",
+    "build>=1.0.0",
+    "twine>=5.0.0",
+]
+
+# Documentation
+docs = [
+    "sphinx>=7.2.0",
+    "sphinx-rtd-theme>=2.0.0",
+    "sphinx-autodoc-typehints>=1.25.0",
+    "myst-parser>=2.0.0",
+]
+
+# Type stubs
+types = [
+    "types-python-dateutil",
+]
+
+# All optional dependencies
+all = [
+    "sqlalchemy-jdbcapi[odbc,dataframe,dev,docs,types]",
+]
+
+[project.urls]
+Homepage = "https://github.com/daneshpatel/sqlalchemy-jdbcapi"
+Documentation = "https://sqlalchemy-jdbcapi.readthedocs.io"
+Repository = "https://github.com/daneshpatel/sqlalchemy-jdbcapi"
+Issues = "https://github.com/daneshpatel/sqlalchemy-jdbcapi/issues"
+Changelog = "https://github.com/daneshpatel/sqlalchemy-jdbcapi/blob/main/CHANGELOG.md"
+
+[project.entry-points."sqlalchemy.dialects"]
+# JDBC Dialects
+"jdbcapi.postgresql" = "sqlalchemy_jdbcapi.dialects.postgresql:PostgreSQLDialect"
+"jdbcapi.pgjdbc" = "sqlalchemy_jdbcapi.dialects.postgresql:PostgreSQLDialect"  # Alias
+"jdbcapi.oracle" = "sqlalchemy_jdbcapi.dialects.oracle:OracleDialect"
+"jdbcapi.oraclejdbc" = "sqlalchemy_jdbcapi.dialects.oracle:OracleDialect"  # Alias
+"jdbcapi.oceanbase" = "sqlalchemy_jdbcapi.dialects.oceanbase:OceanBaseDialect"
+"jdbcapi.oceanbasejdbc" = "sqlalchemy_jdbcapi.dialects.oceanbase:OceanBaseDialect"  # Alias
+"jdbcapi.mysql" = "sqlalchemy_jdbcapi.dialects.mysql:MySQLDialect"
+"jdbcapi.mariadb" = "sqlalchemy_jdbcapi.dialects.mysql:MariaDBDialect"
+"jdbcapi.mssql" = "sqlalchemy_jdbcapi.dialects.mssql:MSSQLDialect"
+"jdbcapi.sqlserver" = "sqlalchemy_jdbcapi.dialects.mssql:MSSQLDialect"  # Alias
+"jdbcapi.db2" = "sqlalchemy_jdbcapi.dialects.db2:DB2Dialect"
+"jdbcapi.sqlite" = "sqlalchemy_jdbcapi.dialects.sqlite:SQLiteDialect"
+
+# ODBC Dialects
+"odbcapi.postgresql" = "sqlalchemy_jdbcapi.dialects.odbc_postgresql:PostgreSQLODBCDialect"
+"odbcapi.pgsql" = "sqlalchemy_jdbcapi.dialects.odbc_postgresql:PostgreSQLODBCDialect"  # Alias
+"odbcapi.mysql" = "sqlalchemy_jdbcapi.dialects.odbc_mysql:MySQLODBCDialect"
+"odbcapi.mariadb" = "sqlalchemy_jdbcapi.dialects.odbc_mysql:MariaDBODBCDialect"
+"odbcapi.mssql" = "sqlalchemy_jdbcapi.dialects.odbc_mssql:MSSQLODBCDialect"
+"odbcapi.sqlserver" = "sqlalchemy_jdbcapi.dialects.odbc_mssql:MSSQLODBCDialect"  # Alias
+"odbcapi.oracle" = "sqlalchemy_jdbcapi.dialects.odbc_oracle:OracleODBCDialect"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+zip-safe = false
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["sqlalchemy_jdbcapi*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+sqlalchemy_jdbcapi = ["py.typed"]
+
+[tool.setuptools_scm]
+version_file = "src/sqlalchemy_jdbcapi/_version.py"
+version_scheme = "post-release"
+
+# Ruff configuration (modern linter & formatter)
+[tool.ruff]
+target-version = "py310"
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "F",     # pyflakes
+    "I",     # isort
+    "B",     # flake8-bugbear
+    "C4",    # flake8-comprehensions
+    "UP",    # pyupgrade
+    "ARG",   # flake8-unused-arguments
+    "SIM",   # flake8-simplify
+    "TID",   # flake8-tidy-imports
+    "TCH",   # flake8-type-checking
+    "RUF",   # Ruff-specific rules
+    "PL",    # pylint
+    "PERF",  # perflint
+    "S",     # flake8-bandit (security)
+    "A",     # flake8-builtins
+    "COM",   # flake8-commas
+    "C90",   # mccabe complexity
+    "DTZ",   # flake8-datetimez
+    "EM",    # flake8-errmsg
+    "G",     # flake8-logging-format
+    "N",     # pep8-naming
+    "PIE",   # flake8-pie
+    "PT",    # flake8-pytest-style
+    "Q",     # flake8-quotes
+    "RSE",   # flake8-raise
+    "RET",   # flake8-return
+    "SLF",   # flake8-self
+    "T20",   # flake8-print
+    "ERA",   # eradicate (commented code)
+    "PD",    # pandas-vet
+    "NPY",   # numpy-specific rules
+]
+ignore = [
+    "E501",    # line too long (handled by formatter)
+    "PLR0913", # too many arguments
+    "PLR2004", # magic value comparison
+    "S101",    # use of assert (needed for tests)
+    "COM812",  # trailing comma (conflicts with formatter)
+    "T201",    # print statement (ok for CLI tools)
+    "S603",    # subprocess without shell=True
+    "S607",    # start process with partial path
+    "EM101",   # raw string in exception
+    "EM102",   # f-string in exception
+    "G004",    # f-string in logging
+    "TID252",  # relative imports
+    "PLC0415", # import outside top-level (needed for lazy imports)
+    "RUF022",  # unsorted __all__
+    "N818",    # exception naming (DB-API compatibility)
+    "UP007",   # Union vs | (compatibility)
+    "ARG002",  # unused arguments (interface compliance)
+    "TC002",   # type checking imports
+    "SLF001",  # private member access (JDBC internals)
+    "SIM102",  # nested if statements (readability preference)
+    "B007",    # unused loop variable (dict iteration)
+    "B905",    # zip strict parameter (Python 3.10 compat)
+    "DTZ006",  # datetime without timezone (not always needed)
+    "PLW0603", # global statement (needed for JVM singleton)
+    "ERA001",  # commented code (useful for documentation)
+    "S110",    # try-except-pass (acceptable in some contexts)
+    "PERF401", # list comprehension (readability preference)
+    "PERF203", # try-except in loop (necessary for robustness)
+    "A004",    # shadowing builtin (DB-API compatibility)
+    "TC003",   # type checking imports (compatibility)
+    "SIM201",  # condition negation (readability preference)
+    "SIM105",  # contextlib.suppress (readability preference)
+    "SIM103",  # return negated condition (readability preference)
+    "S310",    # URL open audit (Maven Central is trusted)
+    "S106",    # hardcoded password (false positive)
+    "RUF012",  # mutable class attrs (intentional)
+    "PLR0912", # too many branches (complexity is justified)
+    "PLR0911", # too many returns (early returns preferred)
+    "PERF102", # dict.values() (sometimes key is needed)
+    "N806",    # variable naming (DB-API compatibility)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = [
+    "S101",    # assert allowed in tests
+    "ARG",     # unused arguments OK in tests
+    "PLR2004", # magic values OK in tests
+]
+"tests/functional/**/*.py" = [
+    "DTZ",     # datetime timezone not required for examples
+    "RET504",  # assignment before return OK for clarity
+    "F841",    # unused variables OK in example code
+]
+"examples/**/*.py" = [
+    "F841",    # unused variables OK in example/demo code
+    "F401",    # unused imports OK in examples
+    "PIE790",  # pass statements OK for class examples
+    "F541",    # f-strings without placeholders OK for readability
+    "PD003",   # pandas method choices OK
+    "T201",    # print statements expected in examples
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["sqlalchemy_jdbcapi"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+# MyPy configuration
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = false  # SQLAlchemy decorators
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+show_error_context = true
+pretty = true
+
+[[tool.mypy.overrides]]
+module = [
+    "jpype.*",
+    "jaydebeapi.*",
+]
+ignore_missing_imports = true
+
+# Pytest configuration
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--cov=sqlalchemy_jdbcapi",
+    "--cov-report=term-missing:skip-covered",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--cov-branch",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "requires_jvm: marks tests that require JVM",
+    "requires_jdbc: marks tests that require JDBC drivers",
+    "functional: marks tests as functional tests (require real databases)",
+    "network: marks tests that require network access (Maven Central, etc.)",
+]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["src"]
+branch = true
+parallel = true
+omit = [
+    "*/tests/*",
+    "*/__pycache__/*",
+    "*/site-packages/*",
+]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+# Bandit security configuration
+[tool.bandit]
+exclude_dirs = ["tests", "build", "dist"]
+skips = ["B101", "B601"]  # B101: assert_used, B601: paramiko_calls
+
+# Black configuration (backup if ruff format not used)
+[tool.black]
+line-length = 88
+target-version = ["py310", "py311", "py312"]
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
 '''

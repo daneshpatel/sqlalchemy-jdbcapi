@@ -6,4 +6,32 @@
 /sqlalchemy_jdbcapi/__pycache__/
 /sqlalchemy_jdbcapi.egg-info/
 /venv/
-/*.egg*/
+/*.egg*/**/__pycache__
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+*.egg-info/
+.eggs/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+*.xml
