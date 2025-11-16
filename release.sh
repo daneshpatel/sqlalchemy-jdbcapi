@@ -25,14 +25,18 @@ fi
 
 # Verify on main or develop branch
 BRANCH=$(git branch --show-current)
-if [[ "$BRANCH" != "main" && "$BRANCH" != "master" && "$BRANCH" != "develop" ]]; then
-    echo "⚠️  Warning: Not on main/master/develop branch (currently on: $BRANCH)"
-    read -p "Continue anyway? (y/N) " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        exit 1
-    fi
-fi
+case "$BRANCH" in
+    main|master|develop) : ;;
+    *)
+        echo "⚠️  Warning: Not on main/master/develop branch (currently on: $BRANCH)"
+        printf "Continue anyway? (y/N) "
+        IFS= read -r REPLY
+        case "$REPLY" in
+            [Yy]*) ;;
+            *) exit 1 ;;
+        esac
+        ;;
+esac
 
 # Create git tag
 echo "🏷️  Creating git tag v${VERSION}..."
@@ -50,29 +54,32 @@ echo "  - Tag: v${VERSION} (created locally)"
 echo "  - Artifacts:"
 ls -lh dist/
 echo ""
-read -p "Upload to PyPI? (y/N) " -n 1 -r
-echo
+printf "Upload to PyPI? (y/N) "
+IFS= read -r REPLY
 
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    # Upload to PyPI
-    echo "📤 Uploading to PyPI..."
-    twine upload dist/*
+case "$REPLY" in
+    [Yy]*)
+        # Upload to PyPI
+        echo "📤 Uploading to PyPI..."
+        twine upload dist/*
 
-    # Push git tag
-    echo "📌 Pushing git tag to remote..."
-    git push origin "v${VERSION}"
+        # Push git tag
+        echo "📌 Pushing git tag to remote..."
+        git push origin "v${VERSION}"
 
-    echo ""
-    echo "✅ Release complete!"
-    echo ""
-    echo "🎉 Version ${VERSION} is now live on PyPI!"
-    echo "🔗 https://pypi.org/project/sqlalchemy-jdbcapi/${VERSION}/"
-    echo ""
-    echo "Next steps:"
-    echo "  1. Create GitHub release: https://github.com/daneshpatel/sqlalchemy-jdbcapi/releases/new"
-    echo "  2. Announce the release"
-else
-    echo "❌ Release cancelled"
-    echo "To delete the local tag: git tag -d v${VERSION}"
-    exit 1
-fi
+        echo ""
+        echo "✅ Release complete!"
+        echo ""
+        echo "🎉 Version ${VERSION} is now live on PyPI!"
+        echo "🔗 https://pypi.org/project/sqlalchemy-jdbcapi/${VERSION}/"
+        echo ""
+        echo "Next steps:"
+        echo "  1. Create GitHub release: https://github.com/daneshpatel/sqlalchemy-jdbcapi/releases/new"
+        echo "  2. Announce the release"
+        ;;
+    *)
+        echo "❌ Release cancelled"
+        echo "To delete the local tag: git tag -d v${VERSION}"
+        exit 1
+        ;;
+esac
