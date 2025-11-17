@@ -3,11 +3,11 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v## [Unreleased].html).
 
 ## [Unreleased]
 
-## [2.0.0] - 2025-XX-XX
+## [## [Unreleased]] - 2025-XX-XX
 
 ### 🚀 Added - Major Features
 
@@ -58,13 +58,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Old imports still work via backward compatibility
 
 - **Changed default dependency** - Now requires `JPype1>=1.5.0` instead of `JayDeBeApi`
-- **SQLAlchemy 2.0+ required** - Minimum SQLAlchemy version is 2.0.0
+- **SQLAlchemy 2.0+ required** - Minimum SQLAlchemy version is ## [Unreleased]
 
 ### 🔧 Changed
 
 - **Migrated to pyproject.toml (PEP 621)** - Modern Python packaging
 - **Updated all dependencies to latest versions**:
-  - SQLAlchemy >= 2.0.0
+  - SQLAlchemy >= ## [Unreleased]
   - JPype1 >= 1.5.0
   - pytest >= 8.0.0
   - ruff >= 0.2.0 (replaces flake8, black, isort)
@@ -274,10 +274,10 @@ with engine.connect() as conn:
 
 **New**:
 - JPype1 >= 1.5.0 (maintained, active)
-- SQLAlchemy >= 2.0.0
+- SQLAlchemy >= ## [Unreleased]
 - Optional: pandas, polars, pyarrow for DataFrame support
 
-[2.0.0]: https://github.com/daneshpatel/sqlalchemy-jdbcapi/compare/v1.3.2...v2.0.0
+[## [Unreleased]]: https://github.com/daneshpatel/sqlalchemy-jdbcapi/compare/v1.3.2...v## [Unreleased]
 [1.3.2]: https://github.com/daneshpatel/sqlalchemy-jdbcapi/compare/v1.3.0...v1.3.2
 [1.3.0]: https://github.com/daneshpatel/sqlalchemy-jdbcapi/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/daneshpatel/sqlalchemy-jdbcapi/compare/v1.2.1...v1.2.2

@@ -36,7 +36,7 @@ from __future__ import annotations
 
 # Version management
 # Version is managed by bump2version
-__version__ = "2.0.0"
+__version__ = "2.1.0"
 
 # Public API
 from . import jdbc
