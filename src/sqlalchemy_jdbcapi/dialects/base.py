@@ -128,11 +128,8 @@ class BaseJDBCDialect(Dialect, ABC):
     supports_native_boolean = True
     poolclass = pool.QueuePool
 
-    # Execution options
-    execution_ctx_cls: ClassVar[type | None] = None
-
     @classmethod
-    def dbapi(cls) -> type:
+    def import_dbapi(cls) -> type:
         """
         Return the DB-API module.
 
@@ -142,6 +139,11 @@ class BaseJDBCDialect(Dialect, ABC):
         from .. import jdbc
 
         return jdbc  # type: ignore
+
+    @classmethod
+    def dbapi(cls) -> type:
+        """Deprecated: Use import_dbapi() instead."""
+        return cls.import_dbapi()
 
     @classmethod
     @abstractmethod

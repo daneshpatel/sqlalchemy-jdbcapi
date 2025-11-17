@@ -310,6 +310,7 @@ markers = [
     "requires_jdbc: marks tests that require JDBC drivers",
     "functional: marks tests as functional tests (require real databases)",
     "network: marks tests that require network access (Maven Central, etc.)",
+    "docker: marks tests that require Docker containers (database integration tests)",
 ]
 
 # Coverage configuration

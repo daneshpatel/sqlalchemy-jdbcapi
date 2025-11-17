@@ -11,22 +11,24 @@ Modern, type-safe SQLAlchemy dialect for JDBC and ODBC connections with native P
 
 ## 📚 Documentation
 
-- **[Quick Start Guide](QUICKSTART.md)** - Get started in 5 minutes
-- **[Usage Guide](USAGE.md)** - Comprehensive usage examples
-- **[Drivers Guide](DRIVERS.md)** - Detailed driver documentation
+- **[Quick Start Guide](docs/quickstart.md)** - Get started in 5 minutes
+- **[Usage Guide](docs/usage.md)** - Comprehensive usage examples
+- **[Drivers Guide](docs/drivers.md)** - Detailed driver documentation
+- **[SQLAlchemy Integration](docs/sqlalchemy_integration.md)** - Full SQLAlchemy features guide
+- **[Troubleshooting Guide](docs/troubleshooting.md)** - Common issues and solutions
 - **[Contributing](CONTRIBUTING.md)** - Contribution guidelines
 
-## 🚀 Version 2.0 - Major Modernization
+##  Version 2.0 - Major Modernization
 
 Version 2.0 is a complete modernization of the library with:
-- ✨ **Automatic JDBC driver download** from Maven Central (zero configuration!)
-- 🔌 **ODBC support** for native database connectivity
-- 🎯 **Full SQLAlchemy native dialect integration** (ORM, reflection, Alembic, Inspector API)
-- 📊 **DataFrame integration** (pandas, polars, pyarrow)
-- 🗄️ **12 database dialects** (8 JDBC + 4 ODBC)
-- 🐍 **Modern Python 3.10+** with full type hints
-- ⚡ **SQLAlchemy 2.0+** compatible
-- 🏗️ **SOLID architecture** with clean code principles
+-  **Automatic JDBC driver download** from Maven Central (zero configuration!)
+-  **ODBC support** for native database connectivity
+-  **Full SQLAlchemy native dialect integration** (ORM, reflection, Alembic, Inspector API)
+-  **DataFrame integration** (pandas, polars, pyarrow)
+- ️ **12 database dialects** (8 JDBC + 4 ODBC)
+-  **Modern Python 3.10+** with full type hints
+-  **SQLAlchemy 2.0+** compatible
+-  **SOLID architecture** with clean code principles
 
 ## ✨ Features
 
@@ -54,7 +56,7 @@ Version 2.0 is a complete modernization of the library with:
 - **Best Practices**: Ruff formatting, mypy type checking, comprehensive linting
 - **Clean Architecture**: SOLID principles and design patterns
 
-> **🎯 What's Different?** Unlike other JDBC bridges, we provide **true SQLAlchemy native dialect integration**. This means you can use all SQLAlchemy features including table autoload, Inspector API, Alembic migrations, and ORM automapping - not just basic SQL execution!
+> ** What's Different?** Unlike other JDBC bridges, we provide **true SQLAlchemy native dialect integration**. This means you can use all SQLAlchemy features including table autoload, Inspector API, Alembic migrations, and ORM automapping - not just basic SQL execution!
 
 ## 📦 Installation
 
@@ -68,6 +70,38 @@ pip install sqlalchemy-jdbcapi[dataframe]
 # For development
 pip install sqlalchemy-jdbcapi[dev]
 ```
+
+### JDBC Requirements
+
+For JDBC support, you need:
+
+1. **Java Runtime** (JRE 11 or higher)
+2. **JPype1** - Python-Java bridge
+
+```bash
+# Install Java (if not already installed)
+# Ubuntu/Debian:
+sudo apt-get update && sudo apt-get install -y openjdk-17-jre
+
+# macOS (using Homebrew):
+brew install openjdk@17
+
+# Windows: Download from https://adoptium.net/
+```
+
+```bash
+# Install JPype1 (IMPORTANT: Use version 1.5.0)
+pip install JPype1==1.5.0
+```
+
+> **⚠️ Important**: JPype1 version 1.6.0 has a known compatibility issue. **Always use version 1.5.0**:
+> ```bash
+> pip install JPype1==1.5.0
+> ```
+>
+> If you encounter the error `RuntimeError: Can't find org.jpype.jar support library`, downgrade to JPype1 1.5.0.
+
+**JDBC drivers auto-download** from Maven Central on first use - no manual setup required!
 
 ## 🗄️ Supported Databases
 
@@ -88,18 +122,20 @@ pip install sqlalchemy-jdbcapi[dev]
 
 | Database | Connection URL | Install Guide |
 |----------|----------------|---------------|
-| PostgreSQL | `odbcapi+postgresql://user:pass@host:5432/db` | [See DRIVERS.md](DRIVERS.md#postgresql-odbc) |
-| MySQL | `odbcapi+mysql://user:pass@host:3306/db` | [See DRIVERS.md](DRIVERS.md#mysql-odbc) |
-| SQL Server | `odbcapi+mssql://user:pass@host:1433/db` | [See DRIVERS.md](DRIVERS.md#microsoft-sql-server-odbc) |
-| Oracle | `odbcapi+oracle://user:pass@host:1521/service` | [See DRIVERS.md](DRIVERS.md#oracle-odbc) |
+| PostgreSQL | `odbcapi+postgresql://user:pass@host:5432/db` | [See DRIVERS.md](docs/drivers.md#postgresql-odbc) |
+| MySQL | `odbcapi+mysql://user:pass@host:3306/db` | [See DRIVERS.md](docs/drivers.md#mysql-odbc) |
+| SQL Server | `odbcapi+mssql://user:pass@host:1433/db` | [See DRIVERS.md](docs/drivers.md#microsoft-sql-server-odbc) |
+| Oracle | `odbcapi+oracle://user:pass@host:1521/service` | [See DRIVERS.md](docs/drivers.md#oracle-odbc) |
 
-For detailed driver documentation, see **[DRIVERS.md](DRIVERS.md)**.
+For detailed driver documentation, see **[DRIVERS.md](docs/drivers.md)**.
 
 ## 🚀 Quick Start
 
 ### JDBC with Auto-Download (Recommended!)
 
 No setup required - drivers auto-download on first use!
+
+**Option 1: Auto-download on connection (simplest)**
 
 ```python
 from sqlalchemy import create_engine, text
@@ -113,11 +149,37 @@ with engine.connect() as conn:
     print(result.scalar())
 ```
 
+**Option 2: Explicit JVM initialization (recommended for production)**
+
+```python
+from sqlalchemy_jdbcapi.jdbc import start_jvm
+from sqlalchemy import create_engine, text
+
+# Initialize JVM and download drivers BEFORE creating engines
+start_jvm(auto_download=True, databases=["postgresql"])
+
+# Now create engine
+engine = create_engine('jdbcapi+postgresql://user:password@localhost:5432/mydb')
+
+with engine.connect() as conn:
+    result = conn.execute(text("SELECT version()"))
+    print(result.scalar())
+```
+
+**Download multiple database drivers at once:**
+
+```python
+from sqlalchemy_jdbcapi.jdbc import start_jvm
+
+# Download drivers for all databases you'll use
+start_jvm(auto_download=True, databases=["postgresql", "mysql", "oracle"])
+```
+
 Drivers are cached in `~/.sqlalchemy-jdbcapi/drivers/` for future use.
 
 ### ODBC (Alternative)
 
-Requires ODBC driver installation (see [DRIVERS.md](DRIVERS.md)):
+Requires ODBC driver installation (see [DRIVERS.md](docs/drivers.md)):
 
 ```python
 from sqlalchemy import create_engine
@@ -146,7 +208,7 @@ from sqlalchemy import create_engine
 engine = create_engine('jdbcapi+postgresql://user:password@localhost/mydb')
 ```
 
-For detailed usage, see **[QUICKSTART.md](QUICKSTART.md)** and **[USAGE.md](USAGE.md)**.
+For detailed usage, see **[Quick Start Guide](docs/quickstart.md)** and **[Usage Guide](docs/usage.md)**.
 
 ## 💡 Examples
 
@@ -268,7 +330,7 @@ engine = create_engine(f'jdbcapi+oceanbase://{user}:password@localhost:2881/mydb
 
 ## 🎯 Full SQLAlchemy Integration
 
-Version 2.0 provides **complete SQLAlchemy native dialect integration** with full ORM, reflection, and Inspector API support. See [SQLALCHEMY_INTEGRATION.md](SQLALCHEMY_INTEGRATION.md) for comprehensive documentation.
+Version 2.0 provides **complete SQLAlchemy native dialect integration** with full ORM, reflection, and Inspector API support. See [SQLAlchemy Integration Guide](docs/sqlalchemy_integration.md) for comprehensive documentation.
 
 ### ORM Support
 
@@ -657,6 +719,9 @@ pytest tests/functional/ -v -m functional
 # Run network tests (requires internet for Maven Central)
 pytest tests/functional/ -v -m network
 
+# Run Docker-based integration tests (recommended!)
+./run_docker_tests.sh
+
 # Run specific test file
 pytest tests/unit/test_dialects.py
 
@@ -722,6 +787,10 @@ See [CHANGELOG.md](CHANGELOG.md) for complete migration guide.
 
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
+Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+For security vulnerabilities, please see our [Security Policy](SECURITY.md).
+
 ### Quick Contribution Guide
 
 1. Fork the repository
@@ -746,11 +815,14 @@ This project is licensed under the Apache License 2.0 - see [LICENSE](LICENSE) f
 ## 📚 Links
 
 - **Documentation**: https://sqlalchemy-jdbcapi.readthedocs.io (coming soon)
-- **SQLAlchemy Integration Guide**: [SQLALCHEMY_INTEGRATION.md](SQLALCHEMY_INTEGRATION.md)
+- **SQLAlchemy Integration Guide**: [docs/sqlalchemy_integration.md](docs/sqlalchemy_integration.md)
 - **PyPI**: https://pypi.org/project/sqlalchemy-jdbcapi/
 - **GitHub**: https://github.com/daneshpatel/sqlalchemy-jdbcapi
 - **Issues**: https://github.com/daneshpatel/sqlalchemy-jdbcapi/issues
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
+- **Contributing**: [CONTRIBUTING.md](CONTRIBUTING.md)
+- **Code of Conduct**: [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+- **Security Policy**: [SECURITY.md](SECURITY.md)
 
 ## 💬 Support
 

@@ -5,6 +5,7 @@ JDBC Connection implementation following DB-API 2.0 specification.
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 from typing import Any
 
 from .cursor import Cursor
@@ -51,7 +52,9 @@ class Connection:
         # Start JVM if not already running
         # Note: JVM can only be started once per Python process
         try:
-            start_jvm(classpath=list(jars or []), jvm_args=None)
+            # Pass jars as-is to start_jvm - if None, it will use environment classpath
+            classpath = [Path(jar) if isinstance(jar, str) else jar for jar in jars] if jars else None
+            start_jvm(classpath=classpath, jvm_args=None)
         except Exception as e:
             raise InterfaceError(f"Failed to start JVM: {e}") from e
 
@@ -90,6 +93,9 @@ class Connection:
                 # TODO: Maybe support more argument formats in the future?
                 raise ValueError("driver_args must be dict, [user, password], or None")
 
+            # Disable autocommit by default for transactional behavior
+            # JDBC connections have autocommit=true by default
+            self._jdbc_connection.setAutoCommit(False)
             logger.info(f"Connected to database: {url}")
 
         except Exception as e:

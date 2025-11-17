@@ -43,6 +43,7 @@ class PostgreSQLDialect(BaseJDBCDialect, PGDialect):
     supports_sequences = True
     supports_native_boolean = True
     supports_smallserial = True
+    supports_statement_cache = True
 
     # Column specifications inherited from PGDialect
     # Can be extended in the future for JDBC-specific type mappings if needed

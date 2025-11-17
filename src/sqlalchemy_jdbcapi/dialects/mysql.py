@@ -40,6 +40,7 @@ class MySQLDialect(BaseJDBCDialect, BaseMySQLDialect):
     supports_native_boolean = False  # MySQL uses TINYINT(1)
     supports_native_enum = True
     supports_sequences = False  # MySQL < 8.0 doesn't support sequences
+    supports_statement_cache = True
 
     @classmethod
     def get_driver_config(cls) -> JDBCDriverConfig:
@@ -52,6 +53,17 @@ class MySQLDialect(BaseJDBCDialect, BaseMySQLDialect):
             supports_schemas=True,
             supports_sequences=False,
         )
+
+    def _detect_charset(self, connection: Connection) -> str:
+        """Detect MySQL connection character set."""
+        try:
+            result = connection.exec_driver_sql(
+                "SELECT @@character_set_client"
+            ).scalar()
+            return result or "utf8mb4"
+        except Exception as e:
+            logger.warning(f"Failed to detect charset: {e}")
+            return "utf8mb4"  # Default to utf8mb4
 
     def initialize(self, connection: Connection) -> None:
         """Initialize MySQL connection."""
