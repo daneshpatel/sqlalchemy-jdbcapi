@@ -1,0 +1,1264 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="JDBC Module" href="jdbc.html"><link rel="prev" title="Troubleshooting Guide" href="../troubleshooting.html">
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+        <title>API Reference - SQLAlchemy JDBC/ODBC API</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-brand-primary: #2563eb;
+  --color-brand-content: #2563eb;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #3b82f6;
+  --color-brand-content: #3b82f6;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #3b82f6;
+  --color-brand-content: #3b82f6;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">SQLAlchemy JDBC/ODBC API</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  <span class="sidebar-brand-text">SQLAlchemy JDBC/ODBC API</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../drivers.html">Supported Drivers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sqlalchemy_integration.html">SQLAlchemy Integration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">API Reference</a><input aria-label="Toggle navigation of API Reference" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html">JDBC Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="odbc.html">ODBC Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dialects.html">Dialects Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="jdbc.html">JDBC Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="odbc.html">ODBC Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dialects.html">Dialects Module</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/api/index.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">¶</a></h1>
+<p>This section provides detailed API documentation for SQLAlchemy JDBC/ODBC API.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="jdbc.html">JDBC Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#connection">Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#cursor">Cursor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#module-sqlalchemy_jdbcapi.jdbc.driver_manager">Driver Manager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#module-sqlalchemy_jdbcapi.jdbc.jvm">JVM Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#module-sqlalchemy_jdbcapi.jdbc.type_converter">Type Converter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#module-sqlalchemy_jdbcapi.jdbc.dataframe">DataFrame Integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#module-sqlalchemy_jdbcapi.jdbc.exceptions">Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jdbc.html#module-sqlalchemy_jdbcapi.jdbc.types">DB-API Type Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="odbc.html">ODBC Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="odbc.html#connection">Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="odbc.html#module-sqlalchemy_jdbcapi.odbc.exceptions">Exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dialects.html">Dialects Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dialects.html#base-dialect">Base Dialect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dialects.html#postgresql-dialect">PostgreSQL Dialect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dialects.html#oracle-dialect">Oracle Dialect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dialects.html#mysql-dialect">MySQL Dialect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dialects.html#sql-server-dialect">SQL Server Dialect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dialects.html#db2-dialect">DB2 Dialect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dialects.html#oceanbase-dialect">OceanBase Dialect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dialects.html#sqlite-dialect">SQLite Dialect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dialects.html#module-sqlalchemy_jdbcapi.dialects.odbc_base">ODBC Dialects</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h2>
+<p>The library is organized into three main modules:</p>
+<ul class="simple">
+<li><p><strong>JDBC Module</strong> (<a class="reference internal" href="jdbc.html#module-sqlalchemy_jdbcapi.jdbc" title="sqlalchemy_jdbcapi.jdbc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sqlalchemy_jdbcapi.jdbc</span></code></a>) - Native JDBC bridge implementation</p></li>
+<li><p><strong>ODBC Module</strong> (<a class="reference internal" href="odbc.html#module-sqlalchemy_jdbcapi.odbc" title="sqlalchemy_jdbcapi.odbc"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sqlalchemy_jdbcapi.odbc</span></code></a>) - Native ODBC connectivity</p></li>
+<li><p><strong>Dialects Module</strong> (<a class="reference internal" href="dialects.html#module-sqlalchemy_jdbcapi.dialects" title="sqlalchemy_jdbcapi.dialects"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sqlalchemy_jdbcapi.dialects</span></code></a>) - SQLAlchemy dialect implementations</p></li>
+</ul>
+</section>
+<section id="package-structure">
+<h2>Package Structure<a class="headerlink" href="#package-structure" title="Link to this heading">¶</a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>sqlalchemy_jdbcapi/
+├── jdbc/                    # JDBC bridge layer (DB-API 2.0)
+│   ├── connection.py        # Connection class
+│   ├── cursor.py            # Cursor class
+│   ├── exceptions.py        # Exception hierarchy
+│   ├── types.py             # DB-API type objects
+│   ├── type_converter.py    # JDBC ↔ Python type conversion
+│   ├── jvm.py               # JVM management
+│   ├── driver_manager.py    # Driver management
+│   └── dataframe.py         # DataFrame integration
+├── odbc/                    # ODBC bridge layer
+│   ├── connection.py        # ODBC Connection implementation
+│   └── exceptions.py        # ODBC exceptions
+└── dialects/                # SQLAlchemy dialects
+    ├── base.py              # Base dialect
+    ├── postgresql.py        # PostgreSQL dialect
+    ├── oracle.py            # Oracle dialect
+    ├── mysql.py             # MySQL/MariaDB dialects
+    ├── mssql.py             # SQL Server dialect
+    ├── db2.py               # DB2 dialect
+    ├── oceanbase.py         # OceanBase dialect
+    ├── sqlite.py            # SQLite dialect
+    └── odbc_*.py            # ODBC dialect variants
+</pre></div>
+</div>
+</section>
+<section id="module-sqlalchemy_jdbcapi">
+<span id="main-entry-point"></span><h2>Main Entry Point<a class="headerlink" href="#module-sqlalchemy_jdbcapi" title="Link to this heading">¶</a></h2>
+<p>SQLAlchemy JDBC API - Modern JDBC Dialect for SQLAlchemy.</p>
+<p>This package provides a modern, type-safe SQLAlchemy dialect for JDBC connections,
+supporting multiple databases through a native JPype-based implementation.</p>
+<p>Supported Databases:
+- PostgreSQL
+- Oracle Database
+- OceanBase (Oracle mode)
+- MySQL
+- MariaDB
+- Microsoft SQL Server
+- IBM DB2
+- SQLite (via JDBC)</p>
+<p>Features:
+- Modern Python 3.10+ with full type hints
+- Native JDBC implementation (no JayDeBeApi dependency)
+- DataFrame integration (pandas, polars, pyarrow)
+- SQLAlchemy 2.0+ compatible
+- Comprehensive error handling and logging
+- Connection pooling support</p>
+<dl>
+<dt>Example usage:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_engine</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># PostgreSQL</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s1">&#39;jdbcapi+postgresql://user:pass@localhost/db&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Oracle</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s1">&#39;jdbcapi+oracle://user:pass@localhost:1521/ORCL&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># MySQL</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s1">&#39;jdbcapi+mysql://user:pass@localhost/db&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.PostgreSQLDialect">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.</span></span><span class="sig-name descname"><span class="pre">PostgreSQLDialect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">native_inet_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_serializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_deserializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/postgresql.html#PostgreSQLDialect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.PostgreSQLDialect" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect" title="sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseJDBCDialect</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">PGDialect</span></code></p>
+<p>PostgreSQL dialect using JDBC driver.</p>
+<p>Supports all PostgreSQL-specific features including:
+- Arrays
+- JSONB
+- UUID
+- Full-text search
+- Custom types</p>
+<dl class="simple">
+<dt>Connection URL format:</dt><dd><p>jdbcapi+postgresql://user:password&#64;host:5432/database
+jdbcapi+pgjdbc://user:password&#64;host:5432/database  # Alias</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.PostgreSQLDialect.do_ping">
+<span class="sig-name descname"><span class="pre">do_ping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbapi_connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/postgresql.html#PostgreSQLDialect.do_ping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.do_ping" title="Link to this definition">¶</a></dt>
+<dd><p>Check if PostgreSQL connection is alive.</p>
+<p>Uses a simple SELECT query for efficiency.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.PostgreSQLDialect.driver">
+<span class="sig-name descname"><span class="pre">driver</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'jdbcapi'</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.driver" title="Link to this definition">¶</a></dt>
+<dd><p>identifying name for the dialect’s DBAPI</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.PostgreSQLDialect.get_driver_config">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_driver_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/postgresql.html#PostgreSQLDialect.get_driver_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.get_driver_config" title="Link to this definition">¶</a></dt>
+<dd><p>Get PostgreSQL JDBC driver configuration.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.PostgreSQLDialect.initialize">
+<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/postgresql.html#PostgreSQLDialect.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.initialize" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize PostgreSQL connection.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.PostgreSQLDialect.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'postgresql'</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.name" title="Link to this definition">¶</a></dt>
+<dd><p>identifying name for the dialect from a DBAPI-neutral point of view
+(i.e. ‘sqlite’)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.PostgreSQLDialect.supports_native_boolean">
+<span class="sig-name descname"><span class="pre">supports_native_boolean</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.supports_native_boolean" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the dialect supports a native boolean construct.
+This will prevent <code class="xref py py-class docutils literal notranslate"><span class="pre">_types.Boolean</span></code> from generating a CHECK
+constraint when that type is used.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.PostgreSQLDialect.supports_native_enum">
+<span class="sig-name descname"><span class="pre">supports_native_enum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.supports_native_enum" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the dialect supports a native ENUM construct.
+This will prevent <code class="xref py py-class docutils literal notranslate"><span class="pre">_types.Enum</span></code> from generating a CHECK
+constraint when that type is used in “native” mode.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.PostgreSQLDialect.supports_sequences">
+<span class="sig-name descname"><span class="pre">supports_sequences</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.supports_sequences" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the dialect supports CREATE SEQUENCE or similar.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.PostgreSQLDialect.supports_smallserial">
+<span class="sig-name descname"><span class="pre">supports_smallserial</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.supports_smallserial" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.PostgreSQLDialect.supports_statement_cache">
+<span class="sig-name descname"><span class="pre">supports_statement_cache</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.supports_statement_cache" title="Link to this definition">¶</a></dt>
+<dd><p>indicates if this dialect supports caching.</p>
+<p>All dialects that are compatible with statement caching should set this
+flag to True directly on each dialect class and subclass that supports
+it.  SQLAlchemy tests that this flag is locally present on each dialect
+subclass before it will use statement caching.  This is to provide
+safety for legacy or new dialects that are not yet fully tested to be
+compliant with SQL statement caching.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.4.5.</span></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.sqlalchemy.org/en/20/core/connections.html#engine-thirdparty-caching" title="(in SQLAlchemy v2.0)"><span>Caching for Third Party Dialects</span></a></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OracleDialect">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.</span></span><span class="sig-name descname"><span class="pre">OracleDialect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_ansi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_binds_for_limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_nchar_for_unicode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_tablespaces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('SYSTEM',</span> <span class="pre">'SYSAUX')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_offset_fetch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/oracle.html#OracleDialect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.OracleDialect" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect" title="sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseJDBCDialect</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">OracleDialect</span></code></p>
+<p>Oracle Database dialect using JDBC driver.</p>
+<p>Supports Oracle-specific features including:
+- Sequences
+- Synonyms
+- Database links
+- Packages
+- Custom types</p>
+<dl class="simple">
+<dt>Connection URL formats:</dt><dd><p>jdbcapi+oracle://user:password&#64;host:1521/database
+jdbcapi+oracle://user:password&#64;host:1521/SID
+jdbcapi+oraclejdbc://user:password&#64;host:1521/service_name  # Alias</p>
+</dd>
+<dt>For TNS connections:</dt><dd><p>jdbcapi+oracle://user:password&#64;tnsname</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OracleDialect.colspecs">
+<span class="sig-name descname"><span class="pre">colspecs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">MutableMapping</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">TypeEngine</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">TypeEngine</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{&lt;class</span> <span class="pre">'sqlalchemy.sql.sqltypes.Boolean'&gt;:</span> <span class="pre">&lt;class</span> <span class="pre">'sqlalchemy.dialects.oracle.types._OracleBoolean'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'sqlalchemy.sql.sqltypes.Date'&gt;:</span> <span class="pre">&lt;class</span> <span class="pre">'sqlalchemy.dialects.oracle.types._OracleDate'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'sqlalchemy.sql.sqltypes.DateTime'&gt;:</span> <span class="pre">&lt;class</span> <span class="pre">'sqlalchemy.dialects.oracle.types.DATE'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'sqlalchemy.sql.sqltypes.Interval'&gt;:</span> <span class="pre">&lt;class</span> <span class="pre">'sqlalchemy.dialects.oracle.types.INTERVAL'&gt;}</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.OracleDialect.colspecs" title="Link to this definition">¶</a></dt>
+<dd><p>A dictionary of TypeEngine classes from sqlalchemy.types mapped
+to subclasses that are specific to the dialect class.  This
+dictionary is class-level only and is not accessed from the
+dialect instance itself.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OracleDialect.create_connect_args">
+<span class="sig-name descname"><span class="pre">create_connect_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/oracle.html#OracleDialect.create_connect_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.OracleDialect.create_connect_args" title="Link to this definition">¶</a></dt>
+<dd><p>Create connection arguments from SQLAlchemy URL.</p>
+<p>Handles various Oracle connection formats including TNS names.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OracleDialect.do_ping">
+<span class="sig-name descname"><span class="pre">do_ping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbapi_connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/oracle.html#OracleDialect.do_ping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.OracleDialect.do_ping" title="Link to this definition">¶</a></dt>
+<dd><p>Check if Oracle connection is alive.</p>
+<p>Uses Oracle’s dual table for efficiency.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OracleDialect.driver">
+<span class="sig-name descname"><span class="pre">driver</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'jdbcapi'</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.OracleDialect.driver" title="Link to this definition">¶</a></dt>
+<dd><p>identifying name for the dialect’s DBAPI</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OracleDialect.get_driver_config">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_driver_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/oracle.html#OracleDialect.get_driver_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.OracleDialect.get_driver_config" title="Link to this definition">¶</a></dt>
+<dd><p>Get Oracle JDBC driver configuration.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OracleDialect.initialize">
+<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/oracle.html#OracleDialect.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.OracleDialect.initialize" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize Oracle connection.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OracleDialect.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'oracle'</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.OracleDialect.name" title="Link to this definition">¶</a></dt>
+<dd><p>identifying name for the dialect from a DBAPI-neutral point of view
+(i.e. ‘sqlite’)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OracleDialect.supports_identity_columns">
+<span class="sig-name descname"><span class="pre">supports_identity_columns</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.OracleDialect.supports_identity_columns" title="Link to this definition">¶</a></dt>
+<dd><p>target database supports IDENTITY</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OracleDialect.supports_native_boolean">
+<span class="sig-name descname"><span class="pre">supports_native_boolean</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.OracleDialect.supports_native_boolean" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the dialect supports a native boolean construct.
+This will prevent <code class="xref py py-class docutils literal notranslate"><span class="pre">_types.Boolean</span></code> from generating a CHECK
+constraint when that type is used.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OracleDialect.supports_sequences">
+<span class="sig-name descname"><span class="pre">supports_sequences</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.OracleDialect.supports_sequences" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the dialect supports CREATE SEQUENCE or similar.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OceanBaseDialect">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.</span></span><span class="sig-name descname"><span class="pre">OceanBaseDialect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">use_ansi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize_limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_binds_for_limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_nchar_for_unicode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_tablespaces</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('SYSTEM',</span> <span class="pre">'SYSAUX')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_offset_fetch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/oceanbase.html#OceanBaseDialect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.OceanBaseDialect" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect" title="sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseJDBCDialect</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">OracleDialect</span></code></p>
+<p>OceanBase dialect using JDBC driver (Oracle compatibility mode).</p>
+<p>OceanBase is a distributed database that supports both MySQL and Oracle
+compatibility modes. This dialect implements Oracle mode.</p>
+<dl class="simple">
+<dt>Connection URL format:</dt><dd><p>jdbcapi+oceanbase://user&#64;tenant#cluster:password&#64;host:2881/database
+jdbcapi+oceanbasejdbc://user:password&#64;host:2881/database  # Alias</p>
+</dd>
+</dl>
+<p>Note: OceanBase uses a special user format: <a class="reference external" href="mailto:username&#37;&#52;&#48;tenant#cluster">username<span>&#64;</span>tenant#cluster</a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OceanBaseDialect.colspecs">
+<span class="sig-name descname"><span class="pre">colspecs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">MutableMapping</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">TypeEngine</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">TypeEngine</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{&lt;class</span> <span class="pre">'sqlalchemy.sql.sqltypes.Boolean'&gt;:</span> <span class="pre">&lt;class</span> <span class="pre">'sqlalchemy.dialects.oracle.types._OracleBoolean'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'sqlalchemy.sql.sqltypes.Date'&gt;:</span> <span class="pre">&lt;class</span> <span class="pre">'sqlalchemy.dialects.oracle.types._OracleDate'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'sqlalchemy.sql.sqltypes.DateTime'&gt;:</span> <span class="pre">&lt;class</span> <span class="pre">'sqlalchemy.dialects.oracle.types.DATE'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'sqlalchemy.sql.sqltypes.Interval'&gt;:</span> <span class="pre">&lt;class</span> <span class="pre">'sqlalchemy.dialects.oracle.types.INTERVAL'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'sqlalchemy.sql.sqltypes.TIMESTAMP'&gt;:</span> <span class="pre">&lt;class</span> <span class="pre">'sqlalchemy_jdbcapi.dialects.oceanbase.ObTimestamp'&gt;}</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.OceanBaseDialect.colspecs" title="Link to this definition">¶</a></dt>
+<dd><p>A dictionary of TypeEngine classes from sqlalchemy.types mapped
+to subclasses that are specific to the dialect class.  This
+dictionary is class-level only and is not accessed from the
+dialect instance itself.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OceanBaseDialect.create_connect_args">
+<span class="sig-name descname"><span class="pre">create_connect_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/oceanbase.html#OceanBaseDialect.create_connect_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.OceanBaseDialect.create_connect_args" title="Link to this definition">¶</a></dt>
+<dd><p>Create connection arguments for OceanBase.</p>
+<p>Handles special OceanBase user format and connection properties.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OceanBaseDialect.do_ping">
+<span class="sig-name descname"><span class="pre">do_ping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbapi_connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/oceanbase.html#OceanBaseDialect.do_ping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.OceanBaseDialect.do_ping" title="Link to this definition">¶</a></dt>
+<dd><p>Check if OceanBase connection is alive.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OceanBaseDialect.do_rollback">
+<span class="sig-name descname"><span class="pre">do_rollback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbapi_connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/oceanbase.html#OceanBaseDialect.do_rollback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.OceanBaseDialect.do_rollback" title="Link to this definition">¶</a></dt>
+<dd><p>Perform rollback on OceanBase connection.</p>
+<p>OceanBase sometimes has issues with rollback, this provides
+error handling.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OceanBaseDialect.driver">
+<span class="sig-name descname"><span class="pre">driver</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'jdbcapi'</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.OceanBaseDialect.driver" title="Link to this definition">¶</a></dt>
+<dd><p>identifying name for the dialect’s DBAPI</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OceanBaseDialect.get_driver_config">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_driver_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/oceanbase.html#OceanBaseDialect.get_driver_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.OceanBaseDialect.get_driver_config" title="Link to this definition">¶</a></dt>
+<dd><p>Get OceanBase JDBC driver configuration.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OceanBaseDialect.initialize">
+<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/oceanbase.html#OceanBaseDialect.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.OceanBaseDialect.initialize" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize OceanBase connection.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OceanBaseDialect.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'oceanbase'</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.OceanBaseDialect.name" title="Link to this definition">¶</a></dt>
+<dd><p>identifying name for the dialect from a DBAPI-neutral point of view
+(i.e. ‘sqlite’)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OceanBaseDialect.supports_native_decimal">
+<span class="sig-name descname"><span class="pre">supports_native_decimal</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.OceanBaseDialect.supports_native_decimal" title="Link to this definition">¶</a></dt>
+<dd><p>indicates if Decimal objects are handled and returned for precision
+numeric types, or if floats are returned</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OceanBaseDialect.supports_sane_multi_rowcount">
+<span class="sig-name descname"><span class="pre">supports_sane_multi_rowcount</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.OceanBaseDialect.supports_sane_multi_rowcount" title="Link to this definition">¶</a></dt>
+<dd><p>Indicate whether the dialect properly implements rowcount for
+<code class="docutils literal notranslate"><span class="pre">UPDATE</span></code> and <code class="docutils literal notranslate"><span class="pre">DELETE</span></code> statements when executed via
+executemany.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OceanBaseDialect.supports_sane_rowcount">
+<span class="sig-name descname"><span class="pre">supports_sane_rowcount</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.OceanBaseDialect.supports_sane_rowcount" title="Link to this definition">¶</a></dt>
+<dd><p>Indicate whether the dialect properly implements rowcount for
+<code class="docutils literal notranslate"><span class="pre">UPDATE</span></code> and <code class="docutils literal notranslate"><span class="pre">DELETE</span></code> statements.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OceanBaseDialect.supports_sequences">
+<span class="sig-name descname"><span class="pre">supports_sequences</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.OceanBaseDialect.supports_sequences" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the dialect supports CREATE SEQUENCE or similar.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OceanBaseDialect.supports_statement_cache">
+<span class="sig-name descname"><span class="pre">supports_statement_cache</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.OceanBaseDialect.supports_statement_cache" title="Link to this definition">¶</a></dt>
+<dd><p>indicates if this dialect supports caching.</p>
+<p>All dialects that are compatible with statement caching should set this
+flag to True directly on each dialect class and subclass that supports
+it.  SQLAlchemy tests that this flag is locally present on each dialect
+subclass before it will use statement caching.  This is to provide
+safety for legacy or new dialects that are not yet fully tested to be
+compliant with SQL statement caching.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.4.5.</span></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.sqlalchemy.org/en/20/core/connections.html#engine-thirdparty-caching" title="(in SQLAlchemy v2.0)"><span>Caching for Third Party Dialects</span></a></p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.OceanBaseDialect.supports_unicode_binds">
+<span class="sig-name descname"><span class="pre">supports_unicode_binds</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.OceanBaseDialect.supports_unicode_binds" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MySQLDialect">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.</span></span><span class="sig-name descname"><span class="pre">MySQLDialect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_serializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_deserializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_mariadb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/mysql.html#MySQLDialect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.MySQLDialect" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect" title="sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseJDBCDialect</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">MySQLDialect</span></code></p>
+<p>MySQL dialect using JDBC driver.</p>
+<p>Supports MySQL-specific features including:
+- AUTO_INCREMENT
+- Full-text indexes
+- JSON columns (MySQL 5.7+)
+- Spatial types</p>
+<dl class="simple">
+<dt>Connection URL format:</dt><dd><p>jdbcapi+mysql://user:password&#64;host:3306/database</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MySQLDialect.do_ping">
+<span class="sig-name descname"><span class="pre">do_ping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbapi_connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/mysql.html#MySQLDialect.do_ping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.MySQLDialect.do_ping" title="Link to this definition">¶</a></dt>
+<dd><p>Check if MySQL connection is alive.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MySQLDialect.driver">
+<span class="sig-name descname"><span class="pre">driver</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'jdbcapi'</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.MySQLDialect.driver" title="Link to this definition">¶</a></dt>
+<dd><p>identifying name for the dialect’s DBAPI</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MySQLDialect.get_driver_config">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_driver_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/mysql.html#MySQLDialect.get_driver_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.MySQLDialect.get_driver_config" title="Link to this definition">¶</a></dt>
+<dd><p>Get MySQL JDBC driver configuration.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MySQLDialect.initialize">
+<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/mysql.html#MySQLDialect.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.MySQLDialect.initialize" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize MySQL connection.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MySQLDialect.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'mysql'</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.MySQLDialect.name" title="Link to this definition">¶</a></dt>
+<dd><p>identifying name for the dialect from a DBAPI-neutral point of view
+(i.e. ‘sqlite’)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MySQLDialect.supports_native_boolean">
+<span class="sig-name descname"><span class="pre">supports_native_boolean</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.MySQLDialect.supports_native_boolean" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the dialect supports a native boolean construct.
+This will prevent <code class="xref py py-class docutils literal notranslate"><span class="pre">_types.Boolean</span></code> from generating a CHECK
+constraint when that type is used.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MySQLDialect.supports_native_enum">
+<span class="sig-name descname"><span class="pre">supports_native_enum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.MySQLDialect.supports_native_enum" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the dialect supports a native ENUM construct.
+This will prevent <code class="xref py py-class docutils literal notranslate"><span class="pre">_types.Enum</span></code> from generating a CHECK
+constraint when that type is used in “native” mode.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MySQLDialect.supports_sequences">
+<span class="sig-name descname"><span class="pre">supports_sequences</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.MySQLDialect.supports_sequences" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the dialect supports CREATE SEQUENCE or similar.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MySQLDialect.supports_statement_cache">
+<span class="sig-name descname"><span class="pre">supports_statement_cache</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.MySQLDialect.supports_statement_cache" title="Link to this definition">¶</a></dt>
+<dd><p>indicates if this dialect supports caching.</p>
+<p>All dialects that are compatible with statement caching should set this
+flag to True directly on each dialect class and subclass that supports
+it.  SQLAlchemy tests that this flag is locally present on each dialect
+subclass before it will use statement caching.  This is to provide
+safety for legacy or new dialects that are not yet fully tested to be
+compliant with SQL statement caching.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 1.4.5.</span></p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://docs.sqlalchemy.org/en/20/core/connections.html#engine-thirdparty-caching" title="(in SQLAlchemy v2.0)"><span>Caching for Third Party Dialects</span></a></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MariaDBDialect">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.</span></span><span class="sig-name descname"><span class="pre">MariaDBDialect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_serializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_deserializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_mariadb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/mysql.html#MariaDBDialect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.MariaDBDialect" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy_jdbcapi.MySQLDialect" title="sqlalchemy_jdbcapi.dialects.mysql.MySQLDialect"><code class="xref py py-class docutils literal notranslate"><span class="pre">MySQLDialect</span></code></a></p>
+<p>MariaDB dialect using JDBC driver.</p>
+<p>MariaDB is a MySQL fork with additional features.
+This dialect extends MySQL with MariaDB-specific capabilities.</p>
+<dl class="simple">
+<dt>Connection URL format:</dt><dd><p>jdbcapi+mariadb://user:password&#64;host:3306/database</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MariaDBDialect.get_driver_config">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_driver_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/mysql.html#MariaDBDialect.get_driver_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.MariaDBDialect.get_driver_config" title="Link to this definition">¶</a></dt>
+<dd><p>Get MariaDB JDBC driver configuration.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MariaDBDialect.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'mariadb'</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.MariaDBDialect.name" title="Link to this definition">¶</a></dt>
+<dd><p>identifying name for the dialect from a DBAPI-neutral point of view
+(i.e. ‘sqlite’)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MSSQLDialect">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.</span></span><span class="sig-name descname"><span class="pre">MSSQLDialect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_scope_identity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">schema_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dbo'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deprecate_large_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">supports_comments</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_serializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_deserializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legacy_schema_aliasing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_no_transaction_on_rollback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">opts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/mssql.html#MSSQLDialect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.MSSQLDialect" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect" title="sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseJDBCDialect</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">MSDialect</span></code></p>
+<p>Microsoft SQL Server dialect using JDBC driver.</p>
+<p>Supports SQL Server-specific features including:
+- T-SQL extensions
+- TOP clause
+- OUTPUT clause
+- Common Table Expressions (CTEs)
+- Window functions
+- JSON support (SQL Server 2016+)</p>
+<dl class="simple">
+<dt>Connection URL formats:</dt><dd><p>jdbcapi+mssql://user:password&#64;host:1433/database
+jdbcapi+sqlserver://user:password&#64;host:1433/database  # Alias</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MSSQLDialect.do_ping">
+<span class="sig-name descname"><span class="pre">do_ping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbapi_connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/mssql.html#MSSQLDialect.do_ping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.MSSQLDialect.do_ping" title="Link to this definition">¶</a></dt>
+<dd><p>Check if SQL Server connection is alive.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MSSQLDialect.driver">
+<span class="sig-name descname"><span class="pre">driver</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'jdbcapi'</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.MSSQLDialect.driver" title="Link to this definition">¶</a></dt>
+<dd><p>identifying name for the dialect’s DBAPI</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MSSQLDialect.get_driver_config">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_driver_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/mssql.html#MSSQLDialect.get_driver_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.MSSQLDialect.get_driver_config" title="Link to this definition">¶</a></dt>
+<dd><p>Get SQL Server JDBC driver configuration.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MSSQLDialect.initialize">
+<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/mssql.html#MSSQLDialect.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.MSSQLDialect.initialize" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize SQL Server connection.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MSSQLDialect.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'mssql'</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.MSSQLDialect.name" title="Link to this definition">¶</a></dt>
+<dd><p>identifying name for the dialect from a DBAPI-neutral point of view
+(i.e. ‘sqlite’)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MSSQLDialect.supports_native_boolean">
+<span class="sig-name descname"><span class="pre">supports_native_boolean</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.MSSQLDialect.supports_native_boolean" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the dialect supports a native boolean construct.
+This will prevent <code class="xref py py-class docutils literal notranslate"><span class="pre">_types.Boolean</span></code> from generating a CHECK
+constraint when that type is used.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MSSQLDialect.supports_native_enum">
+<span class="sig-name descname"><span class="pre">supports_native_enum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.MSSQLDialect.supports_native_enum" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the dialect supports a native ENUM construct.
+This will prevent <code class="xref py py-class docutils literal notranslate"><span class="pre">_types.Enum</span></code> from generating a CHECK
+constraint when that type is used in “native” mode.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.MSSQLDialect.supports_sequences">
+<span class="sig-name descname"><span class="pre">supports_sequences</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.MSSQLDialect.supports_sequences" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the dialect supports CREATE SEQUENCE or similar.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.DB2Dialect">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.</span></span><span class="sig-name descname"><span class="pre">DB2Dialect</span></span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/db2.html#DB2Dialect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.DB2Dialect" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect" title="sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseJDBCDialect</span></code></a>, <a class="reference external" href="https://docs.sqlalchemy.org/en/20/core/internals.html#sqlalchemy.engine.Dialect" title="(in SQLAlchemy v2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dialect</span></code></a></p>
+<p>IBM DB2 dialect using JDBC driver.</p>
+<p>Supports DB2-specific features including:
+- Sequences
+- Identity columns
+- Generated columns
+- Temporal tables (DB2 10+)
+- JSON support (DB2 11+)</p>
+<dl class="simple">
+<dt>Connection URL format:</dt><dd><p>jdbcapi+db2://user:password&#64;host:50000/database</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.DB2Dialect.do_ping">
+<span class="sig-name descname"><span class="pre">do_ping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbapi_connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/db2.html#DB2Dialect.do_ping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.DB2Dialect.do_ping" title="Link to this definition">¶</a></dt>
+<dd><p>Check if DB2 connection is alive.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.DB2Dialect.driver">
+<span class="sig-name descname"><span class="pre">driver</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'jdbcapi'</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.DB2Dialect.driver" title="Link to this definition">¶</a></dt>
+<dd><p>identifying name for the dialect’s DBAPI</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.DB2Dialect.get_driver_config">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_driver_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/db2.html#DB2Dialect.get_driver_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.DB2Dialect.get_driver_config" title="Link to this definition">¶</a></dt>
+<dd><p>Get DB2 JDBC driver configuration.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.DB2Dialect.initialize">
+<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/db2.html#DB2Dialect.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.DB2Dialect.initialize" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize DB2 connection.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.DB2Dialect.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'db2'</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.DB2Dialect.name" title="Link to this definition">¶</a></dt>
+<dd><p>identifying name for the dialect from a DBAPI-neutral point of view
+(i.e. ‘sqlite’)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.DB2Dialect.supports_identity_columns">
+<span class="sig-name descname"><span class="pre">supports_identity_columns</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.DB2Dialect.supports_identity_columns" title="Link to this definition">¶</a></dt>
+<dd><p>target database supports IDENTITY</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.DB2Dialect.supports_native_boolean">
+<span class="sig-name descname"><span class="pre">supports_native_boolean</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.DB2Dialect.supports_native_boolean" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the dialect supports a native boolean construct.
+This will prevent <code class="xref py py-class docutils literal notranslate"><span class="pre">_types.Boolean</span></code> from generating a CHECK
+constraint when that type is used.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.DB2Dialect.supports_native_enum">
+<span class="sig-name descname"><span class="pre">supports_native_enum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.DB2Dialect.supports_native_enum" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the dialect supports a native ENUM construct.
+This will prevent <code class="xref py py-class docutils literal notranslate"><span class="pre">_types.Enum</span></code> from generating a CHECK
+constraint when that type is used in “native” mode.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.DB2Dialect.supports_sequences">
+<span class="sig-name descname"><span class="pre">supports_sequences</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.DB2Dialect.supports_sequences" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the dialect supports CREATE SEQUENCE or similar.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.SQLiteDialect">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.</span></span><span class="sig-name descname"><span class="pre">SQLiteDialect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">native_datetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_serializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">json_deserializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_json_serializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_json_deserializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/sqlite.html#SQLiteDialect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.SQLiteDialect" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect" title="sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseJDBCDialect</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">SQLiteDialect</span></code></p>
+<p>SQLite dialect using JDBC driver.</p>
+<p>Note: For production use, the native sqlite3 dialect is recommended.
+This JDBC dialect is primarily useful for:
+- Testing JDBC infrastructure
+- Java application integration
+- Environments where native sqlite3 is not available</p>
+<dl class="simple">
+<dt>Connection URL format:</dt><dd><p>jdbcapi+sqlite:///path/to/database.db
+jdbcapi+sqlite:///:memory:  # In-memory database</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.SQLiteDialect.create_connect_args">
+<span class="sig-name descname"><span class="pre">create_connect_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/sqlite.html#SQLiteDialect.create_connect_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.SQLiteDialect.create_connect_args" title="Link to this definition">¶</a></dt>
+<dd><p>Create connection arguments for SQLite.</p>
+<p>Handles file paths and in-memory databases.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.SQLiteDialect.do_ping">
+<span class="sig-name descname"><span class="pre">do_ping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dbapi_connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/sqlite.html#SQLiteDialect.do_ping"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.SQLiteDialect.do_ping" title="Link to this definition">¶</a></dt>
+<dd><p>Check if SQLite connection is alive.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.SQLiteDialect.driver">
+<span class="sig-name descname"><span class="pre">driver</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'jdbcapi'</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.SQLiteDialect.driver" title="Link to this definition">¶</a></dt>
+<dd><p>identifying name for the dialect’s DBAPI</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.SQLiteDialect.get_driver_config">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_driver_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/sqlite.html#SQLiteDialect.get_driver_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.SQLiteDialect.get_driver_config" title="Link to this definition">¶</a></dt>
+<dd><p>Get SQLite JDBC driver configuration.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.SQLiteDialect.import_dbapi">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">import_dbapi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/sqlite.html#SQLiteDialect.import_dbapi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.SQLiteDialect.import_dbapi" title="Link to this definition">¶</a></dt>
+<dd><p>Import JDBC module.</p>
+<p>SQLAlchemy’s SQLite dialect expects sqlite_version_info attribute,
+so we add it as a wrapper.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.SQLiteDialect.initialize">
+<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/dialects/sqlite.html#SQLiteDialect.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.SQLiteDialect.initialize" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize SQLite connection.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.SQLiteDialect.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'sqlite'</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.SQLiteDialect.name" title="Link to this definition">¶</a></dt>
+<dd><p>identifying name for the dialect from a DBAPI-neutral point of view
+(i.e. ‘sqlite’)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.SQLiteDialect.supports_native_boolean">
+<span class="sig-name descname"><span class="pre">supports_native_boolean</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.SQLiteDialect.supports_native_boolean" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the dialect supports a native boolean construct.
+This will prevent <code class="xref py py-class docutils literal notranslate"><span class="pre">_types.Boolean</span></code> from generating a CHECK
+constraint when that type is used.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.SQLiteDialect.supports_native_decimal">
+<span class="sig-name descname"><span class="pre">supports_native_decimal</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.SQLiteDialect.supports_native_decimal" title="Link to this definition">¶</a></dt>
+<dd><p>indicates if Decimal objects are handled and returned for precision
+numeric types, or if floats are returned</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.SQLiteDialect.supports_native_enum">
+<span class="sig-name descname"><span class="pre">supports_native_enum</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.SQLiteDialect.supports_native_enum" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the dialect supports a native ENUM construct.
+This will prevent <code class="xref py py-class docutils literal notranslate"><span class="pre">_types.Enum</span></code> from generating a CHECK
+constraint when that type is used in “native” mode.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.SQLiteDialect.supports_sequences">
+<span class="sig-name descname"><span class="pre">supports_sequences</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.SQLiteDialect.supports_sequences" title="Link to this definition">¶</a></dt>
+<dd><p>Indicates if the dialect supports CREATE SEQUENCE or similar.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="jdbc.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">JDBC Module</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../troubleshooting.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Troubleshooting Guide</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Danesh Patel, Pavel Henrykhsen
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">API Reference</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#package-structure">Package Structure</a></li>
+<li><a class="reference internal" href="#module-sqlalchemy_jdbcapi">Main Entry Point</a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.PostgreSQLDialect"><code class="docutils literal notranslate"><span class="pre">PostgreSQLDialect</span></code></a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.do_ping"><code class="docutils literal notranslate"><span class="pre">PostgreSQLDialect.do_ping()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.driver"><code class="docutils literal notranslate"><span class="pre">PostgreSQLDialect.driver</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.get_driver_config"><code class="docutils literal notranslate"><span class="pre">PostgreSQLDialect.get_driver_config()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.initialize"><code class="docutils literal notranslate"><span class="pre">PostgreSQLDialect.initialize()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.name"><code class="docutils literal notranslate"><span class="pre">PostgreSQLDialect.name</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.supports_native_boolean"><code class="docutils literal notranslate"><span class="pre">PostgreSQLDialect.supports_native_boolean</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.supports_native_enum"><code class="docutils literal notranslate"><span class="pre">PostgreSQLDialect.supports_native_enum</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.supports_sequences"><code class="docutils literal notranslate"><span class="pre">PostgreSQLDialect.supports_sequences</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.supports_smallserial"><code class="docutils literal notranslate"><span class="pre">PostgreSQLDialect.supports_smallserial</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.PostgreSQLDialect.supports_statement_cache"><code class="docutils literal notranslate"><span class="pre">PostgreSQLDialect.supports_statement_cache</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OracleDialect"><code class="docutils literal notranslate"><span class="pre">OracleDialect</span></code></a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OracleDialect.colspecs"><code class="docutils literal notranslate"><span class="pre">OracleDialect.colspecs</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OracleDialect.create_connect_args"><code class="docutils literal notranslate"><span class="pre">OracleDialect.create_connect_args()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OracleDialect.do_ping"><code class="docutils literal notranslate"><span class="pre">OracleDialect.do_ping()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OracleDialect.driver"><code class="docutils literal notranslate"><span class="pre">OracleDialect.driver</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OracleDialect.get_driver_config"><code class="docutils literal notranslate"><span class="pre">OracleDialect.get_driver_config()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OracleDialect.initialize"><code class="docutils literal notranslate"><span class="pre">OracleDialect.initialize()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OracleDialect.name"><code class="docutils literal notranslate"><span class="pre">OracleDialect.name</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OracleDialect.supports_identity_columns"><code class="docutils literal notranslate"><span class="pre">OracleDialect.supports_identity_columns</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OracleDialect.supports_native_boolean"><code class="docutils literal notranslate"><span class="pre">OracleDialect.supports_native_boolean</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OracleDialect.supports_sequences"><code class="docutils literal notranslate"><span class="pre">OracleDialect.supports_sequences</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OceanBaseDialect"><code class="docutils literal notranslate"><span class="pre">OceanBaseDialect</span></code></a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OceanBaseDialect.colspecs"><code class="docutils literal notranslate"><span class="pre">OceanBaseDialect.colspecs</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OceanBaseDialect.create_connect_args"><code class="docutils literal notranslate"><span class="pre">OceanBaseDialect.create_connect_args()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OceanBaseDialect.do_ping"><code class="docutils literal notranslate"><span class="pre">OceanBaseDialect.do_ping()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OceanBaseDialect.do_rollback"><code class="docutils literal notranslate"><span class="pre">OceanBaseDialect.do_rollback()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OceanBaseDialect.driver"><code class="docutils literal notranslate"><span class="pre">OceanBaseDialect.driver</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OceanBaseDialect.get_driver_config"><code class="docutils literal notranslate"><span class="pre">OceanBaseDialect.get_driver_config()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OceanBaseDialect.initialize"><code class="docutils literal notranslate"><span class="pre">OceanBaseDialect.initialize()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OceanBaseDialect.name"><code class="docutils literal notranslate"><span class="pre">OceanBaseDialect.name</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OceanBaseDialect.supports_native_decimal"><code class="docutils literal notranslate"><span class="pre">OceanBaseDialect.supports_native_decimal</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OceanBaseDialect.supports_sane_multi_rowcount"><code class="docutils literal notranslate"><span class="pre">OceanBaseDialect.supports_sane_multi_rowcount</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OceanBaseDialect.supports_sane_rowcount"><code class="docutils literal notranslate"><span class="pre">OceanBaseDialect.supports_sane_rowcount</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OceanBaseDialect.supports_sequences"><code class="docutils literal notranslate"><span class="pre">OceanBaseDialect.supports_sequences</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OceanBaseDialect.supports_statement_cache"><code class="docutils literal notranslate"><span class="pre">OceanBaseDialect.supports_statement_cache</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.OceanBaseDialect.supports_unicode_binds"><code class="docutils literal notranslate"><span class="pre">OceanBaseDialect.supports_unicode_binds</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MySQLDialect"><code class="docutils literal notranslate"><span class="pre">MySQLDialect</span></code></a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MySQLDialect.do_ping"><code class="docutils literal notranslate"><span class="pre">MySQLDialect.do_ping()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MySQLDialect.driver"><code class="docutils literal notranslate"><span class="pre">MySQLDialect.driver</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MySQLDialect.get_driver_config"><code class="docutils literal notranslate"><span class="pre">MySQLDialect.get_driver_config()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MySQLDialect.initialize"><code class="docutils literal notranslate"><span class="pre">MySQLDialect.initialize()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MySQLDialect.name"><code class="docutils literal notranslate"><span class="pre">MySQLDialect.name</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MySQLDialect.supports_native_boolean"><code class="docutils literal notranslate"><span class="pre">MySQLDialect.supports_native_boolean</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MySQLDialect.supports_native_enum"><code class="docutils literal notranslate"><span class="pre">MySQLDialect.supports_native_enum</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MySQLDialect.supports_sequences"><code class="docutils literal notranslate"><span class="pre">MySQLDialect.supports_sequences</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MySQLDialect.supports_statement_cache"><code class="docutils literal notranslate"><span class="pre">MySQLDialect.supports_statement_cache</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MariaDBDialect"><code class="docutils literal notranslate"><span class="pre">MariaDBDialect</span></code></a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MariaDBDialect.get_driver_config"><code class="docutils literal notranslate"><span class="pre">MariaDBDialect.get_driver_config()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MariaDBDialect.name"><code class="docutils literal notranslate"><span class="pre">MariaDBDialect.name</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MSSQLDialect"><code class="docutils literal notranslate"><span class="pre">MSSQLDialect</span></code></a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MSSQLDialect.do_ping"><code class="docutils literal notranslate"><span class="pre">MSSQLDialect.do_ping()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MSSQLDialect.driver"><code class="docutils literal notranslate"><span class="pre">MSSQLDialect.driver</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MSSQLDialect.get_driver_config"><code class="docutils literal notranslate"><span class="pre">MSSQLDialect.get_driver_config()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MSSQLDialect.initialize"><code class="docutils literal notranslate"><span class="pre">MSSQLDialect.initialize()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MSSQLDialect.name"><code class="docutils literal notranslate"><span class="pre">MSSQLDialect.name</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MSSQLDialect.supports_native_boolean"><code class="docutils literal notranslate"><span class="pre">MSSQLDialect.supports_native_boolean</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MSSQLDialect.supports_native_enum"><code class="docutils literal notranslate"><span class="pre">MSSQLDialect.supports_native_enum</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.MSSQLDialect.supports_sequences"><code class="docutils literal notranslate"><span class="pre">MSSQLDialect.supports_sequences</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.DB2Dialect"><code class="docutils literal notranslate"><span class="pre">DB2Dialect</span></code></a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.DB2Dialect.do_ping"><code class="docutils literal notranslate"><span class="pre">DB2Dialect.do_ping()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.DB2Dialect.driver"><code class="docutils literal notranslate"><span class="pre">DB2Dialect.driver</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.DB2Dialect.get_driver_config"><code class="docutils literal notranslate"><span class="pre">DB2Dialect.get_driver_config()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.DB2Dialect.initialize"><code class="docutils literal notranslate"><span class="pre">DB2Dialect.initialize()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.DB2Dialect.name"><code class="docutils literal notranslate"><span class="pre">DB2Dialect.name</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.DB2Dialect.supports_identity_columns"><code class="docutils literal notranslate"><span class="pre">DB2Dialect.supports_identity_columns</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.DB2Dialect.supports_native_boolean"><code class="docutils literal notranslate"><span class="pre">DB2Dialect.supports_native_boolean</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.DB2Dialect.supports_native_enum"><code class="docutils literal notranslate"><span class="pre">DB2Dialect.supports_native_enum</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.DB2Dialect.supports_sequences"><code class="docutils literal notranslate"><span class="pre">DB2Dialect.supports_sequences</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.SQLiteDialect"><code class="docutils literal notranslate"><span class="pre">SQLiteDialect</span></code></a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.SQLiteDialect.create_connect_args"><code class="docutils literal notranslate"><span class="pre">SQLiteDialect.create_connect_args()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.SQLiteDialect.do_ping"><code class="docutils literal notranslate"><span class="pre">SQLiteDialect.do_ping()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.SQLiteDialect.driver"><code class="docutils literal notranslate"><span class="pre">SQLiteDialect.driver</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.SQLiteDialect.get_driver_config"><code class="docutils literal notranslate"><span class="pre">SQLiteDialect.get_driver_config()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.SQLiteDialect.import_dbapi"><code class="docutils literal notranslate"><span class="pre">SQLiteDialect.import_dbapi()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.SQLiteDialect.initialize"><code class="docutils literal notranslate"><span class="pre">SQLiteDialect.initialize()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.SQLiteDialect.name"><code class="docutils literal notranslate"><span class="pre">SQLiteDialect.name</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.SQLiteDialect.supports_native_boolean"><code class="docutils literal notranslate"><span class="pre">SQLiteDialect.supports_native_boolean</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.SQLiteDialect.supports_native_decimal"><code class="docutils literal notranslate"><span class="pre">SQLiteDialect.supports_native_decimal</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.SQLiteDialect.supports_native_enum"><code class="docutils literal notranslate"><span class="pre">SQLiteDialect.supports_native_enum</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.SQLiteDialect.supports_sequences"><code class="docutils literal notranslate"><span class="pre">SQLiteDialect.supports_sequences</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=79f5c508"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    </body>
+</html>

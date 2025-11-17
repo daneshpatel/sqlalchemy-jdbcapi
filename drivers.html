@@ -1,0 +1,1104 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="./">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html"><link rel="next" title="SQLAlchemy Integration Guide" href="sqlalchemy_integration.html"><link rel="prev" title="Usage Guide" href="usage.html">
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+        <title>Supported Drivers - SQLAlchemy JDBC/ODBC API</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-brand-primary: #2563eb;
+  --color-brand-content: #2563eb;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #3b82f6;
+  --color-brand-content: #3b82f6;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #3b82f6;
+  --color-brand-content: #3b82f6;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">SQLAlchemy JDBC/ODBC API</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  <span class="sidebar-brand-text">SQLAlchemy JDBC/ODBC API</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage Guide</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Supported Drivers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sqlalchemy_integration.html">SQLAlchemy Integration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/jdbc.html">JDBC Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/odbc.html">ODBC Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/dialects.html">Dialects Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/jdbc.html">JDBC Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/odbc.html">ODBC Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/dialects.html">Dialects Module</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/drivers.md.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="supported-drivers">
+<h1>Supported Drivers<a class="headerlink" href="#supported-drivers" title="Link to this heading">¶</a></h1>
+<p>Comprehensive guide to JDBC and ODBC drivers supported by sqlalchemy-jdbcapi.</p>
+<section id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="#jdbc-drivers"><span class="xref myst">JDBC Drivers</span></a></p></li>
+<li><p><a class="reference internal" href="#odbc-drivers"><span class="xref myst">ODBC Drivers</span></a></p></li>
+<li><p><a class="reference internal" href="#driver-compatibility-matrix"><span class="xref myst">Driver Compatibility Matrix</span></a></p></li>
+<li><p><a class="reference internal" href="#installation-instructions"><span class="xref myst">Installation Instructions</span></a></p></li>
+</ul>
+</section>
+<section id="jdbc-drivers">
+<h2>JDBC Drivers<a class="headerlink" href="#jdbc-drivers" title="Link to this heading">¶</a></h2>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h3>
+<p>JDBC drivers are automatically downloaded from Maven Central on first use. Manual installation is also supported.</p>
+</section>
+<section id="postgresql">
+<h3>PostgreSQL<a class="headerlink" href="#postgresql" title="Link to this heading">¶</a></h3>
+<p><strong>Recommended Version:</strong> 42.7.1
+<strong>Maven Coordinates:</strong> <code class="docutils literal notranslate"><span class="pre">org.postgresql:postgresql:42.7.1</span></code>
+<strong>JDBC URL Format:</strong> <code class="docutils literal notranslate"><span class="pre">jdbcapi+postgresql://user:password&#64;host:5432/database</span></code></p>
+<p><strong>Supported PostgreSQL Versions:</strong></p>
+<ul class="simple">
+<li><p>PostgreSQL 16.x</p></li>
+<li><p>PostgreSQL 15.x</p></li>
+<li><p>PostgreSQL 14.x</p></li>
+<li><p>PostgreSQL 13.x</p></li>
+<li><p>PostgreSQL 12.x</p></li>
+<li><p>PostgreSQL 11.x</p></li>
+<li><p>PostgreSQL 10.x</p></li>
+<li><p>PostgreSQL 9.6+</p></li>
+</ul>
+<p><strong>Features:</strong></p>
+<ul class="simple">
+<li><p>Arrays</p></li>
+<li><p>JSONB</p></li>
+<li><p>UUID</p></li>
+<li><p>Full-text search</p></li>
+<li><p>Sequences</p></li>
+<li><p>Listen/Notify</p></li>
+<li><p>COPY command</p></li>
+<li><p>SSL/TLS support</p></li>
+</ul>
+<p><strong>Manual Download:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget<span class="w"> </span>https://jdbc.postgresql.org/download/postgresql-42.7.1.jar
+<span class="nb">export</span><span class="w"> </span><span class="nv">CLASSPATH</span><span class="o">=</span><span class="s2">&quot;/path/to/postgresql-42.7.1.jar:</span><span class="nv">$CLASSPATH</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="mysql">
+<h3>MySQL<a class="headerlink" href="#mysql" title="Link to this heading">¶</a></h3>
+<p><strong>Recommended Version:</strong> 8.3.0
+<strong>Maven Coordinates:</strong> <code class="docutils literal notranslate"><span class="pre">com.mysql:mysql-connector-j:8.3.0</span></code>
+<strong>JDBC URL Format:</strong> <code class="docutils literal notranslate"><span class="pre">jdbcapi+mysql://user:password&#64;host:3306/database</span></code></p>
+<p><strong>Supported MySQL Versions:</strong></p>
+<ul class="simple">
+<li><p>MySQL 8.0.x</p></li>
+<li><p>MySQL 5.7.x</p></li>
+<li><p>MySQL 5.6.x</p></li>
+</ul>
+<p><strong>Features:</strong></p>
+<ul class="simple">
+<li><p>AUTO_INCREMENT</p></li>
+<li><p>Full-text indexes</p></li>
+<li><p>JSON data type (MySQL 5.7+)</p></li>
+<li><p>Spatial data types</p></li>
+<li><p>Multi-statement support</p></li>
+<li><p>SSL/TLS support</p></li>
+<li><p>Server-side prepared statements</p></li>
+</ul>
+<p><strong>Manual Download:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget<span class="w"> </span>https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/8.3.0/mysql-connector-j-8.3.0.jar
+<span class="nb">export</span><span class="w"> </span><span class="nv">CLASSPATH</span><span class="o">=</span><span class="s2">&quot;/path/to/mysql-connector-j-8.3.0.jar:</span><span class="nv">$CLASSPATH</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p><strong>Connection Parameters:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span>
+    <span class="s2">&quot;jdbcapi+mysql://user:password@localhost:3306/mydb&quot;</span><span class="p">,</span>
+    <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;useSSL&quot;</span><span class="p">:</span> <span class="s2">&quot;false&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;serverTimezone&quot;</span><span class="p">:</span> <span class="s2">&quot;UTC&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;allowMultiQueries&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="mariadb">
+<h3>MariaDB<a class="headerlink" href="#mariadb" title="Link to this heading">¶</a></h3>
+<p><strong>Recommended Version:</strong> 3.3.2
+<strong>Maven Coordinates:</strong> <code class="docutils literal notranslate"><span class="pre">org.mariadb.jdbc:mariadb-java-client:3.3.2</span></code>
+<strong>JDBC URL Format:</strong> <code class="docutils literal notranslate"><span class="pre">jdbcapi+mariadb://user:password&#64;host:3306/database</span></code></p>
+<p><strong>Supported MariaDB Versions:</strong></p>
+<ul class="simple">
+<li><p>MariaDB 11.x</p></li>
+<li><p>MariaDB 10.11 LTS</p></li>
+<li><p>MariaDB 10.6 LTS</p></li>
+<li><p>MariaDB 10.5 LTS</p></li>
+<li><p>MariaDB 10.4+</p></li>
+</ul>
+<p><strong>Features:</strong></p>
+<ul class="simple">
+<li><p>Sequences (MariaDB 10.3+)</p></li>
+<li><p>MySQL compatibility</p></li>
+<li><p>Galera Cluster support</p></li>
+<li><p>Pipeline batching</p></li>
+<li><p>Multi-master replication</p></li>
+<li><p>SSL/TLS support</p></li>
+</ul>
+<p><strong>Manual Download:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget<span class="w"> </span>https://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/3.3.2/mariadb-java-client-3.3.2.jar
+<span class="nb">export</span><span class="w"> </span><span class="nv">CLASSPATH</span><span class="o">=</span><span class="s2">&quot;/path/to/mariadb-java-client-3.3.2.jar:</span><span class="nv">$CLASSPATH</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="microsoft-sql-server">
+<h3>Microsoft SQL Server<a class="headerlink" href="#microsoft-sql-server" title="Link to this heading">¶</a></h3>
+<p><strong>Recommended Version:</strong> 12.6.0.jre11
+<strong>Maven Coordinates:</strong> <code class="docutils literal notranslate"><span class="pre">com.microsoft.sqlserver:mssql-jdbc:12.6.0.jre11</span></code>
+<strong>JDBC URL Format:</strong> <code class="docutils literal notranslate"><span class="pre">jdbcapi+mssql://user:password&#64;host:1433/database</span></code></p>
+<p><strong>Supported SQL Server Versions:</strong></p>
+<ul class="simple">
+<li><p>SQL Server 2022</p></li>
+<li><p>SQL Server 2019</p></li>
+<li><p>SQL Server 2017</p></li>
+<li><p>SQL Server 2016</p></li>
+<li><p>SQL Server 2014</p></li>
+<li><p>SQL Server 2012</p></li>
+<li><p>Azure SQL Database</p></li>
+<li><p>Azure SQL Managed Instance</p></li>
+</ul>
+<p><strong>Features:</strong></p>
+<ul class="simple">
+<li><p>T-SQL support</p></li>
+<li><p>Window functions</p></li>
+<li><p>CTEs (Common Table Expressions)</p></li>
+<li><p>JSON support (SQL Server 2016+)</p></li>
+<li><p>Sequence support (SQL Server 2012+)</p></li>
+<li><p>Always Encrypted</p></li>
+<li><p>Active Directory authentication</p></li>
+<li><p>SSL/TLS support</p></li>
+</ul>
+<p><strong>Manual Download:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget<span class="w"> </span>https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/12.6.0.jre11/mssql-jdbc-12.6.0.jre11.jar
+<span class="nb">export</span><span class="w"> </span><span class="nv">CLASSPATH</span><span class="o">=</span><span class="s2">&quot;/path/to/mssql-jdbc-12.6.0.jre11.jar:</span><span class="nv">$CLASSPATH</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p><strong>Connection Parameters:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span>
+    <span class="s2">&quot;jdbcapi+mssql://user:password@localhost:1433/mydb&quot;</span><span class="p">,</span>
+    <span class="n">connect_args</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;encrypt&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;trustServerCertificate&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;loginTimeout&quot;</span><span class="p">:</span> <span class="s2">&quot;30&quot;</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="oracle">
+<h3>Oracle<a class="headerlink" href="#oracle" title="Link to this heading">¶</a></h3>
+<p><strong>Recommended Version:</strong> 23.3.0.23.09
+<strong>Maven Coordinates:</strong> <code class="docutils literal notranslate"><span class="pre">com.oracle.database.jdbc:ojdbc11:23.3.0.23.09</span></code>
+<strong>JDBC URL Format:</strong> <code class="docutils literal notranslate"><span class="pre">jdbcapi+oracle://user:password&#64;host:1521/service_name</span></code></p>
+<p><strong>Supported Oracle Versions:</strong></p>
+<ul class="simple">
+<li><p>Oracle Database 23c</p></li>
+<li><p>Oracle Database 21c</p></li>
+<li><p>Oracle Database 19c</p></li>
+<li><p>Oracle Database 18c</p></li>
+<li><p>Oracle Database 12c Release 2</p></li>
+<li><p>Oracle Database 12c Release 1</p></li>
+<li><p>Oracle Database 11g Release 2</p></li>
+</ul>
+<p><strong>Features:</strong></p>
+<ul class="simple">
+<li><p>Sequences</p></li>
+<li><p>Synonyms</p></li>
+<li><p>Database links</p></li>
+<li><p>PL/SQL support</p></li>
+<li><p>Oracle RAC</p></li>
+<li><p>Advanced Queuing</p></li>
+<li><p>Flashback queries</p></li>
+<li><p>SSL/TLS support</p></li>
+</ul>
+<p><strong>Manual Download:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Oracle drivers require accepting license agreement</span>
+<span class="c1"># Download from: https://www.oracle.com/database/technologies/appdev/jdbc-downloads.html</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">CLASSPATH</span><span class="o">=</span><span class="s2">&quot;/path/to/ojdbc11-23.3.0.23.09.jar:</span><span class="nv">$CLASSPATH</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p><strong>Connection String Variants:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using service name</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">&quot;jdbcapi+oracle://user:password@localhost:1521/XEPDB1&quot;</span><span class="p">)</span>
+
+<span class="c1"># Using SID</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">&quot;jdbcapi+oracle://user:password@localhost:1521/XE&quot;</span><span class="p">)</span>
+
+<span class="c1"># Using TNS alias</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">&quot;jdbcapi+oracle://user:password@TNSALIAS&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="ibm-db2">
+<h3>IBM DB2<a class="headerlink" href="#ibm-db2" title="Link to this heading">¶</a></h3>
+<p><strong>Recommended Version:</strong> 11.5.9.0
+<strong>Maven Coordinates:</strong> <code class="docutils literal notranslate"><span class="pre">com.ibm.db2:jcc:11.5.9.0</span></code>
+<strong>JDBC URL Format:</strong> <code class="docutils literal notranslate"><span class="pre">jdbcapi+db2://user:password&#64;host:50000/database</span></code></p>
+<p><strong>Supported DB2 Versions:</strong></p>
+<ul class="simple">
+<li><p>DB2 for Linux, UNIX and Windows 11.5</p></li>
+<li><p>DB2 for Linux, UNIX and Windows 11.1</p></li>
+<li><p>DB2 for z/OS 12</p></li>
+<li><p>DB2 for z/OS 11</p></li>
+<li><p>DB2 for i 7.4</p></li>
+<li><p>DB2 for i 7.3</p></li>
+</ul>
+<p><strong>Features:</strong></p>
+<ul class="simple">
+<li><p>Sequences</p></li>
+<li><p>Identity columns</p></li>
+<li><p>Temporal tables</p></li>
+<li><p>XML support</p></li>
+<li><p>pureXML</p></li>
+<li><p>Multi-row INSERT</p></li>
+<li><p>SSL/TLS support</p></li>
+</ul>
+<p><strong>Manual Download:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download from IBM website (requires IBM ID)</span>
+<span class="c1"># https://www.ibm.com/support/pages/db2-jdbc-driver-versions-and-downloads</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">CLASSPATH</span><span class="o">=</span><span class="s2">&quot;/path/to/jcc-11.5.9.0.jar:</span><span class="nv">$CLASSPATH</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="sqlite">
+<h3>SQLite<a class="headerlink" href="#sqlite" title="Link to this heading">¶</a></h3>
+<p><strong>Recommended Version:</strong> 3.45.0.0
+<strong>Maven Coordinates:</strong> <code class="docutils literal notranslate"><span class="pre">org.xerial:sqlite-jdbc:3.45.0.0</span></code>
+<strong>JDBC URL Format:</strong> <code class="docutils literal notranslate"><span class="pre">jdbcapi+sqlite:///path/to/database.db</span></code></p>
+<p><strong>Supported SQLite Versions:</strong></p>
+<ul class="simple">
+<li><p>SQLite 3.45.x</p></li>
+<li><p>SQLite 3.44.x</p></li>
+<li><p>SQLite 3.43.x</p></li>
+</ul>
+<p><strong>Features:</strong></p>
+<ul class="simple">
+<li><p>In-memory databases</p></li>
+<li><p>Full-text search (FTS5)</p></li>
+<li><p>JSON support</p></li>
+<li><p>Common Table Expressions</p></li>
+<li><p>Window functions</p></li>
+<li><p>Partial indexes</p></li>
+<li><p>Generated columns</p></li>
+</ul>
+<p><strong>Manual Download:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget<span class="w"> </span>https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.45.0.0/sqlite-jdbc-3.45.0.0.jar
+<span class="nb">export</span><span class="w"> </span><span class="nv">CLASSPATH</span><span class="o">=</span><span class="s2">&quot;/path/to/sqlite-jdbc-3.45.0.0.jar:</span><span class="nv">$CLASSPATH</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p><strong>Usage:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># File-based database</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">&quot;jdbcapi+sqlite:////absolute/path/to/database.db&quot;</span><span class="p">)</span>
+
+<span class="c1"># Relative path</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">&quot;jdbcapi+sqlite:///relative/path/database.db&quot;</span><span class="p">)</span>
+
+<span class="c1"># In-memory database</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">&quot;jdbcapi+sqlite:///:memory:&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="oceanbase">
+<h3>OceanBase<a class="headerlink" href="#oceanbase" title="Link to this heading">¶</a></h3>
+<p><strong>Recommended Version:</strong> 2.4.9
+<strong>Maven Coordinates:</strong> <code class="docutils literal notranslate"><span class="pre">com.oceanbase:oceanbase-client:2.4.9</span></code>
+<strong>JDBC URL Format:</strong> <code class="docutils literal notranslate"><span class="pre">jdbcapi+oceanbase://user&#64;tenant#cluster:password&#64;host:2881/database</span></code></p>
+<p><strong>Supported OceanBase Versions:</strong></p>
+<ul class="simple">
+<li><p>OceanBase 4.x</p></li>
+<li><p>OceanBase 3.x</p></li>
+<li><p>OceanBase 2.x</p></li>
+</ul>
+<p><strong>Features:</strong></p>
+<ul class="simple">
+<li><p>Oracle compatibility mode</p></li>
+<li><p>MySQL compatibility mode</p></li>
+<li><p>Custom timestamp handling</p></li>
+<li><p>Distributed transactions</p></li>
+<li><p>High availability</p></li>
+<li><p>Multi-tenancy</p></li>
+</ul>
+<p><strong>Manual Download:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget<span class="w"> </span>https://repo1.maven.org/maven2/com/oceanbase/oceanbase-client/2.4.9/oceanbase-client-2.4.9.jar
+<span class="nb">export</span><span class="w"> </span><span class="nv">CLASSPATH</span><span class="o">=</span><span class="s2">&quot;/path/to/oceanbase-client-2.4.9.jar:</span><span class="nv">$CLASSPATH</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="odbc-drivers">
+<h2>ODBC Drivers<a class="headerlink" href="#odbc-drivers" title="Link to this heading">¶</a></h2>
+<section id="id1">
+<h3>Overview<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>ODBC drivers must be installed manually on your system. Connection strings use the <code class="docutils literal notranslate"><span class="pre">odbcapi+</span></code> prefix.</p>
+</section>
+<section id="postgresql-odbc">
+<h3>PostgreSQL ODBC<a class="headerlink" href="#postgresql-odbc" title="Link to this heading">¶</a></h3>
+<p><strong>Recommended Driver:</strong> PostgreSQL Unicode (psqlODBC)
+<strong>Latest Version:</strong> 16.00.0000 (as of 2024)
+<strong>ODBC URL Format:</strong> <code class="docutils literal notranslate"><span class="pre">odbcapi+postgresql://user:password&#64;host:5432/database</span></code></p>
+<p><strong>Installation:</strong></p>
+<p><strong>Linux (Ubuntu/Debian):</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>odbc-postgresql<span class="w"> </span>unixodbc<span class="w"> </span>unixodbc-dev
+</pre></div>
+</div>
+<p><strong>Linux (RHEL/CentOS):</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>postgresql-odbc<span class="w"> </span>unixODBC<span class="w"> </span>unixODBC-devel
+</pre></div>
+</div>
+<p><strong>macOS:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew<span class="w"> </span>install<span class="w"> </span>psqlodbc<span class="w"> </span>unixodbc
+</pre></div>
+</div>
+<p><strong>Windows:</strong>
+Download from https://www.postgresql.org/ftp/odbc/versions/</p>
+<p><strong>Verify Installation:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>odbcinst<span class="w"> </span>-q<span class="w"> </span>-d
+</pre></div>
+</div>
+</section>
+<section id="mysql-odbc">
+<h3>MySQL ODBC<a class="headerlink" href="#mysql-odbc" title="Link to this heading">¶</a></h3>
+<p><strong>Recommended Driver:</strong> MySQL Connector/ODBC 8.0
+<strong>Latest Version:</strong> 8.0.36 (as of 2024)
+<strong>ODBC URL Format:</strong> <code class="docutils literal notranslate"><span class="pre">odbcapi+mysql://user:password&#64;host:3306/database</span></code></p>
+<p><strong>Installation:</strong></p>
+<p><strong>Linux (Ubuntu/Debian):</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>libmyodbc<span class="w"> </span>unixodbc<span class="w"> </span>unixodbc-dev
+</pre></div>
+</div>
+<p><strong>Linux (RHEL/CentOS):</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>mysql-connector-odbc<span class="w"> </span>unixODBC<span class="w"> </span>unixODBC-devel
+</pre></div>
+</div>
+<p><strong>macOS:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew<span class="w"> </span>install<span class="w"> </span>mysql-connector-odbc
+</pre></div>
+</div>
+<p><strong>Windows:</strong>
+Download from https://dev.mysql.com/downloads/connector/odbc/</p>
+</section>
+<section id="mariadb-odbc">
+<h3>MariaDB ODBC<a class="headerlink" href="#mariadb-odbc" title="Link to this heading">¶</a></h3>
+<p><strong>Recommended Driver:</strong> MariaDB Connector/ODBC 3.1
+<strong>Latest Version:</strong> 3.1.21 (as of 2024)
+<strong>ODBC URL Format:</strong> <code class="docutils literal notranslate"><span class="pre">odbcapi+mariadb://user:password&#64;host:3306/database</span></code></p>
+<p><strong>Installation:</strong></p>
+<p><strong>Linux:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download and install from MariaDB repository</span>
+wget<span class="w"> </span>https://downloads.mariadb.com/Connectors/odbc/connector-odbc-3.1.21/mariadb-connector-odbc-3.1.21-ga-debian-x86_64.tar.gz
+tar<span class="w"> </span>-xzf<span class="w"> </span>mariadb-connector-odbc-3.1.21-ga-debian-x86_64.tar.gz
+sudo<span class="w"> </span>cp<span class="w"> </span>lib/libmaodbc.so<span class="w"> </span>/usr/lib/
+</pre></div>
+</div>
+<p><strong>macOS:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew<span class="w"> </span>tap<span class="w"> </span>mariadb/mariadb
+brew<span class="w"> </span>install<span class="w"> </span>mariadb-connector-odbc
+</pre></div>
+</div>
+<p><strong>Windows:</strong>
+Download from https://mariadb.com/downloads/connectors/odbc/</p>
+</section>
+<section id="microsoft-sql-server-odbc">
+<h3>Microsoft SQL Server ODBC<a class="headerlink" href="#microsoft-sql-server-odbc" title="Link to this heading">¶</a></h3>
+<p><strong>Recommended Driver:</strong> ODBC Driver 18 for SQL Server
+<strong>Latest Version:</strong> 18.3.3.1 (as of 2024)
+<strong>ODBC URL Format:</strong> <code class="docutils literal notranslate"><span class="pre">odbcapi+mssql://user:password&#64;host:1433/database</span></code></p>
+<p><strong>Installation:</strong></p>
+<p><strong>Linux (Ubuntu/Debian):</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>https://packages.microsoft.com/keys/microsoft.asc<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/trusted.gpg.d/microsoft.asc
+curl<span class="w"> </span>https://packages.microsoft.com/config/ubuntu/<span class="k">$(</span>lsb_release<span class="w"> </span>-rs<span class="k">)</span>/prod.list<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/sources.list.d/mssql-release.list
+sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+sudo<span class="w"> </span><span class="nv">ACCEPT_EULA</span><span class="o">=</span>Y<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>msodbcsql18<span class="w"> </span>unixodbc-dev
+</pre></div>
+</div>
+<p><strong>Linux (RHEL/CentOS):</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl<span class="w"> </span>https://packages.microsoft.com/config/rhel/8/prod.repo<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/yum.repos.d/mssql-release.repo
+sudo<span class="w"> </span>yum<span class="w"> </span>remove<span class="w"> </span>unixODBC-utf16<span class="w"> </span>unixODBC-utf16-devel
+sudo<span class="w"> </span><span class="nv">ACCEPT_EULA</span><span class="o">=</span>Y<span class="w"> </span>yum<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>msodbcsql18<span class="w"> </span>unixODBC-devel
+</pre></div>
+</div>
+<p><strong>macOS:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew<span class="w"> </span>tap<span class="w"> </span>microsoft/mssql-release<span class="w"> </span>https://github.com/Microsoft/homebrew-mssql-release
+brew<span class="w"> </span>update
+brew<span class="w"> </span>install<span class="w"> </span>msodbcsql18<span class="w"> </span>mssql-tools18
+</pre></div>
+</div>
+<p><strong>Windows:</strong>
+Download from https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server</p>
+</section>
+<section id="oracle-odbc">
+<h3>Oracle ODBC<a class="headerlink" href="#oracle-odbc" title="Link to this heading">¶</a></h3>
+<p><strong>Recommended Driver:</strong> Oracle Instant Client ODBC
+<strong>Latest Version:</strong> 21.13 (as of 2024)
+<strong>ODBC URL Format:</strong> <code class="docutils literal notranslate"><span class="pre">odbcapi+oracle://user:password&#64;host:1521/service_name</span></code></p>
+<p><strong>Installation:</strong></p>
+<p><strong>Linux:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download Oracle Instant Client from oracle.com</span>
+<span class="c1"># Extract files</span>
+unzip<span class="w"> </span>instantclient-basic-linux.x64-21.13.0.0.0dbru.zip
+unzip<span class="w"> </span>instantclient-odbc-linux.x64-21.13.0.0.0dbru.zip
+
+<span class="c1"># Install</span>
+sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;echo /opt/oracle/instantclient_21_13 &gt; /etc/ld.so.conf.d/oracle-instantclient.conf&quot;</span>
+sudo<span class="w"> </span>ldconfig
+
+<span class="c1"># Configure ODBC</span>
+<span class="nb">cd</span><span class="w"> </span>/opt/oracle/instantclient_21_13
+./odbc_update_ini.sh<span class="w"> </span>/<span class="w"> </span>/opt/oracle/instantclient_21_13
+</pre></div>
+</div>
+<p><strong>macOS:</strong>
+Download from https://www.oracle.com/database/technologies/instant-client/macos-intel-x86-downloads.html</p>
+<p><strong>Windows:</strong>
+Download from https://www.oracle.com/database/technologies/instant-client/winx64-64-downloads.html</p>
+</section>
+</section>
+<section id="driver-compatibility-matrix">
+<h2>Driver Compatibility Matrix<a class="headerlink" href="#driver-compatibility-matrix" title="Link to this heading">¶</a></h2>
+<section id="jdbc-driver-compatibility">
+<h3>JDBC Driver Compatibility<a class="headerlink" href="#jdbc-driver-compatibility" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Database</p></th>
+<th class="head"><p>JDBC Driver Version</p></th>
+<th class="head"><p>Minimum DB Version</p></th>
+<th class="head"><p>Maximum DB Version</p></th>
+<th class="head"><p>Auto-Download</p></th>
+<th class="head"><p>Production Ready</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PostgreSQL</p></td>
+<td><p>42.7.1</p></td>
+<td><p>9.6</p></td>
+<td><p>16.x</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>MySQL</p></td>
+<td><p>8.3.0</p></td>
+<td><p>5.6</p></td>
+<td><p>8.0</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-even"><td><p>MariaDB</p></td>
+<td><p>3.3.2</p></td>
+<td><p>10.3</p></td>
+<td><p>11.x</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>SQL Server</p></td>
+<td><p>12.6.0</p></td>
+<td><p>2012</p></td>
+<td><p>2022</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-even"><td><p>Oracle</p></td>
+<td><p>23.3.0</p></td>
+<td><p>11g R2</p></td>
+<td><p>23c</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>IBM DB2</p></td>
+<td><p>11.5.9.0</p></td>
+<td><p>11.1</p></td>
+<td><p>11.5</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-even"><td><p>SQLite</p></td>
+<td><p>3.45.0.0</p></td>
+<td><p>3.40</p></td>
+<td><p>3.45</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>OceanBase</p></td>
+<td><p>2.4.9</p></td>
+<td><p>2.4</p></td>
+<td><p>4.x</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="odbc-driver-compatibility">
+<h3>ODBC Driver Compatibility<a class="headerlink" href="#odbc-driver-compatibility" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Database</p></th>
+<th class="head"><p>ODBC Driver</p></th>
+<th class="head"><p>Minimum DB Version</p></th>
+<th class="head"><p>Maximum DB Version</p></th>
+<th class="head"><p>Auto-Install</p></th>
+<th class="head"><p>Production Ready</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PostgreSQL</p></td>
+<td><p>psqlODBC 16.0</p></td>
+<td><p>9.6</p></td>
+<td><p>16.x</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>MySQL</p></td>
+<td><p>Connector/ODBC 8.0</p></td>
+<td><p>5.6</p></td>
+<td><p>8.0</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-even"><td><p>MariaDB</p></td>
+<td><p>Connector/ODBC 3.1</p></td>
+<td><p>10.3</p></td>
+<td><p>11.x</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>SQL Server</p></td>
+<td><p>ODBC Driver 18</p></td>
+<td><p>2012</p></td>
+<td><p>2022</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-even"><td><p>Oracle</p></td>
+<td><p>Instant Client 21</p></td>
+<td><p>11g R2</p></td>
+<td><p>23c</p></td>
+<td><p>❌</p></td>
+<td><p>✅</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="sqlalchemy-version-compatibility">
+<h3>SQLAlchemy Version Compatibility<a class="headerlink" href="#sqlalchemy-version-compatibility" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>SQLAlchemy Version</p></th>
+<th class="head"><p>Supported</p></th>
+<th class="head"><p>Recommended</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2.0.0 - 2.0.x</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>1.4.x</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+</tr>
+<tr class="row-even"><td><p>1.3.x and earlier</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="python-version-compatibility">
+<h3>Python Version Compatibility<a class="headerlink" href="#python-version-compatibility" title="Link to this heading">¶</a></h3>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Python Version</p></th>
+<th class="head"><p>JDBC Support</p></th>
+<th class="head"><p>ODBC Support</p></th>
+<th class="head"><p>Recommended</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>3.13</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>3.12</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-even"><td><p>3.11</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-odd"><td><p>3.10</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+<td><p>✅</p></td>
+</tr>
+<tr class="row-even"><td><p>3.9</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+</tr>
+<tr class="row-odd"><td><p>3.8 and earlier</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+<td><p>❌</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="installation-instructions">
+<h2>Installation Instructions<a class="headerlink" href="#installation-instructions" title="Link to this heading">¶</a></h2>
+<section id="quick-install-with-auto-download-jdbc">
+<h3>Quick Install with Auto-Download (JDBC)<a class="headerlink" href="#quick-install-with-auto-download-jdbc" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_engine</span>
+
+<span class="c1"># Drivers auto-download on first use</span>
+<span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">&quot;jdbcapi+postgresql://localhost/mydb&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="manual-jdbc-driver-installation">
+<h3>Manual JDBC Driver Installation<a class="headerlink" href="#manual-jdbc-driver-installation" title="Link to this heading">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download driver</span>
+wget<span class="w"> </span>https://jdbc.postgresql.org/download/postgresql-42.7.1.jar
+
+<span class="c1"># Set CLASSPATH</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">CLASSPATH</span><span class="o">=</span><span class="s2">&quot;/path/to/postgresql-42.7.1.jar:</span><span class="nv">$CLASSPATH</span><span class="s2">&quot;</span>
+
+<span class="c1"># Or add to shell profile</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;export CLASSPATH=&quot;/path/to/postgresql-42.7.1.jar:$CLASSPATH&quot;&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc
+</pre></div>
+</div>
+</section>
+<section id="odbc-driver-configuration">
+<h3>ODBC Driver Configuration<a class="headerlink" href="#odbc-driver-configuration" title="Link to this heading">¶</a></h3>
+<p>After installing ODBC driver, verify:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># List installed ODBC drivers</span>
+odbcinst<span class="w"> </span>-q<span class="w"> </span>-d
+
+<span class="c1"># Test ODBC connection</span>
+isql<span class="w"> </span>-v<span class="w"> </span>DSN_NAME<span class="w"> </span>username<span class="w"> </span>password
+</pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading">¶</a></h2>
+<section id="check-driver-versions">
+<h3>Check Driver Versions<a class="headerlink" href="#check-driver-versions" title="Link to this heading">¶</a></h3>
+<p><strong>JDBC:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy_jdbcapi.jdbc</span><span class="w"> </span><span class="kn">import</span> <span class="n">list_cached_drivers</span>
+
+<span class="k">for</span> <span class="n">driver</span> <span class="ow">in</span> <span class="n">list_cached_drivers</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>ODBC:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>odbcinst<span class="w"> </span>-q<span class="w"> </span>-d
+</pre></div>
+</div>
+</section>
+<section id="update-drivers">
+<h3>Update Drivers<a class="headerlink" href="#update-drivers" title="Link to this heading">¶</a></h3>
+<p><strong>JDBC:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy_jdbcapi.jdbc</span><span class="w"> </span><span class="kn">import</span> <span class="n">download_driver</span><span class="p">,</span> <span class="n">JDBCDriver</span>
+
+<span class="c1"># Force download latest version</span>
+<span class="n">driver</span> <span class="o">=</span> <span class="n">JDBCDriver</span><span class="p">(</span>
+    <span class="n">group_id</span><span class="o">=</span><span class="s2">&quot;org.postgresql&quot;</span><span class="p">,</span>
+    <span class="n">artifact_id</span><span class="o">=</span><span class="s2">&quot;postgresql&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="s2">&quot;42.7.1&quot;</span>
+<span class="p">)</span>
+<span class="n">download_driver</span><span class="p">(</span><span class="n">driver</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>ODBC:</strong>
+Follow installation instructions for your platform to update.</p>
+</section>
+</section>
+<section id="additional-resources">
+<h2>Additional Resources<a class="headerlink" href="#additional-resources" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>PostgreSQL JDBC</strong>: https://jdbc.postgresql.org/</p></li>
+<li><p><strong>MySQL Connector/J</strong>: https://dev.mysql.com/downloads/connector/j/</p></li>
+<li><p><strong>MariaDB Connector/J</strong>: https://mariadb.com/kb/en/about-mariadb-connector-j/</p></li>
+<li><p><strong>SQL Server JDBC</strong>: https://learn.microsoft.com/en-us/sql/connect/jdbc/</p></li>
+<li><p><strong>Oracle JDBC</strong>: https://www.oracle.com/database/technologies/appdev/jdbc-downloads.html</p></li>
+<li><p><strong>IBM DB2 JDBC</strong>: https://www.ibm.com/support/pages/db2-jdbc-driver-versions-and-downloads</p></li>
+<li><p><strong>SQLite JDBC</strong>: https://github.com/xerial/sqlite-jdbc</p></li>
+<li><p><strong>pyodbc Documentation</strong>: https://github.com/mkleehammer/pyodbc/wiki</p></li>
+</ul>
+</section>
+<section id="support">
+<h2>Support<a class="headerlink" href="#support" title="Link to this heading">¶</a></h2>
+<p>For driver-related issues:</p>
+<ol class="arabic simple">
+<li><p>Check driver compatibility matrix</p></li>
+<li><p>Verify installation with provided commands</p></li>
+<li><p>Review <a class="reference internal" href="#USAGE.md"><span class="xref myst">USAGE.md</span></a> for examples</p></li>
+<li><p>Report issues at https://github.com/daneshpatel/sqlalchemy-jdbcapi/issues</p></li>
+</ol>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="sqlalchemy_integration.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">SQLAlchemy Integration Guide</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="usage.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Usage Guide</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Danesh Patel, Pavel Henrykhsen
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Supported Drivers</a><ul>
+<li><a class="reference internal" href="#table-of-contents">Table of Contents</a></li>
+<li><a class="reference internal" href="#jdbc-drivers">JDBC Drivers</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#postgresql">PostgreSQL</a></li>
+<li><a class="reference internal" href="#mysql">MySQL</a></li>
+<li><a class="reference internal" href="#mariadb">MariaDB</a></li>
+<li><a class="reference internal" href="#microsoft-sql-server">Microsoft SQL Server</a></li>
+<li><a class="reference internal" href="#oracle">Oracle</a></li>
+<li><a class="reference internal" href="#ibm-db2">IBM DB2</a></li>
+<li><a class="reference internal" href="#sqlite">SQLite</a></li>
+<li><a class="reference internal" href="#oceanbase">OceanBase</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#odbc-drivers">ODBC Drivers</a><ul>
+<li><a class="reference internal" href="#id1">Overview</a></li>
+<li><a class="reference internal" href="#postgresql-odbc">PostgreSQL ODBC</a></li>
+<li><a class="reference internal" href="#mysql-odbc">MySQL ODBC</a></li>
+<li><a class="reference internal" href="#mariadb-odbc">MariaDB ODBC</a></li>
+<li><a class="reference internal" href="#microsoft-sql-server-odbc">Microsoft SQL Server ODBC</a></li>
+<li><a class="reference internal" href="#oracle-odbc">Oracle ODBC</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#driver-compatibility-matrix">Driver Compatibility Matrix</a><ul>
+<li><a class="reference internal" href="#jdbc-driver-compatibility">JDBC Driver Compatibility</a></li>
+<li><a class="reference internal" href="#odbc-driver-compatibility">ODBC Driver Compatibility</a></li>
+<li><a class="reference internal" href="#sqlalchemy-version-compatibility">SQLAlchemy Version Compatibility</a></li>
+<li><a class="reference internal" href="#python-version-compatibility">Python Version Compatibility</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#installation-instructions">Installation Instructions</a><ul>
+<li><a class="reference internal" href="#quick-install-with-auto-download-jdbc">Quick Install with Auto-Download (JDBC)</a></li>
+<li><a class="reference internal" href="#manual-jdbc-driver-installation">Manual JDBC Driver Installation</a></li>
+<li><a class="reference internal" href="#odbc-driver-configuration">ODBC Driver Configuration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#check-driver-versions">Check Driver Versions</a></li>
+<li><a class="reference internal" href="#update-drivers">Update Drivers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#additional-resources">Additional Resources</a></li>
+<li><a class="reference internal" href="#support">Support</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="_static/documentation_options.js?v=79f5c508"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    </body>
+</html>

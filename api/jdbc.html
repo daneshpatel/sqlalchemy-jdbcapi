@@ -1,0 +1,1433 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="ODBC Module" href="odbc.html"><link rel="prev" title="API Reference" href="index.html">
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+        <title>JDBC Module - SQLAlchemy JDBC/ODBC API</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-brand-primary: #2563eb;
+  --color-brand-content: #2563eb;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #3b82f6;
+  --color-brand-content: #3b82f6;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #3b82f6;
+  --color-brand-content: #3b82f6;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">SQLAlchemy JDBC/ODBC API</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  <span class="sidebar-brand-text">SQLAlchemy JDBC/ODBC API</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../drivers.html">Supported Drivers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sqlalchemy_integration.html">SQLAlchemy Integration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">JDBC Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="odbc.html">ODBC Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dialects.html">Dialects Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">JDBC Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="odbc.html">ODBC Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dialects.html">Dialects Module</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/api/jdbc.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="jdbc-module">
+<h1>JDBC Module<a class="headerlink" href="#jdbc-module" title="Link to this heading">¶</a></h1>
+<p>The JDBC module provides a native DB-API 2.0 compliant implementation for JDBC connectivity using JPype.</p>
+<section id="connection">
+<span id="module-sqlalchemy_jdbcapi.jdbc"></span><h2>Connection<a class="headerlink" href="#connection" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.connection.Connection">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.connection.</span></span><span class="sig-name descname"><span class="pre">Connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jclassname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">driver_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">libs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/connection.html#Connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>DB-API 2.0 compliant connection to a JDBC database.</p>
+<p>This class wraps a JDBC Connection object from JPype.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.connection.Connection.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">jclassname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">driver_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jars</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">libs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/connection.html#Connection.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Create a JDBC connection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>jclassname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Fully qualified Java class name of JDBC driver</p></li>
+<li><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – JDBC connection URL</p></li>
+<li><p><strong>driver_args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>] </em><em>| </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>) – Connection properties (dict) or [user, password] (list)</p></li>
+<li><p><strong>jars</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>] </em><em>| </em><em>None</em>) – List of JAR file paths (for classpath)</p></li>
+<li><p><strong>libs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>] </em><em>| </em><em>None</em>) – Additional native library paths</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.InterfaceError" title="sqlalchemy_jdbcapi.jdbc.exceptions.InterfaceError"><strong>InterfaceError</strong></a> – If JVM or driver cannot be loaded</p></li>
+<li><p><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.DatabaseError" title="sqlalchemy_jdbcapi.jdbc.exceptions.DatabaseError"><strong>DatabaseError</strong></a> – If connection fails</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.connection.Connection.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/connection.html#Connection.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.close" title="Link to this definition">¶</a></dt>
+<dd><p>Close the connection.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.connection.Connection.commit">
+<span class="sig-name descname"><span class="pre">commit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/connection.html#Connection.commit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.commit" title="Link to this definition">¶</a></dt>
+<dd><p>Commit current transaction.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.connection.Connection.rollback">
+<span class="sig-name descname"><span class="pre">rollback</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/connection.html#Connection.rollback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.rollback" title="Link to this definition">¶</a></dt>
+<dd><p>Rollback current transaction.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.connection.Connection.cursor">
+<span class="sig-name descname"><span class="pre">cursor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/connection.html#Connection.cursor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.cursor" title="Link to this definition">¶</a></dt>
+<dd><p>Create a new cursor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Cursor object</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.InterfaceError" title="sqlalchemy_jdbcapi.jdbc.exceptions.InterfaceError"><strong>InterfaceError</strong></a> – If connection is closed</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor" title="sqlalchemy_jdbcapi.jdbc.cursor.Cursor"><em>Cursor</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.connection.Connection.set_auto_commit">
+<span class="sig-name descname"><span class="pre">set_auto_commit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auto_commit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/connection.html#Connection.set_auto_commit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.set_auto_commit" title="Link to this definition">¶</a></dt>
+<dd><p>Set auto-commit mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>auto_commit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – True to enable auto-commit, False to disable</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.connection.Connection.get_auto_commit">
+<span class="sig-name descname"><span class="pre">get_auto_commit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/connection.html#Connection.get_auto_commit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.get_auto_commit" title="Link to this definition">¶</a></dt>
+<dd><p>Get current auto-commit mode.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.connection.Connection.closed">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">closed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.closed" title="Link to this definition">¶</a></dt>
+<dd><p>Check if connection is closed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.connection.Connection.__enter__">
+<span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/connection.html#Connection.__enter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.__enter__" title="Link to this definition">¶</a></dt>
+<dd><p>Context manager entry.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.connection.Connection.__exit__">
+<span class="sig-name descname"><span class="pre">__exit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_tb</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/connection.html#Connection.__exit__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.__exit__" title="Link to this definition">¶</a></dt>
+<dd><p>Context manager exit.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.connection.Connection.__del__">
+<span class="sig-name descname"><span class="pre">__del__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/connection.html#Connection.__del__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.__del__" title="Link to this definition">¶</a></dt>
+<dd><p>Destructor to ensure connection is closed.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="cursor">
+<h2>Cursor<a class="headerlink" href="#cursor" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.cursor.</span></span><span class="sig-name descname"><span class="pre">Cursor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jdbc_connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/cursor.html#Cursor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>DB-API 2.0 compliant cursor for JDBC connections.</p>
+<p>This class wraps a JDBC Statement/PreparedStatement and ResultSet.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jdbc_connection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/cursor.html#Cursor.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.__init__" title="Link to this definition">¶</a></dt>
+<dd><p>Initialize cursor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>) – Parent Connection object</p></li>
+<li><p><strong>jdbc_connection</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>) – JDBC Connection object from JPype</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.description">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.description" title="Link to this definition">¶</a></dt>
+<dd><p>Get column descriptions from last query.</p>
+<p>Returns 7-item tuples: (name, type_code, display_size, internal_size,
+precision, scale, null_ok). We only provide name and type_code.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.rowcount">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rowcount</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.rowcount" title="Link to this definition">¶</a></dt>
+<dd><p>Get number of rows affected by last operation.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.arraysize">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">arraysize</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.arraysize" title="Link to this definition">¶</a></dt>
+<dd><p>Get default number of rows to fetch.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/cursor.html#Cursor.close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.close" title="Link to this definition">¶</a></dt>
+<dd><p>Close the cursor.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/cursor.html#Cursor.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.execute" title="Link to this definition">¶</a></dt>
+<dd><p>Execute a database operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>operation</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – SQL query or command</p></li>
+<li><p><strong>parameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>) – Parameters for the query</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Self for chaining</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.ProgrammingError" title="sqlalchemy_jdbcapi.jdbc.exceptions.ProgrammingError"><strong>ProgrammingError</strong></a> – If cursor is closed or operation fails</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor" title="sqlalchemy_jdbcapi.jdbc.cursor.Cursor"><em>Cursor</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.executemany">
+<span class="sig-name descname"><span class="pre">executemany</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seq_of_parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/cursor.html#Cursor.executemany"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.executemany" title="Link to this definition">¶</a></dt>
+<dd><p>Execute a database operation multiple times.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>operation</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – SQL query or command</p></li>
+<li><p><strong>seq_of_parameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence" title="(in Python v3.14)"><em>Sequence</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a><em>]</em><em>]</em>) – Sequence of parameter sequences</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.ProgrammingError" title="sqlalchemy_jdbcapi.jdbc.exceptions.ProgrammingError"><strong>ProgrammingError</strong></a> – If operation fails</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.fetchone">
+<span class="sig-name descname"><span class="pre">fetchone</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/cursor.html#Cursor.fetchone"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.fetchone" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch next row from query result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple of column values or None if no more rows</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.InterfaceError" title="sqlalchemy_jdbcapi.jdbc.exceptions.InterfaceError"><strong>InterfaceError</strong></a> – If no query has been executed</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>, …] | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.fetchmany">
+<span class="sig-name descname"><span class="pre">fetchmany</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/cursor.html#Cursor.fetchmany"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.fetchmany" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch multiple rows from query result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a><em> | </em><em>None</em>) – Number of rows to fetch (default: arraysize)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of row tuples</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.InterfaceError" title="sqlalchemy_jdbcapi.jdbc.exceptions.InterfaceError"><strong>InterfaceError</strong></a> – If no query has been executed</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>, …]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.fetchall">
+<span class="sig-name descname"><span class="pre">fetchall</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/cursor.html#Cursor.fetchall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.fetchall" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch all remaining rows from query result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of row tuples</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.InterfaceError" title="sqlalchemy_jdbcapi.jdbc.exceptions.InterfaceError"><strong>InterfaceError</strong></a> – If no query has been executed</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>, …]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.setinputsizes">
+<span class="sig-name descname"><span class="pre">setinputsizes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sizes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/cursor.html#Cursor.setinputsizes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.setinputsizes" title="Link to this definition">¶</a></dt>
+<dd><p>Does nothing, for DB-API 2.0 compliance.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.setoutputsize">
+<span class="sig-name descname"><span class="pre">setoutputsize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/cursor.html#Cursor.setoutputsize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.setoutputsize" title="Link to this definition">¶</a></dt>
+<dd><p>Does nothing, for DB-API 2.0 compliance.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.__enter__">
+<span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/cursor.html#Cursor.__enter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.__enter__" title="Link to this definition">¶</a></dt>
+<dd><p>Context manager entry.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.__exit__">
+<span class="sig-name descname"><span class="pre">__exit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_tb</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/cursor.html#Cursor.__exit__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.__exit__" title="Link to this definition">¶</a></dt>
+<dd><p>Context manager exit.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.__iter__">
+<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/cursor.html#Cursor.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.__iter__" title="Link to this definition">¶</a></dt>
+<dd><p>Make cursor iterable.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.__next__">
+<span class="sig-name descname"><span class="pre">__next__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/cursor.html#Cursor.__next__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.__next__" title="Link to this definition">¶</a></dt>
+<dd><p>Fetch next row for iteration.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.to_arrow">
+<span class="sig-name descname"><span class="pre">to_arrow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.to_arrow" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.to_dict" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.to_pandas">
+<span class="sig-name descname"><span class="pre">to_pandas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.to_pandas" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.cursor.Cursor.to_polars">
+<span class="sig-name descname"><span class="pre">to_polars</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.to_polars" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-sqlalchemy_jdbcapi.jdbc.driver_manager">
+<span id="driver-manager"></span><h2>Driver Manager<a class="headerlink" href="#module-sqlalchemy_jdbcapi.jdbc.driver_manager" title="Link to this heading">¶</a></h2>
+<p>JDBC driver auto-download and management.</p>
+<p>This module handles automatic downloading of JDBC drivers from Maven Central
+and provides fallback to manual driver configuration via CLASSPATH.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.driver_manager.</span></span><span class="sig-name descname"><span class="pre">JDBCDriver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">artifact_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">classifier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/driver_manager.html#JDBCDriver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NamedTuple" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></a></p>
+<p>JDBC driver metadata for automatic download.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver.group_id">
+<span class="sig-name descname"><span class="pre">group_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver.group_id" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver.artifact_id">
+<span class="sig-name descname"><span class="pre">artifact_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver.artifact_id" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver.version">
+<span class="sig-name descname"><span class="pre">version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver.version" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver.classifier">
+<span class="sig-name descname"><span class="pre">classifier</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver.classifier" title="Link to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver.filename">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">filename</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver.filename" title="Link to this definition">¶</a></dt>
+<dd><p>Get the JAR filename.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver.maven_url">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maven_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver.maven_url" title="Link to this definition">¶</a></dt>
+<dd><p>Get the Maven Central download URL.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.driver_manager.get_driver_cache_dir">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.driver_manager.</span></span><span class="sig-name descname"><span class="pre">get_driver_cache_dir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/driver_manager.html#get_driver_cache_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.get_driver_cache_dir" title="Link to this definition">¶</a></dt>
+<dd><p>Get the driver cache directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path to the driver cache directory.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.driver_manager.download_driver">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.driver_manager.</span></span><span class="sig-name descname"><span class="pre">download_driver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">driver</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/driver_manager.html#download_driver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.download_driver" title="Link to this definition">¶</a></dt>
+<dd><p>Download a JDBC driver from Maven Central.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>driver</strong> (<a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver" title="sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver"><em>JDBCDriver</em></a>) – JDBC driver metadata.</p></li>
+<li><p><strong>cache_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a><em> | </em><em>None</em>) – Directory to cache downloaded drivers. If None, uses default.</p></li>
+<li><p><strong>force</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Force re-download even if driver exists.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Path to the downloaded driver JAR file.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.14)"><strong>RuntimeError</strong></a> – If download fails.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.driver_manager.get_driver_path">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.driver_manager.</span></span><span class="sig-name descname"><span class="pre">get_driver_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">driver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_download</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/driver_manager.html#get_driver_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.get_driver_path" title="Link to this definition">¶</a></dt>
+<dd><p>Get the path to a JDBC driver, downloading if necessary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>database</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Database name (e.g., ‘postgresql’, ‘mysql’).</p></li>
+<li><p><strong>driver</strong> (<a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver" title="sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver"><em>JDBCDriver</em></a><em> | </em><em>None</em>) – Custom driver metadata. If None, uses recommended driver.</p></li>
+<li><p><strong>auto_download</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Whether to auto-download driver if not found.</p></li>
+<li><p><strong>cache_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a><em> | </em><em>None</em>) – Directory to cache downloaded drivers.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Path to the JDBC driver JAR file.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.14)"><strong>RuntimeError</strong></a> – If driver not found and auto-download disabled.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.driver_manager.get_all_driver_paths">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.driver_manager.</span></span><span class="sig-name descname"><span class="pre">get_all_driver_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">databases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_download</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/driver_manager.html#get_all_driver_paths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.get_all_driver_paths" title="Link to this definition">¶</a></dt>
+<dd><p>Get paths to multiple JDBC drivers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>databases</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>] </em><em>| </em><em>None</em>) – List of database names. If None, downloads all recommended drivers.</p></li>
+<li><p><strong>auto_download</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Whether to auto-download drivers if not found.</p></li>
+<li><p><strong>cache_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a><em> | </em><em>None</em>) – Directory to cache downloaded drivers.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of paths to JDBC driver JAR files.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.driver_manager.get_classpath_with_drivers">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.driver_manager.</span></span><span class="sig-name descname"><span class="pre">get_classpath_with_drivers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">databases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_download</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual_classpath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/driver_manager.html#get_classpath_with_drivers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.get_classpath_with_drivers" title="Link to this definition">¶</a></dt>
+<dd><p>Get comprehensive classpath including auto-downloaded and manual drivers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>databases</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>] </em><em>| </em><em>None</em>) – List of database names for auto-download. If None, downloads all recommended.</p></li>
+<li><p><strong>auto_download</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Whether to auto-download drivers.</p></li>
+<li><p><strong>manual_classpath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a><em>] </em><em>| </em><em>None</em>) – Additional manual classpath entries.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of all classpath entries.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.driver_manager.verify_driver">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.driver_manager.</span></span><span class="sig-name descname"><span class="pre">verify_driver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">driver_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/driver_manager.html#verify_driver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.verify_driver" title="Link to this definition">¶</a></dt>
+<dd><p>Verify that a JDBC driver JAR file is valid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>driver_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a>) – Path to the driver JAR file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if driver appears valid, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.driver_manager.list_cached_drivers">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.driver_manager.</span></span><span class="sig-name descname"><span class="pre">list_cached_drivers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/driver_manager.html#list_cached_drivers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.list_cached_drivers" title="Link to this definition">¶</a></dt>
+<dd><p>List all cached JDBC drivers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cache_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a><em> | </em><em>None</em>) – Directory to check. If None, uses default.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of paths to cached driver JAR files.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.driver_manager.clear_driver_cache">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.driver_manager.</span></span><span class="sig-name descname"><span class="pre">clear_driver_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cache_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/driver_manager.html#clear_driver_cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.clear_driver_cache" title="Link to this definition">¶</a></dt>
+<dd><p>Clear the driver cache directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cache_dir</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a><em> | </em><em>None</em>) – Directory to clear. If None, uses default.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of files deleted.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-sqlalchemy_jdbcapi.jdbc.jvm">
+<span id="jvm-management"></span><h2>JVM Management<a class="headerlink" href="#module-sqlalchemy_jdbcapi.jdbc.jvm" title="Link to this heading">¶</a></h2>
+<p>JVM management and initialization.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.jvm.get_classpath">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.jvm.</span></span><span class="sig-name descname"><span class="pre">get_classpath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auto_download</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">databases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/jvm.html#get_classpath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.jvm.get_classpath" title="Link to this definition">¶</a></dt>
+<dd><p>Get JDBC driver classpath from environment, auto-download, or both.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>auto_download</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Whether to auto-download recommended JDBC drivers.</p></li>
+<li><p><strong>databases</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>] </em><em>| </em><em>None</em>) – List of database names for auto-download (e.g., [‘postgresql’, ‘mysql’]).
+If None and auto_download is True, downloads all recommended drivers.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of paths to JDBC driver JAR files.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.jvm.start_jvm">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.jvm.</span></span><span class="sig-name descname"><span class="pre">start_jvm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">classpath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jvm_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jvm_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_download</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">databases</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/jvm.html#start_jvm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.jvm.start_jvm" title="Link to this definition">¶</a></dt>
+<dd><p>Start the JVM with specified classpath and arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>classpath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a><em>] </em><em>| </em><em>None</em>) – List of paths to add to classpath. If None, uses environment + auto-download.</p></li>
+<li><p><strong>jvm_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><em>Path</em></a><em> | </em><em>None</em>) – Path to JVM library. If None, JPype will auto-detect.</p></li>
+<li><p><strong>jvm_args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>] </em><em>| </em><em>None</em>) – Additional JVM arguments (e.g., [‘-Xmx512m’]).</p></li>
+<li><p><strong>auto_download</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Whether to auto-download JDBC drivers. Default: True.</p></li>
+<li><p><strong>databases</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>] </em><em>| </em><em>None</em>) – List of database names for auto-download. If None, downloads common drivers.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.JVMNotStartedError" title="sqlalchemy_jdbcapi.jdbc.exceptions.JVMNotStartedError"><strong>JVMNotStartedError</strong></a> – If JVM fails to start.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.jvm.is_jvm_started">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.jvm.</span></span><span class="sig-name descname"><span class="pre">is_jvm_started</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/jvm.html#is_jvm_started"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.jvm.is_jvm_started" title="Link to this definition">¶</a></dt>
+<dd><p>Check if JVM is started.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.jvm.shutdown_jvm">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.jvm.</span></span><span class="sig-name descname"><span class="pre">shutdown_jvm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/jvm.html#shutdown_jvm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.jvm.shutdown_jvm" title="Link to this definition">¶</a></dt>
+<dd><p>Shutdown the JVM (optional, usually not needed).</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.jvm.get_java_class">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.jvm.</span></span><span class="sig-name descname"><span class="pre">get_java_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">class_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/jvm.html#get_java_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.jvm.get_java_class" title="Link to this definition">¶</a></dt>
+<dd><p>Get a Java class by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>class_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Fully qualified Java class name.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Java class object.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.JVMNotStartedError" title="sqlalchemy_jdbcapi.jdbc.exceptions.JVMNotStartedError"><strong>JVMNotStartedError</strong></a> – If JVM is not started.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-sqlalchemy_jdbcapi.jdbc.type_converter">
+<span id="type-converter"></span><h2>Type Converter<a class="headerlink" href="#module-sqlalchemy_jdbcapi.jdbc.type_converter" title="Link to this heading">¶</a></h2>
+<p>Type conversion between JDBC and Python types.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.type_converter.TypeConverter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.type_converter.</span></span><span class="sig-name descname"><span class="pre">TypeConverter</span></span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/type_converter.html#TypeConverter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.type_converter.TypeConverter" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Handles conversion between JDBC SQL types and Python types.</p>
+<p>Java SQL Types (from java.sql.Types):
+-7  BIT
+-6  TINYINT
+-5  BIGINT
+-4  LONGVARBINARY
+-3  VARBINARY
+-2  BINARY
+-1  LONGVARCHAR
+1   CHAR
+2   NUMERIC
+3   DECIMAL
+4   INTEGER
+5   SMALLINT
+6   FLOAT
+7   REAL
+8   DOUBLE
+12  VARCHAR
+91  DATE
+92  TIME
+93  TIMESTAMP
+2004 BLOB
+2005 CLOB
+2011 NCLOB</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.type_converter.TypeConverter.JDBC_TYPES">
+<span class="sig-name descname"><span class="pre">JDBC_TYPES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{-7:</span> <span class="pre">'BIT',</span> <span class="pre">-6:</span> <span class="pre">'TINYINT',</span> <span class="pre">-5:</span> <span class="pre">'BIGINT',</span> <span class="pre">-4:</span> <span class="pre">'LONGVARBINARY',</span> <span class="pre">-3:</span> <span class="pre">'VARBINARY',</span> <span class="pre">-2:</span> <span class="pre">'BINARY',</span> <span class="pre">-1:</span> <span class="pre">'LONGVARCHAR',</span> <span class="pre">1:</span> <span class="pre">'CHAR',</span> <span class="pre">2:</span> <span class="pre">'NUMERIC',</span> <span class="pre">3:</span> <span class="pre">'DECIMAL',</span> <span class="pre">4:</span> <span class="pre">'INTEGER',</span> <span class="pre">5:</span> <span class="pre">'SMALLINT',</span> <span class="pre">6:</span> <span class="pre">'FLOAT',</span> <span class="pre">7:</span> <span class="pre">'REAL',</span> <span class="pre">8:</span> <span class="pre">'DOUBLE',</span> <span class="pre">12:</span> <span class="pre">'VARCHAR',</span> <span class="pre">91:</span> <span class="pre">'DATE',</span> <span class="pre">92:</span> <span class="pre">'TIME',</span> <span class="pre">93:</span> <span class="pre">'TIMESTAMP',</span> <span class="pre">2004:</span> <span class="pre">'BLOB',</span> <span class="pre">2005:</span> <span class="pre">'CLOB',</span> <span class="pre">2011:</span> <span class="pre">'NCLOB'}</span></em><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.type_converter.TypeConverter.JDBC_TYPES" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.type_converter.TypeConverter.convert_from_jdbc">
+<span class="sig-name descname"><span class="pre">convert_from_jdbc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resultset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/type_converter.html#TypeConverter.convert_from_jdbc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.type_converter.TypeConverter.convert_from_jdbc" title="Link to this definition">¶</a></dt>
+<dd><p>Convert JDBC result to Python type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>resultset</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a>) – JDBC ResultSet object</p></li>
+<li><p><strong>column_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – 1-based column index</p></li>
+<li><p><strong>sql_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – JDBC SQL type code</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Python value</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><em>Any</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-sqlalchemy_jdbcapi.jdbc.dataframe">
+<span id="dataframe-integration"></span><h2>DataFrame Integration<a class="headerlink" href="#module-sqlalchemy_jdbcapi.jdbc.dataframe" title="Link to this heading">¶</a></h2>
+<p>DataFrame integration for pandas, polars, and Apache Arrow.</p>
+<p>This module provides utilities to convert JDBC query results directly
+into DataFrames for data science and ML workflows.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.dataframe.cursor_to_pandas">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.dataframe.</span></span><span class="sig-name descname"><span class="pre">cursor_to_pandas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cursor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/dataframe.html#cursor_to_pandas"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.dataframe.cursor_to_pandas" title="Link to this definition">¶</a></dt>
+<dd><p>Convert cursor results to pandas DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cursor</strong> (<a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor" title="sqlalchemy_jdbcapi.jdbc.cursor.Cursor"><em>Cursor</em></a>) – Cursor with executed query</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>pandas.DataFrame</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ImportError" title="(in Python v3.14)"><strong>ImportError</strong></a> – If pandas is not installed</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If cursor has no results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM users&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cursor_to_pandas</span><span class="p">(</span><span class="n">cursor</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.dataframe.cursor_to_polars">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.dataframe.</span></span><span class="sig-name descname"><span class="pre">cursor_to_polars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cursor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/dataframe.html#cursor_to_polars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.dataframe.cursor_to_polars" title="Link to this definition">¶</a></dt>
+<dd><p>Convert cursor results to polars DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cursor</strong> (<a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor" title="sqlalchemy_jdbcapi.jdbc.cursor.Cursor"><em>Cursor</em></a>) – Cursor with executed query</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>polars.DataFrame</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ImportError" title="(in Python v3.14)"><strong>ImportError</strong></a> – If polars is not installed</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If cursor has no results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM users&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cursor_to_polars</span><span class="p">(</span><span class="n">cursor</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.dataframe.cursor_to_arrow">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.dataframe.</span></span><span class="sig-name descname"><span class="pre">cursor_to_arrow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cursor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/dataframe.html#cursor_to_arrow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.dataframe.cursor_to_arrow" title="Link to this definition">¶</a></dt>
+<dd><p>Convert cursor results to Apache Arrow Table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cursor</strong> (<a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor" title="sqlalchemy_jdbcapi.jdbc.cursor.Cursor"><em>Cursor</em></a>) – Cursor with executed query</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>pyarrow.Table</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ImportError" title="(in Python v3.14)"><strong>ImportError</strong></a> – If pyarrow is not installed</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If cursor has no results</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM users&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">table</span> <span class="o">=</span> <span class="n">cursor_to_arrow</span><span class="p">(</span><span class="n">cursor</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.dataframe.cursor_to_dict">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.dataframe.</span></span><span class="sig-name descname"><span class="pre">cursor_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cursor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/dataframe.html#cursor_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.dataframe.cursor_to_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Convert cursor results to list of dictionaries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cursor</strong> (<a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor" title="sqlalchemy_jdbcapi.jdbc.cursor.Cursor"><em>Cursor</em></a>) – Cursor with executed query</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of row dictionaries</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>, Any]]</p>
+</dd>
+</dl>
+<div class="admonition-example admonition">
+<p class="admonition-title">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM users&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rows</span> <span class="o">=</span> <span class="n">cursor_to_dict</span><span class="p">(</span><span class="n">cursor</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">{&#39;id&#39;: 1, &#39;name&#39;: &#39;Alice&#39;, &#39;email&#39;: &#39;alice@example.com&#39;}</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-sqlalchemy_jdbcapi.jdbc.exceptions">
+<span id="exceptions"></span><h2>Exceptions<a class="headerlink" href="#module-sqlalchemy_jdbcapi.jdbc.exceptions" title="Link to this heading">¶</a></h2>
+<p>JDBC Exception hierarchy following DB-API 2.0 specification.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.exceptions.Error">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.exceptions.</span></span><span class="sig-name descname"><span class="pre">Error</span></span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/exceptions.html#Error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.exceptions.Error" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<p>Base class for all JDBC-related errors.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.exceptions.Warning">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.exceptions.</span></span><span class="sig-name descname"><span class="pre">Warning</span></span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/exceptions.html#Warning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.exceptions.Warning" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<p>Exception raised for important warnings.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.exceptions.InterfaceError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.exceptions.</span></span><span class="sig-name descname"><span class="pre">InterfaceError</span></span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/exceptions.html#InterfaceError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.exceptions.InterfaceError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.Error" title="sqlalchemy_jdbcapi.jdbc.exceptions.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Exception raised for errors related to the database interface.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.exceptions.DatabaseError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.exceptions.</span></span><span class="sig-name descname"><span class="pre">DatabaseError</span></span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/exceptions.html#DatabaseError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.exceptions.DatabaseError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.Error" title="sqlalchemy_jdbcapi.jdbc.exceptions.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Exception raised for errors related to the database.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.exceptions.InternalError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.exceptions.</span></span><span class="sig-name descname"><span class="pre">InternalError</span></span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/exceptions.html#InternalError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.exceptions.InternalError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.DatabaseError" title="sqlalchemy_jdbcapi.jdbc.exceptions.DatabaseError"><code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></a></p>
+<p>Exception raised when the database encounters an internal error.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.exceptions.OperationalError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.exceptions.</span></span><span class="sig-name descname"><span class="pre">OperationalError</span></span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/exceptions.html#OperationalError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.exceptions.OperationalError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.DatabaseError" title="sqlalchemy_jdbcapi.jdbc.exceptions.DatabaseError"><code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></a></p>
+<p>Exception raised for operational database errors.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.exceptions.ProgrammingError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.exceptions.</span></span><span class="sig-name descname"><span class="pre">ProgrammingError</span></span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/exceptions.html#ProgrammingError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.exceptions.ProgrammingError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.DatabaseError" title="sqlalchemy_jdbcapi.jdbc.exceptions.DatabaseError"><code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></a></p>
+<p>Exception raised for programming errors.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.exceptions.IntegrityError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.exceptions.</span></span><span class="sig-name descname"><span class="pre">IntegrityError</span></span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/exceptions.html#IntegrityError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.exceptions.IntegrityError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.DatabaseError" title="sqlalchemy_jdbcapi.jdbc.exceptions.DatabaseError"><code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></a></p>
+<p>Exception raised when database integrity is violated.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.exceptions.DataError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.exceptions.</span></span><span class="sig-name descname"><span class="pre">DataError</span></span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/exceptions.html#DataError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.exceptions.DataError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.DatabaseError" title="sqlalchemy_jdbcapi.jdbc.exceptions.DatabaseError"><code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></a></p>
+<p>Exception raised for errors related to processed data.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.exceptions.NotSupportedError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.exceptions.</span></span><span class="sig-name descname"><span class="pre">NotSupportedError</span></span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/exceptions.html#NotSupportedError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.exceptions.NotSupportedError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.DatabaseError" title="sqlalchemy_jdbcapi.jdbc.exceptions.DatabaseError"><code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></a></p>
+<p>Exception raised when a method or database API is not supported.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.exceptions.JDBCDriverNotFoundError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.exceptions.</span></span><span class="sig-name descname"><span class="pre">JDBCDriverNotFoundError</span></span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/exceptions.html#JDBCDriverNotFoundError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.exceptions.JDBCDriverNotFoundError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.InterfaceError" title="sqlalchemy_jdbcapi.jdbc.exceptions.InterfaceError"><code class="xref py py-class docutils literal notranslate"><span class="pre">InterfaceError</span></code></a></p>
+<p>Exception raised when JDBC driver cannot be found.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.exceptions.JVMNotStartedError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.exceptions.</span></span><span class="sig-name descname"><span class="pre">JVMNotStartedError</span></span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/exceptions.html#JVMNotStartedError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.exceptions.JVMNotStartedError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.InterfaceError" title="sqlalchemy_jdbcapi.jdbc.exceptions.InterfaceError"><code class="xref py py-class docutils literal notranslate"><span class="pre">InterfaceError</span></code></a></p>
+<p>Exception raised when JVM is not started.</p>
+</dd></dl>
+
+</section>
+<section id="module-sqlalchemy_jdbcapi.jdbc.types">
+<span id="db-api-type-objects"></span><h2>DB-API Type Objects<a class="headerlink" href="#module-sqlalchemy_jdbcapi.jdbc.types" title="Link to this heading">¶</a></h2>
+<p>DB-API 2.0 type objects and constructors.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.types.DBAPITypeObject">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.types.</span></span><span class="sig-name descname"><span class="pre">DBAPITypeObject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/types.html#DBAPITypeObject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.types.DBAPITypeObject" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Base class for DB-API type objects.</p>
+<dl class="field-list simple">
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.types.DBAPITypeObject.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/types.html#DBAPITypeObject.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.types.DBAPITypeObject.__init__" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.types.Date">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.types.</span></span><span class="sig-name descname"><span class="pre">Date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">month</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">day</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/types.html#Date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.types.Date" title="Link to this definition">¶</a></dt>
+<dd><p>Construct a date object.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.types.Time">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.types.</span></span><span class="sig-name descname"><span class="pre">Time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hour</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">second</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/types.html#Time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.types.Time" title="Link to this definition">¶</a></dt>
+<dd><p>Construct a time object.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.types.Timestamp">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.types.</span></span><span class="sig-name descname"><span class="pre">Timestamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">year</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">month</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">day</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hour</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">second</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/types.html#Timestamp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.types.Timestamp" title="Link to this definition">¶</a></dt>
+<dd><p>Construct a timestamp object.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.types.DateFromTicks">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.types.</span></span><span class="sig-name descname"><span class="pre">DateFromTicks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticks</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/types.html#DateFromTicks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.types.DateFromTicks" title="Link to this definition">¶</a></dt>
+<dd><p>Construct a date object from ticks since epoch.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.types.TimeFromTicks">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.types.</span></span><span class="sig-name descname"><span class="pre">TimeFromTicks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticks</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/types.html#TimeFromTicks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.types.TimeFromTicks" title="Link to this definition">¶</a></dt>
+<dd><p>Construct a time object from ticks since epoch.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.types.TimestampFromTicks">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.types.</span></span><span class="sig-name descname"><span class="pre">TimestampFromTicks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticks</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/types.html#TimestampFromTicks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.types.TimestampFromTicks" title="Link to this definition">¶</a></dt>
+<dd><p>Construct a timestamp object from ticks since epoch.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sqlalchemy_jdbcapi.jdbc.types.Binary">
+<span class="sig-prename descclassname"><span class="pre">sqlalchemy_jdbcapi.jdbc.types.</span></span><span class="sig-name descname"><span class="pre">Binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sqlalchemy_jdbcapi/jdbc/types.html#Binary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sqlalchemy_jdbcapi.jdbc.types.Binary" title="Link to this definition">¶</a></dt>
+<dd><p>Construct a binary object.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="odbc.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">ODBC Module</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">API Reference</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Danesh Patel, Pavel Henrykhsen
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">JDBC Module</a><ul>
+<li><a class="reference internal" href="#connection">Connection</a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection"><code class="docutils literal notranslate"><span class="pre">Connection</span></code></a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.__init__"><code class="docutils literal notranslate"><span class="pre">Connection.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.close"><code class="docutils literal notranslate"><span class="pre">Connection.close()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.commit"><code class="docutils literal notranslate"><span class="pre">Connection.commit()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.rollback"><code class="docutils literal notranslate"><span class="pre">Connection.rollback()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.cursor"><code class="docutils literal notranslate"><span class="pre">Connection.cursor()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.set_auto_commit"><code class="docutils literal notranslate"><span class="pre">Connection.set_auto_commit()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.get_auto_commit"><code class="docutils literal notranslate"><span class="pre">Connection.get_auto_commit()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.closed"><code class="docutils literal notranslate"><span class="pre">Connection.closed</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.__enter__"><code class="docutils literal notranslate"><span class="pre">Connection.__enter__()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.__exit__"><code class="docutils literal notranslate"><span class="pre">Connection.__exit__()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.connection.Connection.__del__"><code class="docutils literal notranslate"><span class="pre">Connection.__del__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cursor">Cursor</a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor"><code class="docutils literal notranslate"><span class="pre">Cursor</span></code></a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.__init__"><code class="docutils literal notranslate"><span class="pre">Cursor.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.description"><code class="docutils literal notranslate"><span class="pre">Cursor.description</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.rowcount"><code class="docutils literal notranslate"><span class="pre">Cursor.rowcount</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.arraysize"><code class="docutils literal notranslate"><span class="pre">Cursor.arraysize</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.close"><code class="docutils literal notranslate"><span class="pre">Cursor.close()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.execute"><code class="docutils literal notranslate"><span class="pre">Cursor.execute()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.executemany"><code class="docutils literal notranslate"><span class="pre">Cursor.executemany()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.fetchone"><code class="docutils literal notranslate"><span class="pre">Cursor.fetchone()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.fetchmany"><code class="docutils literal notranslate"><span class="pre">Cursor.fetchmany()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.fetchall"><code class="docutils literal notranslate"><span class="pre">Cursor.fetchall()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.setinputsizes"><code class="docutils literal notranslate"><span class="pre">Cursor.setinputsizes()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.setoutputsize"><code class="docutils literal notranslate"><span class="pre">Cursor.setoutputsize()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.__enter__"><code class="docutils literal notranslate"><span class="pre">Cursor.__enter__()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.__exit__"><code class="docutils literal notranslate"><span class="pre">Cursor.__exit__()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.__iter__"><code class="docutils literal notranslate"><span class="pre">Cursor.__iter__()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.__next__"><code class="docutils literal notranslate"><span class="pre">Cursor.__next__()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.to_arrow"><code class="docutils literal notranslate"><span class="pre">Cursor.to_arrow()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.to_dict"><code class="docutils literal notranslate"><span class="pre">Cursor.to_dict()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.to_pandas"><code class="docutils literal notranslate"><span class="pre">Cursor.to_pandas()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.cursor.Cursor.to_polars"><code class="docutils literal notranslate"><span class="pre">Cursor.to_polars()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sqlalchemy_jdbcapi.jdbc.driver_manager">Driver Manager</a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver"><code class="docutils literal notranslate"><span class="pre">JDBCDriver</span></code></a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver.group_id"><code class="docutils literal notranslate"><span class="pre">JDBCDriver.group_id</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver.artifact_id"><code class="docutils literal notranslate"><span class="pre">JDBCDriver.artifact_id</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver.version"><code class="docutils literal notranslate"><span class="pre">JDBCDriver.version</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver.classifier"><code class="docutils literal notranslate"><span class="pre">JDBCDriver.classifier</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver.filename"><code class="docutils literal notranslate"><span class="pre">JDBCDriver.filename</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.JDBCDriver.maven_url"><code class="docutils literal notranslate"><span class="pre">JDBCDriver.maven_url</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.get_driver_cache_dir"><code class="docutils literal notranslate"><span class="pre">get_driver_cache_dir()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.download_driver"><code class="docutils literal notranslate"><span class="pre">download_driver()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.get_driver_path"><code class="docutils literal notranslate"><span class="pre">get_driver_path()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.get_all_driver_paths"><code class="docutils literal notranslate"><span class="pre">get_all_driver_paths()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.get_classpath_with_drivers"><code class="docutils literal notranslate"><span class="pre">get_classpath_with_drivers()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.verify_driver"><code class="docutils literal notranslate"><span class="pre">verify_driver()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.list_cached_drivers"><code class="docutils literal notranslate"><span class="pre">list_cached_drivers()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.driver_manager.clear_driver_cache"><code class="docutils literal notranslate"><span class="pre">clear_driver_cache()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sqlalchemy_jdbcapi.jdbc.jvm">JVM Management</a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.jvm.get_classpath"><code class="docutils literal notranslate"><span class="pre">get_classpath()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.jvm.start_jvm"><code class="docutils literal notranslate"><span class="pre">start_jvm()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.jvm.is_jvm_started"><code class="docutils literal notranslate"><span class="pre">is_jvm_started()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.jvm.shutdown_jvm"><code class="docutils literal notranslate"><span class="pre">shutdown_jvm()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.jvm.get_java_class"><code class="docutils literal notranslate"><span class="pre">get_java_class()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sqlalchemy_jdbcapi.jdbc.type_converter">Type Converter</a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.type_converter.TypeConverter"><code class="docutils literal notranslate"><span class="pre">TypeConverter</span></code></a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.type_converter.TypeConverter.JDBC_TYPES"><code class="docutils literal notranslate"><span class="pre">TypeConverter.JDBC_TYPES</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.type_converter.TypeConverter.convert_from_jdbc"><code class="docutils literal notranslate"><span class="pre">TypeConverter.convert_from_jdbc()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sqlalchemy_jdbcapi.jdbc.dataframe">DataFrame Integration</a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.dataframe.cursor_to_pandas"><code class="docutils literal notranslate"><span class="pre">cursor_to_pandas()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.dataframe.cursor_to_polars"><code class="docutils literal notranslate"><span class="pre">cursor_to_polars()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.dataframe.cursor_to_arrow"><code class="docutils literal notranslate"><span class="pre">cursor_to_arrow()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.dataframe.cursor_to_dict"><code class="docutils literal notranslate"><span class="pre">cursor_to_dict()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sqlalchemy_jdbcapi.jdbc.exceptions">Exceptions</a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.Error"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.Warning"><code class="docutils literal notranslate"><span class="pre">Warning</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.InterfaceError"><code class="docutils literal notranslate"><span class="pre">InterfaceError</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.DatabaseError"><code class="docutils literal notranslate"><span class="pre">DatabaseError</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.InternalError"><code class="docutils literal notranslate"><span class="pre">InternalError</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.OperationalError"><code class="docutils literal notranslate"><span class="pre">OperationalError</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.ProgrammingError"><code class="docutils literal notranslate"><span class="pre">ProgrammingError</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.IntegrityError"><code class="docutils literal notranslate"><span class="pre">IntegrityError</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.DataError"><code class="docutils literal notranslate"><span class="pre">DataError</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.NotSupportedError"><code class="docutils literal notranslate"><span class="pre">NotSupportedError</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.JDBCDriverNotFoundError"><code class="docutils literal notranslate"><span class="pre">JDBCDriverNotFoundError</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.exceptions.JVMNotStartedError"><code class="docutils literal notranslate"><span class="pre">JVMNotStartedError</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sqlalchemy_jdbcapi.jdbc.types">DB-API Type Objects</a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.types.DBAPITypeObject"><code class="docutils literal notranslate"><span class="pre">DBAPITypeObject</span></code></a><ul>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.types.DBAPITypeObject.__init__"><code class="docutils literal notranslate"><span class="pre">DBAPITypeObject.__init__()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.types.Date"><code class="docutils literal notranslate"><span class="pre">Date()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.types.Time"><code class="docutils literal notranslate"><span class="pre">Time()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.types.Timestamp"><code class="docutils literal notranslate"><span class="pre">Timestamp()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.types.DateFromTicks"><code class="docutils literal notranslate"><span class="pre">DateFromTicks()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.types.TimeFromTicks"><code class="docutils literal notranslate"><span class="pre">TimeFromTicks()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.types.TimestampFromTicks"><code class="docutils literal notranslate"><span class="pre">TimestampFromTicks()</span></code></a></li>
+<li><a class="reference internal" href="#sqlalchemy_jdbcapi.jdbc.types.Binary"><code class="docutils literal notranslate"><span class="pre">Binary()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=79f5c508"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    </body>
+</html>

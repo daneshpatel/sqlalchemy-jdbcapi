@@ -1,0 +1,1245 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+        <title>sqlalchemy_jdbcapi.dialects.base - SQLAlchemy JDBC/ODBC API</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  --color-brand-primary: #2563eb;
+  --color-brand-content: #2563eb;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #3b82f6;
+  --color-brand-content: #3b82f6;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  --color-brand-primary: #3b82f6;
+  --color-brand-content: #3b82f6;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">SQLAlchemy JDBC/ODBC API</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  <span class="sidebar-brand-text">SQLAlchemy JDBC/ODBC API</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">Quick Start Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage.html">Usage Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../drivers.html">Supported Drivers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../sqlalchemy_integration.html">SQLAlchemy Integration Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../troubleshooting.html">Troubleshooting Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/index.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/jdbc.html">JDBC Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/odbc.html">ODBC Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/dialects.html">Dialects Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/jdbc.html">JDBC Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/odbc.html">ODBC Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/dialects.html">Dialects Module</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <h1>Source code for sqlalchemy_jdbcapi.dialects.base</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Base JDBC dialect implementation following SOLID principles.</span>
+
+<span class="sd">This module provides the abstract base class for all JDBC dialects,</span>
+<span class="sd">implementing common functionality and defining the interface that</span>
+<span class="sd">database-specific dialects must implement.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy</span><span class="w"> </span><span class="kn">import</span> <span class="n">pool</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.engine</span><span class="w"> </span><span class="kn">import</span> <span class="n">Connection</span><span class="p">,</span> <span class="n">Dialect</span><span class="p">,</span> <span class="n">reflection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.engine.url</span><span class="w"> </span><span class="kn">import</span> <span class="n">URL</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.types</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BIGINT</span><span class="p">,</span>
+    <span class="n">BINARY</span><span class="p">,</span>
+    <span class="n">BOOLEAN</span><span class="p">,</span>
+    <span class="n">CHAR</span><span class="p">,</span>
+    <span class="n">DATE</span><span class="p">,</span>
+    <span class="n">DECIMAL</span><span class="p">,</span>
+    <span class="n">FLOAT</span><span class="p">,</span>
+    <span class="n">INTEGER</span><span class="p">,</span>
+    <span class="n">NUMERIC</span><span class="p">,</span>
+    <span class="n">REAL</span><span class="p">,</span>
+    <span class="n">SMALLINT</span><span class="p">,</span>
+    <span class="n">TIME</span><span class="p">,</span>
+    <span class="n">TIMESTAMP</span><span class="p">,</span>
+    <span class="n">VARBINARY</span><span class="p">,</span>
+    <span class="n">VARCHAR</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..jdbc.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">DatabaseError</span><span class="p">,</span> <span class="n">OperationalError</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">JDBCDriverConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Configuration for a JDBC driver.</span>
+
+<span class="sd">    This encapsulates all driver-specific configuration in a single</span>
+<span class="sd">    immutable object, following the Single Responsibility Principle.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">driver_class</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fully qualified Java class name of the JDBC driver&quot;&quot;&quot;</span>
+
+    <span class="n">jdbc_url_template</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Template for JDBC URL (e.g., &#39;jdbc:postgresql://{host}:{port}/{database}&#39;)&quot;&quot;&quot;</span>
+
+    <span class="n">default_port</span><span class="p">:</span> <span class="nb">int</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Default port number for the database&quot;&quot;&quot;</span>
+
+    <span class="n">supports_transactions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether the database supports transactions&quot;&quot;&quot;</span>
+
+    <span class="n">supports_schemas</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether the database supports schemas&quot;&quot;&quot;</span>
+
+    <span class="n">supports_sequences</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether the database supports sequences&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_jdbc_url</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">database</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">query_params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Format a JDBC connection URL.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            host: Database host</span>
+<span class="sd">            port: Database port (uses default_port if None)</span>
+<span class="sd">            database: Database name</span>
+<span class="sd">            query_params: Additional query parameters</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Formatted JDBC URL</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">port</span> <span class="o">=</span> <span class="n">port</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_port</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jdbc_url_template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="n">database</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">query_params</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="s2">&quot;&amp;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">query_params</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="n">separator</span> <span class="o">=</span> <span class="s2">&quot;?&quot;</span> <span class="k">if</span> <span class="s2">&quot;?&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">url</span> <span class="k">else</span> <span class="s2">&quot;&amp;&quot;</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">url</span><span class="si">}{</span><span class="n">separator</span><span class="si">}{</span><span class="n">params</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="k">return</span> <span class="n">url</span>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseJDBCDialect</span><span class="p">(</span><span class="n">Dialect</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract base class for JDBC-based SQLAlchemy dialects.</span>
+
+<span class="sd">    This class implements the Template Method pattern, providing common</span>
+<span class="sd">    JDBC functionality while allowing database-specific customization</span>
+<span class="sd">    through abstract methods.</span>
+
+<span class="sd">    Subclasses must implement:</span>
+<span class="sd">    - get_driver_config(): Return driver configuration</span>
+<span class="sd">    - _get_server_version_info(): Parse database version</span>
+
+<span class="sd">    SQLAlchemy 2.0+ compatible with full type hints.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># DB-API module (our custom JDBC bridge)</span>
+    <span class="n">driver</span> <span class="o">=</span> <span class="s2">&quot;jdbcapi&quot;</span>
+
+    <span class="c1"># SQLAlchemy capabilities</span>
+    <span class="n">supports_native_decimal</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">supports_sane_rowcount</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">supports_sane_multi_rowcount</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">supports_unicode_binds</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">supports_statement_cache</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">supports_server_side_cursors</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># Connection pooling</span>
+    <span class="n">supports_native_boolean</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">poolclass</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">QueuePool</span>
+
+<div class="viewcode-block" id="BaseJDBCDialect.import_dbapi">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.import_dbapi">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">import_dbapi</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the DB-API module.</span>
+
+<span class="sd">        Returns our custom JDBC bridge module that implements</span>
+<span class="sd">        the Python DB-API 2.0 specification.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">jdbc</span>
+
+        <span class="k">return</span> <span class="n">jdbc</span>  <span class="c1"># type: ignore</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.dbapi">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.dbapi">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dbapi</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Deprecated: Use import_dbapi() instead.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">import_dbapi</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.get_driver_config">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.get_driver_config">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_driver_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JDBCDriverConfig</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get JDBC driver configuration for this dialect.</span>
+
+<span class="sd">        This method must be implemented by each database dialect</span>
+<span class="sd">        to provide driver-specific configuration.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            JDBCDriverConfig instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.create_connect_args">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.create_connect_args">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_connect_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="n">URL</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create connection arguments from SQLAlchemy URL.</span>
+
+<span class="sd">        Converts a SQLAlchemy URL into arguments for our JDBC connect()</span>
+<span class="sd">        function, following the Adapter pattern.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            url: SQLAlchemy connection URL</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple of (args, kwargs) for jdbc.connect()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_driver_config</span><span class="p">()</span>
+
+        <span class="c1"># Build JDBC URL</span>
+        <span class="n">jdbc_url</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">format_jdbc_url</span><span class="p">(</span>
+            <span class="n">host</span><span class="o">=</span><span class="n">url</span><span class="o">.</span><span class="n">host</span> <span class="ow">or</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span>
+            <span class="n">port</span><span class="o">=</span><span class="n">url</span><span class="o">.</span><span class="n">port</span><span class="p">,</span>
+            <span class="n">database</span><span class="o">=</span><span class="n">url</span><span class="o">.</span><span class="n">database</span><span class="p">,</span>
+            <span class="n">query_params</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">url</span><span class="o">.</span><span class="n">query</span><span class="p">)</span> <span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">query</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating connection to: </span><span class="si">{</span><span class="n">jdbc_url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Build driver arguments</span>
+        <span class="n">driver_args</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">username</span><span class="p">:</span>
+            <span class="n">driver_args</span><span class="p">[</span><span class="s2">&quot;user&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">username</span>
+        <span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">password</span><span class="p">:</span>
+            <span class="n">driver_args</span><span class="p">[</span><span class="s2">&quot;password&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">password</span>
+
+        <span class="c1"># Add query parameters as connection properties</span>
+        <span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">query</span><span class="p">:</span>
+            <span class="n">driver_args</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">url</span><span class="o">.</span><span class="n">query</span><span class="p">)</span>
+
+        <span class="c1"># Connection arguments for jdbc.connect()</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;jclassname&quot;</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">driver_class</span><span class="p">,</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">jdbc_url</span><span class="p">,</span>
+            <span class="s2">&quot;driver_args&quot;</span><span class="p">:</span> <span class="n">driver_args</span> <span class="k">if</span> <span class="n">driver_args</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="p">([],</span> <span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.initialize">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.initialize">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize a new connection.</span>
+
+<span class="sd">        Called when a new connection is established to set up</span>
+<span class="sd">        connection-specific settings.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            connection: SQLAlchemy connection object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+
+        <span class="c1"># Set up server version</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_server_version_info&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_server_version_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_server_version_info</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Server version: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_server_version_info</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_server_version_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get database server version information.</span>
+
+<span class="sd">        This must be implemented by each dialect to parse version</span>
+<span class="sd">        information in a database-specific way.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            connection: SQLAlchemy connection</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Tuple of version numbers (e.g., (14, 5, 0))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+
+<div class="viewcode-block" id="BaseJDBCDialect.is_disconnect">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.is_disconnect">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">connection</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">cursor</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if an exception indicates a database disconnect.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            e: Exception that occurred</span>
+<span class="sd">            connection: Database connection</span>
+<span class="sd">            cursor: Database cursor</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if this is a disconnect error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="p">(</span><span class="n">DatabaseError</span><span class="p">,</span> <span class="n">OperationalError</span><span class="p">)):</span>
+            <span class="n">error_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="n">disconnect_indicators</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;connection is closed&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;cursor is closed&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;connection reset&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;broken pipe&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;connection refused&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;connection lost&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;can&#39;t connect&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;connection terminated&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+            <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">indicator</span> <span class="ow">in</span> <span class="n">error_str</span> <span class="k">for</span> <span class="n">indicator</span> <span class="ow">in</span> <span class="n">disconnect_indicators</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.do_rollback">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.do_rollback">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">do_rollback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbapi_connection</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform a rollback on the connection.</span>
+
+<span class="sd">        Some JDBC drivers have issues with rollback,</span>
+<span class="sd">        this can be overridden by subclasses.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dbapi_connection: DB-API connection object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">dbapi_connection</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rollback failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.do_commit">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.do_commit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">do_commit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbapi_connection</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform a commit on the connection.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dbapi_connection: DB-API connection object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dbapi_connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.do_close">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.do_close">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">do_close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbapi_connection</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Close the connection.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dbapi_connection: DB-API connection object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dbapi_connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.do_ping">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.do_ping">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">do_ping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbapi_connection</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if connection is alive.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dbapi_connection: DB-API connection object</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if connection is alive, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cursor</span> <span class="o">=</span> <span class="n">dbapi_connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT 1&quot;</span><span class="p">)</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ping failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.get_isolation_level">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.get_isolation_level">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_isolation_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbapi_connection</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the current transaction isolation level.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dbapi_connection: DB-API connection object</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Isolation level name or None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># This would need JDBC-specific implementation</span>
+        <span class="c1"># Most JDBC connections support getTransactionIsolation()</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.set_isolation_level">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.set_isolation_level">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_isolation_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbapi_connection</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the transaction isolation level.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dbapi_connection: DB-API connection object</span>
+<span class="sd">            level: Isolation level to set</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+        <span class="c1"># This would need JDBC-specific implementation</span>
+        <span class="c1"># Most JDBC connections support setTransactionIsolation()</span>
+
+    <span class="c1"># ========================================================================</span>
+    <span class="c1"># JDBC Reflection Methods - Using DatabaseMetaData API</span>
+    <span class="c1"># ========================================================================</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_jdbc_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get JDBC DatabaseMetaData object from connection.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            connection: SQLAlchemy connection</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            JDBC DatabaseMetaData object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get the raw JDBC connection</span>
+        <span class="n">dbapi_conn</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">dbapi_connection</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dbapi_conn</span><span class="p">,</span> <span class="s2">&quot;_jdbc_connection&quot;</span><span class="p">):</span>
+            <span class="n">jdbc_conn</span> <span class="o">=</span> <span class="n">dbapi_conn</span><span class="o">.</span><span class="n">_jdbc_connection</span>
+            <span class="k">return</span> <span class="n">jdbc_conn</span><span class="o">.</span><span class="n">getMetaData</span><span class="p">()</span>
+        <span class="k">raise</span> <span class="n">OperationalError</span><span class="p">(</span><span class="s2">&quot;Cannot access JDBC connection metadata&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_jdbc_type_to_sqlalchemy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jdbc_type_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">jdbc_type</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert JDBC type to SQLAlchemy type.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            jdbc_type_name: JDBC type name (e.g., &#39;VARCHAR&#39;)</span>
+<span class="sd">            jdbc_type: JDBC type code (from java.sql.Types)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            SQLAlchemy type instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Map common JDBC type codes to SQLAlchemy types</span>
+        <span class="n">type_map</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="o">-</span><span class="mi">7</span><span class="p">:</span> <span class="n">BOOLEAN</span><span class="p">,</span>  <span class="c1"># BIT</span>
+            <span class="o">-</span><span class="mi">6</span><span class="p">:</span> <span class="n">SMALLINT</span><span class="p">,</span>  <span class="c1"># TINYINT</span>
+            <span class="o">-</span><span class="mi">5</span><span class="p">:</span> <span class="n">BIGINT</span><span class="p">,</span>  <span class="c1"># BIGINT</span>
+            <span class="o">-</span><span class="mi">4</span><span class="p">:</span> <span class="n">VARBINARY</span><span class="p">,</span>  <span class="c1"># LONGVARBINARY</span>
+            <span class="o">-</span><span class="mi">3</span><span class="p">:</span> <span class="n">VARBINARY</span><span class="p">,</span>  <span class="c1"># VARBINARY</span>
+            <span class="o">-</span><span class="mi">2</span><span class="p">:</span> <span class="n">BINARY</span><span class="p">,</span>  <span class="c1"># BINARY</span>
+            <span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="n">VARCHAR</span><span class="p">,</span>  <span class="c1"># LONGVARCHAR</span>
+            <span class="mi">1</span><span class="p">:</span> <span class="n">CHAR</span><span class="p">,</span>  <span class="c1"># CHAR</span>
+            <span class="mi">2</span><span class="p">:</span> <span class="n">NUMERIC</span><span class="p">,</span>  <span class="c1"># NUMERIC</span>
+            <span class="mi">3</span><span class="p">:</span> <span class="n">DECIMAL</span><span class="p">,</span>  <span class="c1"># DECIMAL</span>
+            <span class="mi">4</span><span class="p">:</span> <span class="n">INTEGER</span><span class="p">,</span>  <span class="c1"># INTEGER</span>
+            <span class="mi">5</span><span class="p">:</span> <span class="n">SMALLINT</span><span class="p">,</span>  <span class="c1"># SMALLINT</span>
+            <span class="mi">6</span><span class="p">:</span> <span class="n">FLOAT</span><span class="p">,</span>  <span class="c1"># FLOAT</span>
+            <span class="mi">7</span><span class="p">:</span> <span class="n">REAL</span><span class="p">,</span>  <span class="c1"># REAL</span>
+            <span class="mi">8</span><span class="p">:</span> <span class="n">FLOAT</span><span class="p">,</span>  <span class="c1"># DOUBLE</span>
+            <span class="mi">12</span><span class="p">:</span> <span class="n">VARCHAR</span><span class="p">,</span>  <span class="c1"># VARCHAR</span>
+            <span class="mi">16</span><span class="p">:</span> <span class="n">BOOLEAN</span><span class="p">,</span>  <span class="c1"># BOOLEAN</span>
+            <span class="mi">91</span><span class="p">:</span> <span class="n">DATE</span><span class="p">,</span>  <span class="c1"># DATE</span>
+            <span class="mi">92</span><span class="p">:</span> <span class="n">TIME</span><span class="p">,</span>  <span class="c1"># TIME</span>
+            <span class="mi">93</span><span class="p">:</span> <span class="n">TIMESTAMP</span><span class="p">,</span>  <span class="c1"># TIMESTAMP</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">type_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">jdbc_type</span><span class="p">,</span> <span class="n">VARCHAR</span><span class="p">())</span>
+
+<div class="viewcode-block" id="BaseJDBCDialect.get_schema_names">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.get_schema_names">[docs]</a>
+    <span class="nd">@reflection</span><span class="o">.</span><span class="n">cache</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_schema_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get list of schema names using JDBC DatabaseMetaData.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            connection: SQLAlchemy connection</span>
+<span class="sd">            **kw: Additional keyword arguments</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of schema names</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_jdbc_metadata</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+            <span class="n">schemas</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="n">rs</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">getSchemas</span><span class="p">()</span>
+            <span class="k">while</span> <span class="n">rs</span><span class="o">.</span><span class="n">next</span><span class="p">():</span>
+                <span class="n">schema_name</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;TABLE_SCHEM&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">schema_name</span><span class="p">:</span>
+                    <span class="n">schemas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">schema_name</span><span class="p">)</span>
+            <span class="n">rs</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">schemas</span><span class="p">)</span><span class="si">}</span><span class="s2"> schemas&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">schemas</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to get schema names: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.get_table_names">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.get_table_names">[docs]</a>
+    <span class="nd">@reflection</span><span class="o">.</span><span class="n">cache</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_table_names</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get list of table names using JDBC DatabaseMetaData.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            connection: SQLAlchemy connection</span>
+<span class="sd">            schema: Schema name (None for default schema)</span>
+<span class="sd">            **kw: Additional keyword arguments</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of table names</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_jdbc_metadata</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+            <span class="n">tables</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># getTables(catalog, schemaPattern, tableNamePattern, types[])</span>
+            <span class="n">rs</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">getTables</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="s2">&quot;%&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;TABLE&quot;</span><span class="p">])</span>
+            <span class="k">while</span> <span class="n">rs</span><span class="o">.</span><span class="n">next</span><span class="p">():</span>
+                <span class="n">table_name</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;TABLE_NAME&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">table_name</span><span class="p">:</span>
+                    <span class="n">tables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">table_name</span><span class="p">)</span>
+            <span class="n">rs</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">tables</span><span class="p">)</span><span class="si">}</span><span class="s2"> tables in schema &#39;</span><span class="si">{</span><span class="n">schema</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">tables</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to get table names: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.get_view_names">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.get_view_names">[docs]</a>
+    <span class="nd">@reflection</span><span class="o">.</span><span class="n">cache</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_view_names</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get list of view names using JDBC DatabaseMetaData.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            connection: SQLAlchemy connection</span>
+<span class="sd">            schema: Schema name (None for default schema)</span>
+<span class="sd">            **kw: Additional keyword arguments</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of view names</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_jdbc_metadata</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+            <span class="n">views</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="n">rs</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">getTables</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="s2">&quot;%&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;VIEW&quot;</span><span class="p">])</span>
+            <span class="k">while</span> <span class="n">rs</span><span class="o">.</span><span class="n">next</span><span class="p">():</span>
+                <span class="n">view_name</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;TABLE_NAME&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">view_name</span><span class="p">:</span>
+                    <span class="n">views</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">view_name</span><span class="p">)</span>
+            <span class="n">rs</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">views</span><span class="p">)</span><span class="si">}</span><span class="s2"> views in schema &#39;</span><span class="si">{</span><span class="n">schema</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">views</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to get view names: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.has_table">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.has_table">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">has_table</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span>
+        <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">schema</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kw</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if a table exists using JDBC DatabaseMetaData.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            connection: SQLAlchemy connection</span>
+<span class="sd">            table_name: Table name to check</span>
+<span class="sd">            schema: Schema name (None for default schema)</span>
+<span class="sd">            **kw: Additional keyword arguments</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if table exists, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_jdbc_metadata</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+
+            <span class="n">rs</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">getTables</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;TABLE&quot;</span><span class="p">])</span>
+            <span class="n">exists</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+            <span class="n">rs</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Table &#39;</span><span class="si">{</span><span class="n">schema</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&#39; exists: </span><span class="si">{</span><span class="n">exists</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">exists</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to check table existence: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.get_columns">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.get_columns">[docs]</a>
+    <span class="nd">@reflection</span><span class="o">.</span><span class="n">cache</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_columns</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span>
+        <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">schema</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kw</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get column definitions for a table using JDBC DatabaseMetaData.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            connection: SQLAlchemy connection</span>
+<span class="sd">            table_name: Table name</span>
+<span class="sd">            schema: Schema name (None for default schema)</span>
+<span class="sd">            **kw: Additional keyword arguments</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of column dictionaries with keys:</span>
+<span class="sd">            - name: Column name</span>
+<span class="sd">            - type: SQLAlchemy type instance</span>
+<span class="sd">            - nullable: Boolean</span>
+<span class="sd">            - default: Default value (string or None)</span>
+<span class="sd">            - autoincrement: Boolean</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_jdbc_metadata</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="n">rs</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">getColumns</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="s2">&quot;%&quot;</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">rs</span><span class="o">.</span><span class="n">next</span><span class="p">():</span>
+                <span class="n">column_name</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;COLUMN_NAME&quot;</span><span class="p">)</span>
+                <span class="n">data_type</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getInt</span><span class="p">(</span><span class="s2">&quot;DATA_TYPE&quot;</span><span class="p">)</span>
+                <span class="n">type_name</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;TYPE_NAME&quot;</span><span class="p">)</span>
+                <span class="n">column_size</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getInt</span><span class="p">(</span><span class="s2">&quot;COLUMN_SIZE&quot;</span><span class="p">)</span>
+                <span class="n">nullable</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getInt</span><span class="p">(</span><span class="s2">&quot;NULLABLE&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>  <span class="c1"># DatabaseMetaData.columnNullable</span>
+                <span class="n">column_def</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;COLUMN_DEF&quot;</span><span class="p">)</span>
+                <span class="n">is_autoincrement</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;IS_AUTOINCREMENT&quot;</span><span class="p">)</span>
+
+                <span class="c1"># Convert JDBC type to SQLAlchemy type</span>
+                <span class="n">sa_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jdbc_type_to_sqlalchemy</span><span class="p">(</span><span class="n">type_name</span><span class="p">,</span> <span class="n">data_type</span><span class="p">)</span>
+
+                <span class="c1"># Apply size for character/binary types</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sa_type</span><span class="p">,</span> <span class="s2">&quot;length&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">column_size</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sa_type</span><span class="p">,</span> <span class="p">(</span><span class="n">VARCHAR</span><span class="p">,</span> <span class="n">CHAR</span><span class="p">,</span> <span class="n">VARBINARY</span><span class="p">,</span> <span class="n">BINARY</span><span class="p">)):</span>
+                        <span class="n">sa_type</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">sa_type</span><span class="p">)(</span><span class="n">length</span><span class="o">=</span><span class="n">column_size</span><span class="p">)</span>
+
+                <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">column_name</span><span class="p">,</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">sa_type</span><span class="p">,</span>
+                        <span class="s2">&quot;nullable&quot;</span><span class="p">:</span> <span class="n">nullable</span><span class="p">,</span>
+                        <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">column_def</span><span class="p">,</span>
+                        <span class="s2">&quot;autoincrement&quot;</span><span class="p">:</span> <span class="n">is_autoincrement</span> <span class="o">==</span> <span class="s2">&quot;YES&quot;</span>
+                        <span class="k">if</span> <span class="n">is_autoincrement</span>
+                        <span class="k">else</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+
+            <span class="n">rs</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span><span class="si">}</span><span class="s2"> columns for table &#39;</span><span class="si">{</span><span class="n">schema</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">columns</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to get columns: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.get_pk_constraint">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.get_pk_constraint">[docs]</a>
+    <span class="nd">@reflection</span><span class="o">.</span><span class="n">cache</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_pk_constraint</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span>
+        <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">schema</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kw</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get primary key constraint for a table using JDBC DatabaseMetaData.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            connection: SQLAlchemy connection</span>
+<span class="sd">            table_name: Table name</span>
+<span class="sd">            schema: Schema name (None for default schema)</span>
+<span class="sd">            **kw: Additional keyword arguments</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dictionary with keys:</span>
+<span class="sd">            - name: Constraint name</span>
+<span class="sd">            - constrained_columns: List of column names</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_jdbc_metadata</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+            <span class="n">pk_columns</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">pk_name</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="n">rs</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">getPrimaryKeys</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">rs</span><span class="o">.</span><span class="n">next</span><span class="p">():</span>
+                <span class="n">column_name</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;COLUMN_NAME&quot;</span><span class="p">)</span>
+                <span class="n">pk_name</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;PK_NAME&quot;</span><span class="p">)</span>
+                <span class="n">key_seq</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getInt</span><span class="p">(</span><span class="s2">&quot;KEY_SEQ&quot;</span><span class="p">)</span>
+                <span class="n">pk_columns</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">key_seq</span><span class="p">,</span> <span class="n">column_name</span><span class="p">))</span>
+
+            <span class="n">rs</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="c1"># Sort by KEY_SEQ to maintain correct column order</span>
+            <span class="n">pk_columns</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">constrained_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">pk_columns</span><span class="p">]</span>
+
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">pk_name</span><span class="p">,</span>
+                <span class="s2">&quot;constrained_columns&quot;</span><span class="p">:</span> <span class="n">constrained_columns</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Primary key for &#39;</span><span class="si">{</span><span class="n">schema</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to get primary key: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;constrained_columns&quot;</span><span class="p">:</span> <span class="p">[]}</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.get_foreign_keys">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.get_foreign_keys">[docs]</a>
+    <span class="nd">@reflection</span><span class="o">.</span><span class="n">cache</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_foreign_keys</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span>
+        <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">schema</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kw</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get foreign key constraints for a table using JDBC DatabaseMetaData.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            connection: SQLAlchemy connection</span>
+<span class="sd">            table_name: Table name</span>
+<span class="sd">            schema: Schema name (None for default schema)</span>
+<span class="sd">            **kw: Additional keyword arguments</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of dictionaries with keys:</span>
+<span class="sd">            - name: Constraint name</span>
+<span class="sd">            - constrained_columns: List of local column names</span>
+<span class="sd">            - referred_schema: Referenced schema name</span>
+<span class="sd">            - referred_table: Referenced table name</span>
+<span class="sd">            - referred_columns: List of referenced column names</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_jdbc_metadata</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+            <span class="n">fks</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="n">rs</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">getImportedKeys</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">rs</span><span class="o">.</span><span class="n">next</span><span class="p">():</span>
+                <span class="n">fk_name</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;FK_NAME&quot;</span><span class="p">)</span>
+                <span class="n">fk_column</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;FKCOLUMN_NAME&quot;</span><span class="p">)</span>
+                <span class="n">pk_table</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;PKTABLE_NAME&quot;</span><span class="p">)</span>
+                <span class="n">pk_schema</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;PKTABLE_SCHEM&quot;</span><span class="p">)</span>
+                <span class="n">pk_column</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;PKCOLUMN_NAME&quot;</span><span class="p">)</span>
+                <span class="n">key_seq</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getInt</span><span class="p">(</span><span class="s2">&quot;KEY_SEQ&quot;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">fk_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fks</span><span class="p">:</span>
+                    <span class="n">fks</span><span class="p">[</span><span class="n">fk_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">fk_name</span><span class="p">,</span>
+                        <span class="s2">&quot;constrained_columns&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                        <span class="s2">&quot;referred_schema&quot;</span><span class="p">:</span> <span class="n">pk_schema</span><span class="p">,</span>
+                        <span class="s2">&quot;referred_table&quot;</span><span class="p">:</span> <span class="n">pk_table</span><span class="p">,</span>
+                        <span class="s2">&quot;referred_columns&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                        <span class="s2">&quot;_seq&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                    <span class="p">}</span>
+
+                <span class="n">fks</span><span class="p">[</span><span class="n">fk_name</span><span class="p">][</span><span class="s2">&quot;_seq&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key_seq</span><span class="p">)</span>
+                <span class="n">fks</span><span class="p">[</span><span class="n">fk_name</span><span class="p">][</span><span class="s2">&quot;constrained_columns&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fk_column</span><span class="p">)</span>
+                <span class="n">fks</span><span class="p">[</span><span class="n">fk_name</span><span class="p">][</span><span class="s2">&quot;referred_columns&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pk_column</span><span class="p">)</span>
+
+            <span class="n">rs</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="c1"># Sort columns by KEY_SEQ</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">fk_name</span><span class="p">,</span> <span class="n">fk_data</span> <span class="ow">in</span> <span class="n">fks</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="c1"># Sort by sequence</span>
+                <span class="n">sorted_data</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+                    <span class="nb">zip</span><span class="p">(</span>
+                        <span class="n">fk_data</span><span class="p">[</span><span class="s2">&quot;_seq&quot;</span><span class="p">],</span>
+                        <span class="n">fk_data</span><span class="p">[</span><span class="s2">&quot;constrained_columns&quot;</span><span class="p">],</span>
+                        <span class="n">fk_data</span><span class="p">[</span><span class="s2">&quot;referred_columns&quot;</span><span class="p">],</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">fk_data</span><span class="p">[</span><span class="s2">&quot;constrained_columns&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sorted_data</span><span class="p">]</span>
+                <span class="n">fk_data</span><span class="p">[</span><span class="s2">&quot;referred_columns&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">sorted_data</span><span class="p">]</span>
+                <span class="k">del</span> <span class="n">fk_data</span><span class="p">[</span><span class="s2">&quot;_seq&quot;</span><span class="p">]</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fk_data</span><span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="si">}</span><span class="s2"> foreign keys for &#39;</span><span class="si">{</span><span class="n">schema</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to get foreign keys: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.get_indexes">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.get_indexes">[docs]</a>
+    <span class="nd">@reflection</span><span class="o">.</span><span class="n">cache</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_indexes</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span>
+        <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">schema</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kw</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get indexes for a table using JDBC DatabaseMetaData.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            connection: SQLAlchemy connection</span>
+<span class="sd">            table_name: Table name</span>
+<span class="sd">            schema: Schema name (None for default schema)</span>
+<span class="sd">            **kw: Additional keyword arguments</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of dictionaries with keys:</span>
+<span class="sd">            - name: Index name</span>
+<span class="sd">            - column_names: List of column names</span>
+<span class="sd">            - unique: Boolean</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_jdbc_metadata</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+            <span class="n">indexes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="c1"># getIndexInfo(catalog, schema, table, unique, approximate)</span>
+            <span class="n">rs</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">getIndexInfo</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">rs</span><span class="o">.</span><span class="n">next</span><span class="p">():</span>
+                <span class="n">index_name</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;INDEX_NAME&quot;</span><span class="p">)</span>
+
+                <span class="c1"># Skip statistics</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">index_name</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="n">column_name</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getString</span><span class="p">(</span><span class="s2">&quot;COLUMN_NAME&quot;</span><span class="p">)</span>
+                <span class="n">non_unique</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getBoolean</span><span class="p">(</span><span class="s2">&quot;NON_UNIQUE&quot;</span><span class="p">)</span>
+                <span class="n">ordinal_position</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">getInt</span><span class="p">(</span><span class="s2">&quot;ORDINAL_POSITION&quot;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">index_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">indexes</span><span class="p">:</span>
+                    <span class="n">indexes</span><span class="p">[</span><span class="n">index_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">index_name</span><span class="p">,</span>
+                        <span class="s2">&quot;column_names&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                        <span class="s2">&quot;unique&quot;</span><span class="p">:</span> <span class="ow">not</span> <span class="n">non_unique</span><span class="p">,</span>
+                        <span class="s2">&quot;_positions&quot;</span><span class="p">:</span> <span class="p">[],</span>
+                    <span class="p">}</span>
+
+                <span class="n">indexes</span><span class="p">[</span><span class="n">index_name</span><span class="p">][</span><span class="s2">&quot;_positions&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ordinal_position</span><span class="p">)</span>
+                <span class="n">indexes</span><span class="p">[</span><span class="n">index_name</span><span class="p">][</span><span class="s2">&quot;column_names&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">column_name</span><span class="p">)</span>
+
+            <span class="n">rs</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="c1"># Sort columns by ordinal position</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">idx_name</span><span class="p">,</span> <span class="n">idx_data</span> <span class="ow">in</span> <span class="n">indexes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">sorted_data</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+                    <span class="nb">zip</span><span class="p">(</span><span class="n">idx_data</span><span class="p">[</span><span class="s2">&quot;_positions&quot;</span><span class="p">],</span> <span class="n">idx_data</span><span class="p">[</span><span class="s2">&quot;column_names&quot;</span><span class="p">])</span>
+                <span class="p">)</span>
+                <span class="n">idx_data</span><span class="p">[</span><span class="s2">&quot;column_names&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">sorted_data</span><span class="p">]</span>
+                <span class="k">del</span> <span class="n">idx_data</span><span class="p">[</span><span class="s2">&quot;_positions&quot;</span><span class="p">]</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx_data</span><span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span><span class="si">}</span><span class="s2"> indexes for &#39;</span><span class="si">{</span><span class="n">schema</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to get indexes: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.get_unique_constraints">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.get_unique_constraints">[docs]</a>
+    <span class="nd">@reflection</span><span class="o">.</span><span class="n">cache</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_unique_constraints</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span>
+        <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">schema</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kw</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get unique constraints for a table.</span>
+
+<span class="sd">        This is extracted from get_indexes() by filtering for unique indexes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            connection: SQLAlchemy connection</span>
+<span class="sd">            table_name: Table name</span>
+<span class="sd">            schema: Schema name (None for default schema)</span>
+<span class="sd">            **kw: Additional keyword arguments</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of dictionaries with keys:</span>
+<span class="sd">            - name: Constraint name</span>
+<span class="sd">            - column_names: List of column names</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">indexes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_indexes</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+            <span class="n">unique_constraints</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">idx</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="s2">&quot;column_names&quot;</span><span class="p">:</span> <span class="n">idx</span><span class="p">[</span><span class="s2">&quot;column_names&quot;</span><span class="p">]}</span>
+                <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">indexes</span>
+                <span class="k">if</span> <span class="n">idx</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;unique&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="p">]</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">unique_constraints</span><span class="p">)</span><span class="si">}</span><span class="s2"> unique constraints for &#39;</span><span class="si">{</span><span class="n">schema</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">unique_constraints</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to get unique constraints: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.get_check_constraints">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.get_check_constraints">[docs]</a>
+    <span class="nd">@reflection</span><span class="o">.</span><span class="n">cache</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_check_constraints</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">connection</span><span class="p">:</span> <span class="n">Connection</span><span class="p">,</span>
+        <span class="n">table_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">schema</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kw</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get check constraints for a table.</span>
+
+<span class="sd">        Note: JDBC DatabaseMetaData doesn&#39;t have a standard method for check constraints.</span>
+<span class="sd">        This returns an empty list. Database-specific dialects should override this</span>
+<span class="sd">        method to query system tables if check constraint information is needed.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            connection: SQLAlchemy connection</span>
+<span class="sd">            table_name: Table name</span>
+<span class="sd">            schema: Schema name (None for default schema)</span>
+<span class="sd">            **kw: Additional keyword arguments</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of dictionaries with keys:</span>
+<span class="sd">            - name: Constraint name</span>
+<span class="sd">            - sqltext: Check constraint SQL expression</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># JDBC doesn&#39;t provide standard access to check constraints</span>
+        <span class="c1"># Subclasses can override to query database-specific system tables</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Check constraints not available via JDBC for &#39;</span><span class="si">{</span><span class="n">schema</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="BaseJDBCDialect.__repr__">
+<a class="viewcode-back" href="../../../api/dialects.html#sqlalchemy_jdbcapi.dialects.base.BaseJDBCDialect.__repr__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;String representation of the dialect.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&gt;&quot;</span></div>
+</div>
+
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2024, Danesh Patel, Pavel Henrykhsen
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../../../_static/documentation_options.js?v=79f5c508"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    </body>
+</html>
