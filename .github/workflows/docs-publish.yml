@@ -38,7 +38,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e ".[docs]"
 
-      - name: Build Sphinx documentation
+      - name: Build Sphinx documentation (Furo theme)
         run: |
           cd docs
           make html
@@ -51,7 +51,13 @@ jobs:
         run: |
           echo "### Documentation Published 📚" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Documentation built and deployed successfully" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Modern Sphinx documentation built with **Furo theme**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Features:**" >> $GITHUB_STEP_SUMMARY
+          echo "- 🌓 Dark/Light mode support" >> $GITHUB_STEP_SUMMARY
+          echo "- 📋 Copy buttons on code blocks" >> $GITHUB_STEP_SUMMARY
+          echo "- ⌨️ Keyboard navigation" >> $GITHUB_STEP_SUMMARY
+          echo "- 📱 Mobile responsive" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Statistics:**" >> $GITHUB_STEP_SUMMARY
           echo "- HTML pages: $(find docs/_build/html -name '*.html' | wc -l)" >> $GITHUB_STEP_SUMMARY

@@ -53,7 +53,11 @@ class Connection:
         # Note: JVM can only be started once per Python process
         try:
             # Pass jars as-is to start_jvm - if None, it will use environment classpath
-            classpath = [Path(jar) if isinstance(jar, str) else jar for jar in jars] if jars else None
+            classpath = (
+                [Path(jar) if isinstance(jar, str) else jar for jar in jars]
+                if jars
+                else None
+            )
             start_jvm(classpath=classpath, jvm_args=None)
         except Exception as e:
             raise InterfaceError(f"Failed to start JVM: {e}") from e
