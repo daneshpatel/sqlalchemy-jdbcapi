@@ -159,7 +159,7 @@ src/sqlalchemy_jdbcapi/
     └── sqlite.py
 ```
 
-### 🔮 Future Plans (2.1.0+)
+### 🔮 Future Plans (## [Unreleased]+)
 
 - Async support with SQLAlchemy async engine
 - Connection pooling enhancements
