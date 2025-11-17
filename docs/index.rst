@@ -49,12 +49,24 @@ Version 2.0 is a complete modernization of the library with:
    api/odbc
    api/dialects
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Development
+Resources
+=========
 
-   ../CONTRIBUTING.md
-   ../CHANGELOG.md
+Development
+-----------
+
+* `Contributing Guide <https://github.com/daneshpatel/sqlalchemy-jdbcapi/blob/master/CONTRIBUTING.md>`_
+* `Changelog <https://github.com/daneshpatel/sqlalchemy-jdbcapi/blob/master/CHANGELOG.md>`_
+* `Code of Conduct <https://github.com/daneshpatel/sqlalchemy-jdbcapi/blob/master/CODE_OF_CONDUCT.md>`_
+* `Security Policy <https://github.com/daneshpatel/sqlalchemy-jdbcapi/blob/master/SECURITY.md>`_
+
+Community
+---------
+
+* `GitHub Repository <https://github.com/daneshpatel/sqlalchemy-jdbcapi>`_
+* `Issue Tracker <https://github.com/daneshpatel/sqlalchemy-jdbcapi/issues>`_
+* `Discussions <https://github.com/daneshpatel/sqlalchemy-jdbcapi/discussions>`_
+* `PyPI Package <https://pypi.org/project/sqlalchemy-jdbcapi/>`_
 
 Indices and tables
 ==================
