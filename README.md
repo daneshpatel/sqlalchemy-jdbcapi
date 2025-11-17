@@ -829,6 +829,3 @@ This project is licensed under the Apache License 2.0 - see [LICENSE](LICENSE) f
 - **Issues**: Report bugs or request features on [GitHub Issues](https://github.com/daneshpatel/sqlalchemy-jdbcapi/issues)
 - **Discussions**: Ask questions on [GitHub Discussions](https://github.com/daneshpatel/sqlalchemy-jdbcapi/discussions)
 
----
-
-Made with ❤️ by the SQLAlchemy JDBC API team
