@@ -35,10 +35,8 @@ Example usage:
 from __future__ import annotations
 
 # Version management
-try:
-    from ._version import version as __version__
-except ImportError:
-    __version__ = "2.0.0.dev0"
+# Version is managed by bump2version
+__version__ = "2.0.0"
 
 # Public API
 from . import jdbc
