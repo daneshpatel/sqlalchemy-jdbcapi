@@ -88,6 +88,7 @@ class TestRecommendedDrivers:
     def test_recommended_drivers_exist(self):
         """Test that all expected drivers are defined."""
         expected_databases = {
+            # Existing databases
             "postgresql",
             "mysql",
             "mariadb",
@@ -96,8 +97,51 @@ class TestRecommendedDrivers:
             "db2",
             "sqlite",
             "oceanbase",
+            # New databases
+            "gbase",
+            "iseries",
+            "access",
+            "avatica",
+            "phoenix",
+            # Connection pooling
+            "hikari",
         }
         assert set(RECOMMENDED_JDBC_DRIVERS.keys()) == expected_databases
+
+    def test_hikari_driver(self):
+        """Test HikariCP driver metadata."""
+        driver = RECOMMENDED_JDBC_DRIVERS["hikari"]
+        assert driver.group_id == "com.zaxxer"
+        assert driver.artifact_id == "HikariCP"
+
+    def test_gbase_driver(self):
+        """Test GBase driver metadata."""
+        driver = RECOMMENDED_JDBC_DRIVERS["gbase"]
+        assert driver.group_id == "com.gbasedbt"
+        assert driver.artifact_id == "gbasedbt-jdbc"
+
+    def test_iseries_driver(self):
+        """Test iSeries/JT400 driver metadata."""
+        driver = RECOMMENDED_JDBC_DRIVERS["iseries"]
+        assert driver.group_id == "net.sf.jt400"
+        assert driver.artifact_id == "jt400"
+
+    def test_access_driver(self):
+        """Test UCanAccess driver metadata."""
+        driver = RECOMMENDED_JDBC_DRIVERS["access"]
+        assert driver.group_id == "net.sf.ucanaccess"
+        assert driver.artifact_id == "ucanaccess"
+
+    def test_avatica_driver(self):
+        """Test Avatica driver metadata."""
+        driver = RECOMMENDED_JDBC_DRIVERS["avatica"]
+        assert driver.group_id == "org.apache.calcite.avatica"
+        assert driver.artifact_id == "avatica-core"
+
+    def test_phoenix_driver(self):
+        """Test Phoenix driver metadata."""
+        driver = RECOMMENDED_JDBC_DRIVERS["phoenix"]
+        assert driver.group_id == "org.apache.phoenix"
 
     def test_postgresql_driver(self):
         """Test PostgreSQL driver metadata."""
@@ -349,8 +393,8 @@ class TestGetAllDriverPaths:
 
         get_all_driver_paths(auto_download=False)
 
-        # Should attempt to get all 8 recommended drivers
-        assert mock_get_path.call_count == 8
+        # Should attempt to get all 14 recommended drivers
+        assert mock_get_path.call_count == 14
 
     @patch("sqlalchemy_jdbcapi.jdbc.driver_manager.get_driver_path")
     def test_get_specific_drivers(self, mock_get_path):

@@ -10,6 +10,9 @@ Comprehensive guide for using sqlalchemy-jdbcapi with JDBC and ODBC connections.
 - [Database-Specific Examples](#database-specific-examples)
 - [Driver Management](#driver-management)
 - [ORM Usage](#orm-usage)
+- [Asyncio Support](#asyncio-support)
+- [HikariCP Connection Pooling](#hikaricp-connection-pooling)
+- [Database X-Ray Monitoring](#database-x-ray-monitoring)
 - [Advanced Features](#advanced-features)
 - [Performance Optimization](#performance-optimization)
 - [Troubleshooting](#troubleshooting)
@@ -370,6 +373,11 @@ Base.metadata.create_all(engine)
 | IBM DB2 | com.ibm.db2 | jcc | 11.5.9.0 |
 | SQLite | org.xerial | sqlite-jdbc | 3.45.0.0 |
 | OceanBase | com.oceanbase | oceanbase-client | 2.4.9 |
+| GBase 8s | com.gbasedbt | gbasedbt-jdbc | 3.5.1 |
+| IBM iSeries | com.ibm.as400 | jt400 | 11.1 |
+| MS Access | net.sf.ucanaccess | ucanaccess | 5.0.1 |
+| Apache Phoenix | org.apache.phoenix | phoenix-client | 5.1.3 |
+| Apache Calcite | org.apache.calcite.avatica | avatica-core | 1.23.0 |
 
 ### Custom Driver Download
 
@@ -493,6 +501,320 @@ with Session(engine) as session:
     print(f"Author: {result.username}")
     for post in result.posts:
         print(f"  - {post.title}")
+```
+
+## Asyncio Support
+
+sqlalchemy-jdbcapi provides full asyncio support for both Core and ORM operations.
+
+### Async Engine Creation
+
+```python
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.orm import sessionmaker
+
+# Create async engine using the async dialect
+engine = create_async_engine(
+    "jdbcapi+postgresql+async://user:password@localhost:5432/mydb",
+    echo=True
+)
+
+# Create async session factory
+async_session = sessionmaker(
+    engine, class_=AsyncSession, expire_on_commit=False
+)
+```
+
+### Async Core Operations
+
+```python
+import asyncio
+from sqlalchemy import text
+
+async def main():
+    async with engine.begin() as conn:
+        # Execute query
+        result = await conn.execute(text("SELECT * FROM users"))
+        rows = result.fetchall()
+        for row in rows:
+            print(row)
+
+asyncio.run(main())
+```
+
+### Async ORM Operations
+
+```python
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+async def get_users(session: AsyncSession):
+    result = await session.execute(select(User))
+    return result.scalars().all()
+
+async def create_user(session: AsyncSession, username: str, email: str):
+    user = User(username=username, email=email)
+    session.add(user)
+    await session.commit()
+    return user
+
+async def main():
+    async with async_session() as session:
+        # Create user
+        user = await create_user(session, "alice", "alice@example.com")
+        print(f"Created: {user.username}")
+
+        # Get all users
+        users = await get_users(session)
+        for user in users:
+            print(f"User: {user.username}")
+
+asyncio.run(main())
+```
+
+### Supported Async Databases
+
+| Database | Async Dialect |
+|----------|---------------|
+| PostgreSQL | `jdbcapi+postgresql+async` |
+| MySQL | `jdbcapi+mysql+async` |
+| Oracle | `jdbcapi+oracle+async` |
+| SQL Server | `jdbcapi+mssql+async` |
+| DB2 | `jdbcapi+db2+async` |
+| SQLite | `jdbcapi+sqlite+async` |
+| GBase 8s | `jdbcapi+gbase8s+async` |
+| IBM iSeries | `jdbcapi+iseries+async` |
+| MS Access | `jdbcapi+access+async` |
+| Apache Avatica | `jdbcapi+avatica+async` |
+| Apache Phoenix | `jdbcapi+phoenix+async` |
+| Apache Calcite | `jdbcapi+calcite+async` |
+
+## HikariCP Connection Pooling
+
+HikariCP is a high-performance JDBC connection pool. sqlalchemy-jdbcapi provides native HikariCP integration.
+
+### Basic Usage
+
+```python
+from sqlalchemy_jdbcapi.jdbc import HikariConfig, HikariConnectionPool
+
+# Configure the pool
+config = HikariConfig(
+    jdbc_url="jdbc:postgresql://localhost:5432/mydb",
+    username="user",
+    password="password",
+    maximum_pool_size=10,
+    minimum_idle=5,
+    connection_timeout=30000,  # 30 seconds
+    idle_timeout=600000,       # 10 minutes
+    max_lifetime=1800000       # 30 minutes
+)
+
+# Create connection pool
+pool = HikariConnectionPool(config)
+
+# Get a connection
+connection = pool.get_connection()
+try:
+    # Use connection
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM users")
+    rows = cursor.fetchall()
+finally:
+    connection.close()  # Returns to pool
+
+# Get pool statistics
+stats = pool.pool_stats()
+print(f"Active connections: {stats['active_connections']}")
+print(f"Idle connections: {stats['idle_connections']}")
+print(f"Total connections: {stats['total_connections']}")
+
+# Close the pool when done
+pool.close()
+```
+
+### Advanced Configuration
+
+```python
+config = HikariConfig(
+    jdbc_url="jdbc:postgresql://localhost:5432/mydb",
+    username="user",
+    password="password",
+    driver_class="org.postgresql.Driver",
+
+    # Pool sizing
+    maximum_pool_size=20,
+    minimum_idle=10,  # Should equal max for fixed-size pool
+
+    # Timeouts (milliseconds)
+    connection_timeout=30000,
+    idle_timeout=600000,
+    max_lifetime=1800000,
+    keepalive_time=300000,  # Must be < max_lifetime
+
+    # Health checks
+    connection_test_query="SELECT 1",
+    validation_timeout=5000,
+
+    # Initialization
+    connection_init_sql="SET timezone='UTC'",
+    transaction_isolation="TRANSACTION_READ_COMMITTED",
+
+    # Pool name for monitoring
+    pool_name="MyAppPool"
+)
+```
+
+### Configuration Validation
+
+HikariCP configuration is automatically validated to prevent runtime errors:
+
+- `minimum_idle` cannot exceed `maximum_pool_size`
+- `keepalive_time` must be less than `max_lifetime`
+- `connection_timeout` must be at least 250ms
+- `idle_timeout` must be at least 10000ms (10 seconds) if set
+
+### Pool Management
+
+```python
+# Suspend pool (stop acquiring new connections)
+pool.suspend_pool()
+
+# Resume pool
+pool.resume_pool()
+
+# Check pool health
+if pool.is_running():
+    print("Pool is healthy")
+```
+
+## Database X-Ray Monitoring
+
+X-Ray provides query monitoring, performance metrics, and tracing capabilities.
+
+### Basic Monitoring
+
+```python
+from sqlalchemy_jdbcapi.xray import DatabaseMonitor
+
+# Create monitor
+monitor = DatabaseMonitor()
+
+# Record a query
+monitor.record_query(
+    query="SELECT * FROM users WHERE id = ?",
+    execution_time=0.025,  # 25ms
+    rows_affected=1
+)
+
+# Get statistics for a query
+stats = monitor.get_query_stats("SELECT * FROM users WHERE id = ?")
+print(f"Total executions: {stats.count}")
+print(f"Average time: {stats.avg_time:.3f}s")
+print(f"Max time: {stats.max_time:.3f}s")
+print(f"Total rows: {stats.total_rows}")
+
+# Get all slow queries
+slow_queries = monitor.get_slow_queries(threshold=0.1)  # > 100ms
+for query, stats in slow_queries:
+    print(f"Slow query: {query}")
+    print(f"  Avg time: {stats.avg_time:.3f}s")
+```
+
+### Automatic Query Tracing
+
+```python
+from sqlalchemy_jdbcapi.xray import QueryTracer, TracedConnection
+
+# Create a tracer
+tracer = QueryTracer()
+
+# Wrap your connection
+traced_conn = TracedConnection(connection, tracer)
+
+# Use traced connection normally - all queries are automatically recorded
+cursor = traced_conn.cursor()
+cursor.execute("SELECT * FROM users")
+rows = cursor.fetchall()
+
+# Get the monitor from tracer
+monitor = tracer.monitor
+
+# View statistics
+for query, stats in monitor.get_all_stats():
+    print(f"{query}: {stats.count} executions, avg {stats.avg_time:.3f}s")
+```
+
+### Slow Query Callbacks
+
+```python
+def on_slow_query(query: str, execution_time: float):
+    print(f"SLOW QUERY ALERT: {execution_time:.3f}s")
+    print(f"Query: {query}")
+    # Log to monitoring system, send alert, etc.
+
+# Set up monitor with callback
+monitor = DatabaseMonitor(
+    slow_query_threshold=0.1,  # 100ms
+    slow_query_callback=on_slow_query
+)
+```
+
+### Memory Management
+
+X-Ray includes automatic memory management to prevent unbounded growth:
+
+```python
+from sqlalchemy_jdbcapi.xray import XRayConfig, DatabaseMonitor
+
+config = XRayConfig(
+    slow_query_threshold=1.0,
+    max_query_history=1000,      # Max queries in history
+    max_query_patterns=500,      # Max unique query patterns to track
+    log_queries=False,
+    capture_parameters=False     # Disable for production
+)
+
+monitor = DatabaseMonitor(config)
+```
+
+The monitor automatically:
+- Caps query history to prevent memory leaks
+- Uses LRU eviction for query patterns exceeding the limit
+- Uses reservoir sampling to maintain statistical accuracy with bounded memory
+
+### Query Normalization
+
+X-Ray automatically normalizes queries for better grouping:
+
+```python
+# These queries are grouped together:
+# "SELECT * FROM users WHERE id = 1"
+# "SELECT * FROM users WHERE id = 42"
+# Both become: "SELECT * FROM users WHERE id = ?"
+
+stats = monitor.get_query_stats("SELECT * FROM users WHERE id = ?")
+```
+
+### Export Metrics
+
+```python
+# Get all metrics as dictionary
+all_stats = monitor.get_all_stats()
+
+# Export to JSON
+import json
+metrics = {
+    query: {
+        "count": stats.count,
+        "avg_time": stats.avg_time,
+        "max_time": stats.max_time,
+        "min_time": stats.min_time,
+        "total_rows": stats.total_rows
+    }
+    for query, stats in all_stats
+}
+print(json.dumps(metrics, indent=2))
 ```
 
 ## Advanced Features

@@ -8,13 +8,18 @@
 
 Modern, type-safe SQLAlchemy dialect for JDBC and ODBC connections with native Python implementation.
 
+> **Community Help Needed**: We don't have access to all database systems for thorough testing. If you encounter issues connecting to a particular database, please [raise an issue](https://github.com/daneshpatel/sqlalchemy-jdbcapi/issues) - we rely on community feedback to improve support for all databases.
+
 ## Features
 
 -  **Automatic JDBC driver download** from Maven Central (zero configuration!)
 -  **ODBC support** for native database connectivity
 -  **Full SQLAlchemy integration** (ORM, reflection, Alembic, Inspector API)
 -  **DataFrame integration** (pandas, polars, pyarrow)
-- ️ **12 database dialects** (PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, DB2, SQLite, OceanBase)
+- ️ **18 database dialects** (PostgreSQL, Oracle, MySQL, MariaDB, SQL Server, DB2, SQLite, OceanBase, GBase 8s, IBM iSeries, MS Access, Apache Phoenix)
+-  **Asyncio support** for Core and ORM operations
+-  **HikariCP connection pooling** for high-performance connections
+-  **Database X-Ray** for query monitoring and performance tracing
 -  **Modern Python 3.10+** with full type hints
 -  **SQLAlchemy 2.0+** compatible
 
@@ -100,22 +105,36 @@ with engine.connect() as conn:
 
 ## Supported Databases
 
-| Database | JDBC | ODBC | Auto-Download |
-|----------|------|------|---------------|
-| PostgreSQL | ✅ | ✅ | ✅ |
-| Oracle | ✅ | ✅ | ✅ |
-| MySQL | ✅ | ✅ | ✅ |
-| MariaDB | ✅ | ✅ | ✅ |
-| SQL Server | ✅ | ✅ | ✅ |
-| DB2 | ✅ | ❌ | ✅ |
-| SQLite | ✅ | ❌ | ✅ |
-| OceanBase | ✅ | ❌ | ✅ |
+| Database | JDBC | ODBC | Auto-Download | Async |
+|----------|------|------|---------------|-------|
+| PostgreSQL | ✅ | ✅ | ✅ | ✅ |
+| Oracle | ✅ | ✅ | ✅ | ✅ |
+| MySQL | ✅ | ✅ | ✅ | ✅ |
+| MariaDB | ✅ | ✅ | ✅ | ✅ |
+| SQL Server | ✅ | ✅ | ✅ | ✅ |
+| DB2 | ✅ | ❌ | ✅ | ✅ |
+| SQLite | ✅ | ❌ | ✅ | ✅ |
+| OceanBase | ✅ | ❌ | ✅ | ❌ |
+| GBase 8s | ✅ | ❌ | ✅ | ❌ |
+| IBM iSeries | ✅ | ❌ | ✅ | ❌ |
+| MS Access | ✅ | ❌ | ✅ | ❌ |
+| Apache Phoenix | ✅ | ❌ | ✅ | ❌ |
 
 See **[Drivers Guide](docs/drivers.md)** for detailed configuration.
 
+## What's New in 2.1
+
+Version 2.1 adds major new capabilities:
+
+-  **New database dialects**: GBase 8s, IBM iSeries, MS Access, Apache Phoenix/Avatica
+-  **Asyncio support**: Full async/await for Core and ORM operations
+-  **HikariCP integration**: High-performance connection pooling
+-  **Database X-Ray**: Query monitoring, metrics, and performance tracing
+-  **Docker test suite**: Functional tests with real databases
+
 ## What's New in 2.0
 
-Version 2.0 is a complete modernization:
+Version 2.0 was a complete modernization:
 
 -  Native JDBC implementation (replaced JayDeBeApi)
 -  Added ODBC support

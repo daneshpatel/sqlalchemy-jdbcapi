@@ -293,6 +293,136 @@ wget https://repo1.maven.org/maven2/com/oceanbase/oceanbase-client/2.4.9/oceanba
 export CLASSPATH="/path/to/oceanbase-client-2.4.9.jar:$CLASSPATH"
 ```
 
+### GBase 8s
+
+**Recommended Version:** 3.5.1
+**Maven Coordinates:** `com.gbase:gbase-jdbc:3.5.1`
+**JDBC URL Format:** `jdbcapi+gbase://user:password@host:9088/database`
+
+**Supported GBase Versions:**
+- GBase 8s V8.8
+- GBase 8s V8.7
+
+**Features:**
+- Informix compatibility
+- High performance analytics
+- Distributed transactions
+- SSL/TLS support
+
+**Manual Download:**
+```bash
+# Download from GBase official website
+export CLASSPATH="/path/to/gbase-jdbc-3.5.1.jar:$CLASSPATH"
+```
+
+### IBM iSeries (AS/400)
+
+**Recommended Version:** 11.1
+**Maven Coordinates:** `net.sf.jt400:jt400:11.1`
+**JDBC URL Format:** `jdbcapi+iseries://user:password@host/library`
+
+**Supported iSeries Versions:**
+- IBM i 7.5
+- IBM i 7.4
+- IBM i 7.3
+- IBM i 7.2
+
+**Features:**
+- Native AS/400 access
+- Library list support
+- SQL naming conventions
+- Journal support
+- Commitment control
+
+**Manual Download:**
+```bash
+wget https://repo1.maven.org/maven2/net/sf/jt400/jt400/11.1/jt400-11.1.jar
+export CLASSPATH="/path/to/jt400-11.1.jar:$CLASSPATH"
+```
+
+**Connection Parameters:**
+```python
+engine = create_engine(
+    "jdbcapi+iseries://user:password@myiseries/MYLIB",
+    connect_args={
+        "libraries": "MYLIB,OTHERLIB",
+        "naming": "sql"
+    }
+)
+```
+
+### Microsoft Access
+
+**Recommended Version:** 5.0.1
+**Maven Coordinates:** `net.sf.ucanaccess:ucanaccess:5.0.1`
+**JDBC URL Format:** `jdbcapi+access:///path/to/database.accdb`
+
+**Supported Access Versions:**
+- Access 2019
+- Access 2016
+- Access 2013
+- Access 2010
+- Access 2007 (.accdb)
+- Access 97-2003 (.mdb)
+
+**Features:**
+- File-based database
+- No server required
+- Read/write support
+- Query support
+
+**Manual Download:**
+```bash
+wget https://repo1.maven.org/maven2/net/sf/ucanaccess/ucanaccess/5.0.1/ucanaccess-5.0.1.jar
+export CLASSPATH="/path/to/ucanaccess-5.0.1.jar:$CLASSPATH"
+```
+
+**Usage:**
+```python
+# File-based database
+engine = create_engine("jdbcapi+access:////absolute/path/to/database.accdb")
+
+# With memory option for better performance
+engine = create_engine(
+    "jdbcapi+access:////path/to/database.accdb",
+    connect_args={"memory": "true"}
+)
+```
+
+### Apache Avatica (Phoenix/Calcite)
+
+**Recommended Version:** 1.24.0
+**Maven Coordinates:** `org.apache.calcite.avatica:avatica:1.24.0`
+**JDBC URL Format:** `jdbcapi+avatica://host:8765`
+
+**Supported Systems:**
+- Apache Phoenix (HBase SQL)
+- Apache Calcite
+- Custom Avatica servers
+
+**Features:**
+- HTTP/HTTPS transport
+- Protobuf serialization
+- Connection pooling
+- Kerberos authentication
+
+**Manual Download:**
+```bash
+wget https://repo1.maven.org/maven2/org/apache/calcite/avatica/avatica/1.24.0/avatica-1.24.0.jar
+export CLASSPATH="/path/to/avatica-1.24.0.jar:$CLASSPATH"
+```
+
+**Phoenix Connection:**
+```python
+# Connect to Phoenix Query Server
+engine = create_engine(
+    "jdbcapi+phoenix://host:8765",
+    connect_args={
+        "serialization": "PROTOBUF"
+    }
+)
+```
+
 ## ODBC Drivers
 
 ### Overview
@@ -460,6 +590,10 @@ Download from https://www.oracle.com/database/technologies/instant-client/winx64
 | IBM DB2 | 11.5.9.0 | 11.1 | 11.5 | ✅ | ✅ |
 | SQLite | 3.45.0.0 | 3.40 | 3.45 | ✅ | ✅ |
 | OceanBase | 2.4.9 | 2.4 | 4.x | ✅ | ✅ |
+| GBase 8s | 3.5.1 | 8.7 | 8.8 | ✅ | ⚠️ |
+| IBM iSeries | 11.1 | 7.2 | 7.5 | ✅ | ⚠️ |
+| MS Access | 5.0.1 | 97 | 2019 | ✅ | ⚠️ |
+| Apache Phoenix | 1.24.0 | 4.x | 5.x | ✅ | ⚠️ |
 
 ### ODBC Driver Compatibility
 

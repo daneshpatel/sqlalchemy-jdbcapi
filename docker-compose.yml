@@ -1,0 +1,160 @@
+version: '3.8'
+
+# Docker Compose configuration for functional testing of sqlalchemy-jdbcapi
+# This creates database containers for each supported database
+
+services:
+  # PostgreSQL Database
+  postgresql:
+    image: postgres:16-alpine
+    container_name: jdbcapi-postgres
+    environment:
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpass
+      POSTGRES_DB: testdb
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U testuser -d testdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - jdbcapi-network
+
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: jdbcapi-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpass
+      MYSQL_DATABASE: testdb
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "testuser", "-ptestpass"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - jdbcapi-network
+
+  # MariaDB Database
+  mariadb:
+    image: mariadb:11
+    container_name: jdbcapi-mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: rootpass
+      MARIADB_USER: testuser
+      MARIADB_PASSWORD: testpass
+      MARIADB_DATABASE: testdb
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - jdbcapi-network
+
+  # Microsoft SQL Server
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: jdbcapi-mssql
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "TestPass123!"
+      MSSQL_PID: Express
+    ports:
+      - "1433:1433"
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "TestPass123!" -C -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - mssql_data:/var/opt/mssql
+    networks:
+      - jdbcapi-network
+
+  # SQLite (using a simple container with file mount)
+  # Note: SQLite is typically file-based, but we include it for completeness
+  sqlite:
+    image: alpine:latest
+    container_name: jdbcapi-sqlite
+    command: ["tail", "-f", "/dev/null"]
+    volumes:
+      - sqlite_data:/data
+    networks:
+      - jdbcapi-network
+
+  # Test Runner Service
+  # This service runs the functional tests against the database containers
+  test-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: jdbcapi-test-runner
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
+      mssql:
+        condition: service_healthy
+    environment:
+      # PostgreSQL connection
+      POSTGRES_HOST: postgresql
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpass
+      POSTGRES_DB: testdb
+      # MySQL connection
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testpass
+      MYSQL_DB: testdb
+      # MariaDB connection
+      MARIADB_HOST: mariadb
+      MARIADB_PORT: 3306
+      MARIADB_USER: testuser
+      MARIADB_PASSWORD: testpass
+      MARIADB_DB: testdb
+      # MSSQL connection
+      MSSQL_HOST: mssql
+      MSSQL_PORT: 1433
+      MSSQL_USER: sa
+      MSSQL_PASSWORD: "TestPass123!"
+      MSSQL_DB: master
+      # Test configuration
+      PYTEST_ADDOPTS: "-v --tb=short"
+    volumes:
+      - ./tests:/app/tests
+      - ./src:/app/src
+      - test_results:/app/test-results
+    networks:
+      - jdbcapi-network
+
+volumes:
+  postgres_data:
+  mysql_data:
+  mariadb_data:
+  mssql_data:
+  sqlite_data:
+  test_results:
+
+networks:
+  jdbcapi-network:
+    driver: bridge

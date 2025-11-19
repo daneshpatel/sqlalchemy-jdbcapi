@@ -7,6 +7,7 @@ from __future__ import annotations
 from sqlalchemy.engine.url import make_url
 
 from sqlalchemy_jdbcapi.dialects import (
+    # Existing dialects
     DB2Dialect,
     MariaDBDialect,
     MSSQLDialect,
@@ -14,6 +15,13 @@ from sqlalchemy_jdbcapi.dialects import (
     OracleDialect,
     PostgreSQLDialect,
     SQLiteDialect,
+    # New dialects
+    AccessDialect,
+    AvaticaDialect,
+    CalciteDialect,
+    GBase8sDialect,
+    IBMiSeriesDialect,
+    PhoenixDialect,
 )
 
 
@@ -129,3 +137,147 @@ class TestSQLiteDialect:
         _args, kwargs = dialect.create_connect_args(url)
 
         assert "jdbc:sqlite::memory:" in kwargs["url"]
+
+
+# New dialect tests
+
+
+class TestGBase8sDialect:
+    """Tests for GBase 8s dialect."""
+
+    def test_driver_config(self) -> None:
+        """Test GBase 8s driver configuration."""
+        config = GBase8sDialect.get_driver_config()
+        assert config.driver_class == "com.gbasedbt.jdbc.Driver"
+        assert config.default_port == 9088
+        assert config.supports_transactions is True
+        assert config.supports_sequences is True
+
+    def test_dialect_name(self) -> None:
+        """Test dialect name."""
+        dialect = GBase8sDialect()
+        assert dialect.name == "gbase8s"
+        assert dialect.driver == "jdbcapi"
+
+    def test_capabilities(self) -> None:
+        """Test GBase 8s capabilities."""
+        dialect = GBase8sDialect()
+        assert dialect.supports_sequences is True
+        assert dialect.supports_identity_columns is True
+        assert dialect.supports_native_boolean is False
+
+
+class TestIBMiSeriesDialect:
+    """Tests for IBM iSeries dialect."""
+
+    def test_driver_config(self) -> None:
+        """Test IBM iSeries driver configuration."""
+        config = IBMiSeriesDialect.get_driver_config()
+        assert config.driver_class == "com.ibm.as400.access.AS400JDBCDriver"
+        assert config.supports_transactions is True
+        assert config.supports_sequences is True
+
+    def test_dialect_name(self) -> None:
+        """Test dialect name."""
+        dialect = IBMiSeriesDialect()
+        assert dialect.name == "iseries"
+        assert dialect.driver == "jdbcapi"
+
+    def test_create_connect_args(self) -> None:
+        """Test connection argument creation for iSeries."""
+        url = make_url("jdbcapi+iseries://user:pass@as400host/MYLIB")
+
+        result = IBMiSeriesDialect.create_connect_args(url)
+
+        assert result[0] == "com.ibm.as400.access.AS400JDBCDriver"
+        assert "jdbc:as400://" in result[1]
+        assert "as400host" in result[1]
+
+    def test_capabilities(self) -> None:
+        """Test IBM iSeries capabilities."""
+        dialect = IBMiSeriesDialect()
+        assert dialect.supports_sequences is True
+        assert dialect.supports_identity_columns is True
+        assert dialect.default_schema_name == "QGPL"
+
+
+class TestAccessDialect:
+    """Tests for Microsoft Access dialect."""
+
+    def test_driver_config(self) -> None:
+        """Test Access driver configuration."""
+        config = AccessDialect.get_driver_config()
+        assert config.driver_class == "net.ucanaccess.jdbc.UcanaccessDriver"
+        assert config.default_port == 0  # File-based
+        assert config.supports_schemas is False
+        assert config.supports_sequences is False
+
+    def test_dialect_name(self) -> None:
+        """Test dialect name."""
+        dialect = AccessDialect()
+        assert dialect.name == "access"
+        assert dialect.driver == "jdbcapi"
+
+    def test_capabilities(self) -> None:
+        """Test Access capabilities (limited)."""
+        dialect = AccessDialect()
+        assert dialect.supports_sequences is False
+        assert dialect.supports_identity_columns is True
+        assert dialect.supports_native_boolean is True
+        assert dialect.supports_multivalues_insert is False
+
+
+class TestAvaticaDialect:
+    """Tests for Apache Avatica dialect."""
+
+    def test_driver_config(self) -> None:
+        """Test Avatica driver configuration."""
+        config = AvaticaDialect.get_driver_config()
+        assert config.driver_class == "org.apache.calcite.avatica.remote.Driver"
+        assert config.default_port == 8765
+        assert config.supports_transactions is True
+
+    def test_dialect_name(self) -> None:
+        """Test dialect name."""
+        dialect = AvaticaDialect()
+        assert dialect.name == "avatica"
+        assert dialect.driver == "jdbcapi"
+
+    def test_is_async(self) -> None:
+        """Test async flag is false for sync dialect."""
+        dialect = AvaticaDialect()
+        assert not getattr(dialect, "is_async", False)
+
+
+class TestPhoenixDialect:
+    """Tests for Apache Phoenix dialect."""
+
+    def test_driver_config(self) -> None:
+        """Test Phoenix driver configuration."""
+        config = PhoenixDialect.get_driver_config()
+        assert config.driver_class == "org.apache.phoenix.jdbc.PhoenixDriver"
+        assert config.default_port == 2181  # ZooKeeper port
+
+    def test_dialect_name(self) -> None:
+        """Test dialect name."""
+        dialect = PhoenixDialect()
+        assert dialect.name == "phoenix"
+
+    def test_supports_sequences(self) -> None:
+        """Test Phoenix supports sequences."""
+        dialect = PhoenixDialect()
+        assert dialect.supports_sequences is True
+
+
+class TestCalciteDialect:
+    """Tests for Apache Calcite dialect."""
+
+    def test_driver_config(self) -> None:
+        """Test Calcite driver configuration."""
+        config = CalciteDialect.get_driver_config()
+        assert config.driver_class == "org.apache.calcite.jdbc.Driver"
+
+    def test_dialect_name(self) -> None:
+        """Test dialect name."""
+        dialect = CalciteDialect()
+        assert dialect.name == "calcite"

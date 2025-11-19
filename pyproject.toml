@@ -119,6 +119,33 @@ Changelog = "https://github.com/daneshpatel/sqlalchemy-jdbcapi/blob/main/CHANGEL
 "jdbcapi.db2" = "sqlalchemy_jdbcapi.dialects.db2:DB2Dialect"
 "jdbcapi.sqlite" = "sqlalchemy_jdbcapi.dialects.sqlite:SQLiteDialect"
 
+# New dialects
+"jdbcapi.gbase8s" = "sqlalchemy_jdbcapi.dialects.gbase:GBase8sDialect"
+"jdbcapi.gbase" = "sqlalchemy_jdbcapi.dialects.gbase:GBaseDialect"  # Alias
+"jdbcapi.iseries" = "sqlalchemy_jdbcapi.dialects.ibm_iseries:IBMiSeriesDialect"
+"jdbcapi.as400" = "sqlalchemy_jdbcapi.dialects.ibm_iseries:AS400Dialect"  # Alias
+"jdbcapi.ibmi" = "sqlalchemy_jdbcapi.dialects.ibm_iseries:IBMiDialect"  # Alias
+"jdbcapi.access" = "sqlalchemy_jdbcapi.dialects.access:AccessDialect"
+"jdbcapi.msaccess" = "sqlalchemy_jdbcapi.dialects.access:MSAccessDialect"  # Alias
+"jdbcapi.avatica" = "sqlalchemy_jdbcapi.dialects.avatica:AvaticaDialect"
+"jdbcapi.phoenix" = "sqlalchemy_jdbcapi.dialects.avatica:PhoenixDialect"
+"jdbcapi.calcite" = "sqlalchemy_jdbcapi.dialects.avatica:CalciteDialect"
+
+# Async dialects
+"jdbcapi.postgresql+async" = "sqlalchemy_jdbcapi.asyncio.dialect:AsyncPostgreSQLDialect"
+"jdbcapi.oracle+async" = "sqlalchemy_jdbcapi.asyncio.dialect:AsyncOracleDialect"
+"jdbcapi.mysql+async" = "sqlalchemy_jdbcapi.asyncio.dialect:AsyncMySQLDialect"
+"jdbcapi.mssql+async" = "sqlalchemy_jdbcapi.asyncio.dialect:AsyncMSSQLDialect"
+"jdbcapi.db2+async" = "sqlalchemy_jdbcapi.asyncio.dialect:AsyncDB2Dialect"
+"jdbcapi.sqlite+async" = "sqlalchemy_jdbcapi.asyncio.dialect:AsyncSQLiteDialect"
+"jdbcapi.gbase8s+async" = "sqlalchemy_jdbcapi.asyncio.dialect:AsyncGBase8sDialect"
+"jdbcapi.gbase+async" = "sqlalchemy_jdbcapi.asyncio.dialect:AsyncGBase8sDialect"  # Alias
+"jdbcapi.iseries+async" = "sqlalchemy_jdbcapi.asyncio.dialect:AsyncIBMiSeriesDialect"
+"jdbcapi.access+async" = "sqlalchemy_jdbcapi.asyncio.dialect:AsyncAccessDialect"
+"jdbcapi.avatica+async" = "sqlalchemy_jdbcapi.asyncio.dialect:AsyncAvaticaDialect"
+"jdbcapi.phoenix+async" = "sqlalchemy_jdbcapi.asyncio.dialect:AsyncPhoenixDialect"
+"jdbcapi.calcite+async" = "sqlalchemy_jdbcapi.asyncio.dialect:AsyncCalciteDialect"
+
 # ODBC Dialects
 "odbcapi.postgresql" = "sqlalchemy_jdbcapi.dialects.odbc_postgresql:PostgreSQLODBCDialect"
 "odbcapi.pgsql" = "sqlalchemy_jdbcapi.dialects.odbc_postgresql:PostgreSQLODBCDialect"  # Alias

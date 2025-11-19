@@ -89,6 +89,38 @@ RECOMMENDED_JDBC_DRIVERS = {
         artifact_id="oceanbase-client",
         version="2.4.9",
     ),
+    # New drivers
+    "gbase": JDBCDriver(
+        group_id="com.gbasedbt",
+        artifact_id="gbasedbt-jdbc",
+        version="3.5.1",  # GBase 8s JDBC driver
+    ),
+    "iseries": JDBCDriver(
+        group_id="net.sf.jt400",
+        artifact_id="jt400",
+        version="20.0.7",  # IBM Toolbox for Java (JT400)
+    ),
+    "access": JDBCDriver(
+        group_id="net.sf.ucanaccess",
+        artifact_id="ucanaccess",
+        version="5.0.1",  # UCanAccess JDBC driver
+    ),
+    "avatica": JDBCDriver(
+        group_id="org.apache.calcite.avatica",
+        artifact_id="avatica-core",
+        version="1.25.0",  # Apache Avatica
+    ),
+    "phoenix": JDBCDriver(
+        group_id="org.apache.phoenix",
+        artifact_id="phoenix-client-hbase-2.5",
+        version="5.1.3",  # Apache Phoenix
+    ),
+    # Connection pooling
+    "hikari": JDBCDriver(
+        group_id="com.zaxxer",
+        artifact_id="HikariCP",
+        version="5.1.0",  # HikariCP connection pool
+    ),
 }
 
 

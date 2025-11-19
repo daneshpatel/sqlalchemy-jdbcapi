@@ -7,7 +7,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v## [U
 
 ## [Unreleased]
 
-## [## [Unreleased]] - 2025-XX-XX
+## [2.1.4] - 2025-11-19
+
+### 🚀 Added - Major Features
+
+- **New Database Dialects**:
+  - ✨ GBase 8s dialect with Informix compatibility
+  - ✨ IBM iSeries (AS/400) dialect with JT400 driver
+  - ✨ Microsoft Access dialect via UCanAccess
+  - ✨ Apache Avatica dialect (Phoenix, Calcite support)
+
+- **Asyncio Support**:
+  - Full async/await support for Core and ORM
+  - AsyncConnection and AsyncCursor classes
+  - Async dialect variants for PostgreSQL, MySQL, Oracle, MSSQL, DB2, SQLite
+  - Uses `asyncio.to_thread()` for non-blocking JDBC operations
+
+- **HikariCP Connection Pooling**:
+  - High-performance JDBC connection pool integration
+  - HikariConfig for pool configuration
+  - HikariConnectionPool with stats, suspend/resume
+  - Automatic connection validation and health checks
+
+- **Database X-Ray Monitoring**:
+  - DatabaseMonitor for query performance tracking
+  - QueryMetrics and QueryStats for aggregation
+  - TracedCursor and TracedConnection for automatic profiling
+  - Slow query detection with configurable callbacks
+  - Query normalization for grouping similar queries
+
+- **Docker Test Suite**:
+  - Docker Compose setup with PostgreSQL, MySQL, MariaDB, MSSQL
+  - Functional tests for ORM and Core operations
+  - GitHub Actions workflow for CI/CD integration
+
+### 📚 Documentation
+
+- Updated README with community help notice for database issues
+- Added documentation for all new database dialects
+- Added asyncio usage guide with examples
+- Added HikariCP configuration guide
+- Added X-Ray monitoring documentation
+
+---
+
+## [2.0.0] - 2025-XX-XX
 
 ### 🚀 Added - Major Features
 

@@ -39,8 +39,9 @@ from __future__ import annotations
 __version__ = "2.1.3"
 
 # Public API
-from . import jdbc
+from . import jdbc, xray
 from .dialects import (
+    # Existing dialects
     DB2Dialect,
     MariaDBDialect,
     MSSQLDialect,
@@ -49,14 +50,26 @@ from .dialects import (
     OracleDialect,
     PostgreSQLDialect,
     SQLiteDialect,
+    # New dialects
+    AccessDialect,
+    AS400Dialect,
+    AvaticaDialect,
+    CalciteDialect,
+    GBase8sDialect,
+    GBaseDialect,
+    IBMiDialect,
+    IBMiSeriesDialect,
+    MSAccessDialect,
+    PhoenixDialect,
 )
 
 __all__ = [
     # Version
     "__version__",
-    # JDBC Module
+    # Modules
     "jdbc",
-    # Dialects
+    "xray",
+    # Existing Dialects
     "PostgreSQLDialect",
     "OracleDialect",
     "OceanBaseDialect",
@@ -65,6 +78,17 @@ __all__ = [
     "MSSQLDialect",
     "DB2Dialect",
     "SQLiteDialect",
+    # New Dialects
+    "GBase8sDialect",
+    "GBaseDialect",
+    "IBMiSeriesDialect",
+    "IBMiDialect",
+    "AS400Dialect",
+    "AccessDialect",
+    "MSAccessDialect",
+    "AvaticaDialect",
+    "PhoenixDialect",
+    "CalciteDialect",
 ]
 
 # SQLAlchemy dialect registration
@@ -119,6 +143,70 @@ try:
     registry.register("jdbcapi.db2", "sqlalchemy_jdbcapi.dialects.db2", "DB2Dialect")
     registry.register(
         "jdbcapi.sqlite", "sqlalchemy_jdbcapi.dialects.sqlite", "SQLiteDialect"
+    )
+
+    # New dialect registrations
+    registry.register(
+        "jdbcapi.gbase8s", "sqlalchemy_jdbcapi.dialects.gbase", "GBase8sDialect"
+    )
+    registry.register(
+        "jdbcapi.gbase", "sqlalchemy_jdbcapi.dialects.gbase", "GBaseDialect"
+    )
+    registry.register(
+        "jdbcapi.iseries",
+        "sqlalchemy_jdbcapi.dialects.ibm_iseries",
+        "IBMiSeriesDialect",
+    )
+    registry.register(
+        "jdbcapi.as400", "sqlalchemy_jdbcapi.dialects.ibm_iseries", "AS400Dialect"
+    )
+    registry.register(
+        "jdbcapi.ibmi", "sqlalchemy_jdbcapi.dialects.ibm_iseries", "IBMiDialect"
+    )
+    registry.register(
+        "jdbcapi.access", "sqlalchemy_jdbcapi.dialects.access", "AccessDialect"
+    )
+    registry.register(
+        "jdbcapi.msaccess", "sqlalchemy_jdbcapi.dialects.access", "MSAccessDialect"
+    )
+    registry.register(
+        "jdbcapi.avatica", "sqlalchemy_jdbcapi.dialects.avatica", "AvaticaDialect"
+    )
+    registry.register(
+        "jdbcapi.phoenix", "sqlalchemy_jdbcapi.dialects.avatica", "PhoenixDialect"
+    )
+    registry.register(
+        "jdbcapi.calcite", "sqlalchemy_jdbcapi.dialects.avatica", "CalciteDialect"
+    )
+
+    # Async dialect registrations
+    registry.register(
+        "jdbcapi.postgresql+async",
+        "sqlalchemy_jdbcapi.asyncio.dialect",
+        "AsyncPostgreSQLDialect",
+    )
+    registry.register(
+        "jdbcapi.oracle+async",
+        "sqlalchemy_jdbcapi.asyncio.dialect",
+        "AsyncOracleDialect",
+    )
+    registry.register(
+        "jdbcapi.mysql+async",
+        "sqlalchemy_jdbcapi.asyncio.dialect",
+        "AsyncMySQLDialect",
+    )
+    registry.register(
+        "jdbcapi.mssql+async",
+        "sqlalchemy_jdbcapi.asyncio.dialect",
+        "AsyncMSSQLDialect",
+    )
+    registry.register(
+        "jdbcapi.db2+async", "sqlalchemy_jdbcapi.asyncio.dialect", "AsyncDB2Dialect"
+    )
+    registry.register(
+        "jdbcapi.sqlite+async",
+        "sqlalchemy_jdbcapi.asyncio.dialect",
+        "AsyncSQLiteDialect",
     )
 
 except ImportError:

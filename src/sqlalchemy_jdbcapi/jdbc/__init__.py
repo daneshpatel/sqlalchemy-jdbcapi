@@ -8,8 +8,11 @@ with a modern, type-safe, and feature-rich implementation.
 
 from __future__ import annotations
 
+from .async_connection import AsyncConnection, async_connect
+from .async_cursor import AsyncCursor
 from .connection import Connection, connect
 from .cursor import Cursor
+from .hikari import HikariConfig, HikariConnectionPool
 from .driver_manager import (
     RECOMMENDED_JDBC_DRIVERS,
     JDBCDriver,
@@ -50,6 +53,7 @@ from .types import (
 __all__ = [
     # Core functions
     "connect",
+    "async_connect",
     # JVM management
     "start_jvm",
     "is_jvm_started",
@@ -66,6 +70,11 @@ __all__ = [
     # Classes
     "Connection",
     "Cursor",
+    "AsyncConnection",
+    "AsyncCursor",
+    # HikariCP
+    "HikariConfig",
+    "HikariConnectionPool",
     # Exceptions
     "Error",
     "Warning",
