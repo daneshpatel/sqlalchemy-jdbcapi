@@ -24,9 +24,11 @@ class TestHikariConfig:
 
         assert config.jdbc_url == "jdbc:postgresql://localhost:5432/testdb"
         assert config.username == "user"
-        assert config.password == "pass"
+        assert config.password == "pass"  # noqa: S105
         assert config.maximum_pool_size == 10
-        assert config.minimum_idle == 10  # Best practice: equal to max for fixed-size pool
+        assert (
+            config.minimum_idle == 10
+        )  # Best practice: equal to max for fixed-size pool
         assert config.connection_timeout == 30000
         assert config.idle_timeout == 600000
         assert config.max_lifetime == 1800000
@@ -104,7 +106,7 @@ class TestHikariConnectionPool:
         def jclass_side_effect(class_name):
             if "HikariConfig" in class_name:
                 return MagicMock(return_value=mock_hikari_config)
-            elif "HikariDataSource" in class_name:
+            if "HikariDataSource" in class_name:
                 return MagicMock(return_value=mock_hikari_datasource)
             return MagicMock()
 

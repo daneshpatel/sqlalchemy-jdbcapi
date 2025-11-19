@@ -86,7 +86,9 @@ class GBase8sDialect(BaseJDBCDialect, Dialect):  # type: ignore
         try:
             # GBase 8s version query
             result = connection.execute(
-                sql.text("SELECT DBINFO('version', 'full') FROM systables WHERE tabid = 1")
+                sql.text(
+                    "SELECT DBINFO('version', 'full') FROM systables WHERE tabid = 1"
+                )
             ).scalar()
 
             if result:
@@ -105,7 +107,9 @@ class GBase8sDialect(BaseJDBCDialect, Dialect):  # type: ignore
             # Fallback: try alternative query
             try:
                 result = connection.execute(
-                    sql.text("SELECT FIRST 1 DBINFO('version', 'major') || '.' || DBINFO('version', 'minor') FROM systables")
+                    sql.text(
+                        "SELECT FIRST 1 DBINFO('version', 'major') || '.' || DBINFO('version', 'minor') FROM systables"
+                    )
                 ).scalar()
 
                 if result:
@@ -149,7 +153,12 @@ class GBase8sDialect(BaseJDBCDialect, Dialect):  # type: ignore
             level = self._isolation_lookup[level]
 
         # Validate isolation level to prevent SQL injection
-        valid_levels = {"SERIALIZABLE", "READ UNCOMMITTED", "READ COMMITTED", "REPEATABLE READ"}
+        valid_levels = {
+            "SERIALIZABLE",
+            "READ UNCOMMITTED",
+            "READ COMMITTED",
+            "REPEATABLE READ",
+        }
         if level.upper() not in valid_levels:
             logger.warning(f"Invalid isolation level: {level}")
             return

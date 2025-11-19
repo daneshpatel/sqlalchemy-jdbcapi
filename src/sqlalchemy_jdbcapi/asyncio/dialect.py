@@ -24,7 +24,7 @@ from ..dialects.mysql import MySQLDialect
 from ..dialects.oracle import OracleDialect
 from ..dialects.postgresql import PostgreSQLDialect
 from ..dialects.sqlite import SQLiteDialect
-from ..jdbc.async_connection import AsyncConnection, async_connect
+from ..jdbc.async_connection import AsyncConnection
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +37,7 @@ class AsyncAdaptedJDBCConnection(AdaptedConnection):
     SQLAlchemy's async connection pool.
     """
 
-    __slots__ = ("dbapi_connection", "_execute_mutex")
+    __slots__ = ("_execute_mutex", "dbapi_connection")
 
     def __init__(self, dbapi_connection: AsyncConnection) -> None:
         self.dbapi_connection = dbapi_connection
@@ -76,12 +76,12 @@ class AsyncJDBCDialectMixin:
     supports_statement_cache = True
 
     @classmethod
-    def get_pool_class(cls, url):  # type: ignore
+    def get_pool_class(cls, url):  # type: ignore  # noqa: ARG003
         """Use async-adapted queue pool for connection pooling."""
         return AsyncAdaptedQueuePool
 
     @classmethod
-    def get_async_dialect_cls(cls, url):  # type: ignore
+    def get_async_dialect_cls(cls, url):  # type: ignore  # noqa: ARG003
         """Return the async dialect class."""
         return cls
 
@@ -107,6 +107,7 @@ class AsyncJDBCDialectMixin:
                 jclassname, url, driver_args = connect_args
                 # Create synchronous connection wrapped in async
                 from ..jdbc.connection import Connection
+
                 sync_conn = Connection(jclassname, url, driver_args)
                 async_conn = AsyncConnection(sync_conn)
             else:

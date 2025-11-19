@@ -7,17 +7,15 @@ from __future__ import annotations
 import pytest
 from sqlalchemy import (
     Column,
-    DateTime,
     Integer,
     MetaData,
     String,
     Table,
-    create_engine,
     func,
     select,
     text,
 )
-from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
 
 
 @pytest.mark.docker
@@ -41,7 +39,7 @@ class TestPostgreSQLConnection:
         """Test creating a table in PostgreSQL."""
         metadata = MetaData()
 
-        test_table = Table(
+        Table(
             "test_users",
             metadata,
             Column("id", Integer, primary_key=True),
@@ -155,9 +153,7 @@ class TestPostgreSQLORM:
                 session.commit()
 
                 # Query users
-                users = session.execute(
-                    select(User).order_by(User.id)
-                ).scalars().all()
+                users = session.execute(select(User).order_by(User.id)).scalars().all()
 
                 assert len(users) == 2
                 assert users[0].name == "Alice"
@@ -237,17 +233,13 @@ class TestPostgreSQLAdvanced:
     def test_json_type(self, postgres_engine):
         """Test PostgreSQL JSON type."""
         with postgres_engine.connect() as conn:
-            result = conn.execute(
-                text("SELECT '{\"name\": \"test\"}'::json->>'name'")
-            )
+            result = conn.execute(text("SELECT '{\"name\": \"test\"}'::json->>'name'"))
             assert result.fetchone()[0] == "test"
 
     def test_array_type(self, postgres_engine):
         """Test PostgreSQL array type."""
         with postgres_engine.connect() as conn:
-            result = conn.execute(
-                text("SELECT ARRAY[1, 2, 3]")
-            )
+            result = conn.execute(text("SELECT ARRAY[1, 2, 3]"))
             value = result.fetchone()[0]
             # Result may be list or array depending on driver
             assert 1 in value or value == [1, 2, 3]
@@ -268,17 +260,19 @@ class TestPostgreSQLAdvanced:
 
             with postgres_engine.connect() as conn:
                 # Insert scores
-                conn.execute(scores.insert().values([
-                    {"score": 85},
-                    {"score": 90},
-                    {"score": 78},
-                ]))
+                conn.execute(
+                    scores.insert().values(
+                        [
+                            {"score": 85},
+                            {"score": 90},
+                            {"score": 78},
+                        ]
+                    )
+                )
                 conn.commit()
 
                 # Calculate average
-                result = conn.execute(
-                    select(func.avg(scores.c.score))
-                )
+                result = conn.execute(select(func.avg(scores.c.score)))
                 avg = float(result.fetchone()[0])
                 assert 84 < avg < 85  # ~84.33
         finally:

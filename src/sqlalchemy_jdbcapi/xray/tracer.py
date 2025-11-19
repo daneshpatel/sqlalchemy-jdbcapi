@@ -10,7 +10,8 @@ from __future__ import annotations
 import logging
 import time
 import traceback
-from typing import Any, Sequence
+from collections.abc import Sequence
+from typing import Any
 
 from .monitor import DatabaseMonitor, get_global_monitor
 
@@ -70,9 +71,9 @@ class TracedCursor:
         self._last_query = operation
         self._last_params = tuple(parameters) if parameters else None
 
-        stack_trace = None
+        # Capture stack trace if enabled (for future diagnostic features)
         if self._capture_stack:
-            stack_trace = "".join(traceback.format_stack()[:-1])
+            _ = "".join(traceback.format_stack()[:-1])
 
         start_time = time.perf_counter()
         error_msg = None

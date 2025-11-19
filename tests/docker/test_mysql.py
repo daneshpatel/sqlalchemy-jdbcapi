@@ -38,7 +38,7 @@ class TestMySQLConnection:
         """Test creating a table in MySQL."""
         metadata = MetaData()
 
-        test_table = Table(
+        Table(
             "mysql_test_users",
             metadata,
             Column("id", Integer, primary_key=True, autoincrement=True),
@@ -51,9 +51,7 @@ class TestMySQLConnection:
 
             # Verify table exists
             with mysql_engine.connect() as conn:
-                result = conn.execute(
-                    text("SHOW TABLES LIKE 'mysql_test_users'")
-                )
+                result = conn.execute(text("SHOW TABLES LIKE 'mysql_test_users'"))
                 assert result.fetchone() is not None
         finally:
             metadata.drop_all(mysql_engine)
@@ -103,7 +101,7 @@ class TestMySQLConnection:
             metadata.create_all(mysql_engine)
 
             with mysql_engine.connect() as conn:
-                result = conn.execute(items.insert().values(name="Item 1"))
+                conn.execute(items.insert().values(name="Item 1"))
                 conn.commit()
 
                 # Get last insert ID
@@ -141,9 +139,7 @@ class TestMySQLORM:
                 session.add_all([user1, user2])
                 session.commit()
 
-                users = session.execute(
-                    select(User).order_by(User.id)
-                ).scalars().all()
+                users = session.execute(select(User).order_by(User.id)).scalars().all()
 
                 assert len(users) == 2
                 assert users[0].name == "Alice"

@@ -4,7 +4,7 @@ Unit tests for async JDBC connection and cursor.
 
 from __future__ import annotations
 
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -134,9 +134,7 @@ class TestAsyncCursor:
         mock_sync_cursor.close.assert_called_once()
 
     @pytest.mark.asyncio
-    async def test_context_manager(
-        self, mock_sync_cursor: MagicMock
-    ) -> None:
+    async def test_context_manager(self, mock_sync_cursor: MagicMock) -> None:
         """Test async context manager."""
         async with AsyncCursor(mock_sync_cursor) as cursor:
             assert cursor._closed is False
@@ -258,7 +256,7 @@ class TestAsyncConnection:
         self, mock_sync_connection: MagicMock
     ) -> None:
         """Test context manager rolls back on error."""
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match="Test error"):
             async with AsyncConnection(mock_sync_connection):
                 raise ValueError("Test error")
 

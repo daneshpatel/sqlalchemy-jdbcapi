@@ -24,8 +24,8 @@ Example usage:
 from __future__ import annotations
 
 from .dialect import (
-    AsyncJDBCDialect,
     AsyncDB2Dialect,
+    AsyncJDBCDialect,
     AsyncMSSQLDialect,
     AsyncMySQLDialect,
     AsyncOracleDialect,

@@ -38,7 +38,7 @@ class TestMSSQLConnection:
         """Test creating a table in SQL Server."""
         metadata = MetaData()
 
-        test_table = Table(
+        Table(
             "mssql_test_users",
             metadata,
             Column("id", Integer, primary_key=True, autoincrement=True),
@@ -144,9 +144,7 @@ class TestMSSQLORM:
                 session.add_all([user1, user2])
                 session.commit()
 
-                users = session.execute(
-                    select(User).order_by(User.id)
-                ).scalars().all()
+                users = session.execute(select(User).order_by(User.id)).scalars().all()
 
                 assert len(users) == 2
                 assert users[0].name == "Alice"
@@ -176,7 +174,7 @@ class TestMSSQLAdvanced:
             with mssql_engine.connect() as conn:
                 # Insert multiple rows
                 for i in range(5):
-                    conn.execute(items.insert().values(name=f"Item {i+1}"))
+                    conn.execute(items.insert().values(name=f"Item {i + 1}"))
                 conn.commit()
 
                 # Select top 2

@@ -7,21 +7,21 @@ from __future__ import annotations
 from sqlalchemy.engine.url import make_url
 
 from sqlalchemy_jdbcapi.dialects import (
-    # Existing dialects
-    DB2Dialect,
-    MariaDBDialect,
-    MSSQLDialect,
-    MySQLDialect,
-    OracleDialect,
-    PostgreSQLDialect,
-    SQLiteDialect,
     # New dialects
     AccessDialect,
     AvaticaDialect,
     CalciteDialect,
+    # Existing dialects
+    DB2Dialect,
     GBase8sDialect,
     IBMiSeriesDialect,
+    MariaDBDialect,
+    MSSQLDialect,
+    MySQLDialect,
+    OracleDialect,
     PhoenixDialect,
+    PostgreSQLDialect,
+    SQLiteDialect,
 )
 
 

@@ -194,7 +194,7 @@ class HikariConnectionPool:
         # Initialize HikariCP
         self._initialize_pool()
 
-    def _initialize_pool(self) -> None:
+    def _initialize_pool(self) -> None:  # noqa: C901
         """Initialize the HikariCP data source."""
         try:
             import jpype
@@ -245,15 +245,21 @@ class HikariConnectionPool:
 
             # Connection test query
             if self._config.connection_test_query:
-                self._hikari_config.setConnectionTestQuery(self._config.connection_test_query)
+                self._hikari_config.setConnectionTestQuery(
+                    self._config.connection_test_query
+                )
 
             # Connection init SQL
             if self._config.connection_init_sql:
-                self._hikari_config.setConnectionInitSql(self._config.connection_init_sql)
+                self._hikari_config.setConnectionInitSql(
+                    self._config.connection_init_sql
+                )
 
             # Transaction isolation
             if self._config.transaction_isolation:
-                self._hikari_config.setTransactionIsolation(self._config.transaction_isolation)
+                self._hikari_config.setTransactionIsolation(
+                    self._config.transaction_isolation
+                )
 
             # Additional data source properties
             for key, value in self._config.data_source_properties.items():

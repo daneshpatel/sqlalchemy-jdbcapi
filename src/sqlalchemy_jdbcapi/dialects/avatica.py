@@ -8,7 +8,6 @@ including Apache Phoenix, Apache Drill, and other Calcite-based systems.
 from __future__ import annotations
 
 import logging
-import re
 from typing import Any
 
 from sqlalchemy import exc, sql
@@ -97,7 +96,9 @@ class AvaticaDialect(BaseJDBCDialect, Dialect):  # type: ignore
         query_params = dict(url.query)
 
         # Determine protocol (http or https)
-        protocol = "https" if query_params.pop("ssl", "false").lower() == "true" else "http"
+        protocol = (
+            "https" if query_params.pop("ssl", "false").lower() == "true" else "http"
+        )
 
         # Build the Avatica remote URL
         avatica_url = f"{protocol}://{host}:{port}"
@@ -122,7 +123,9 @@ class AvaticaDialect(BaseJDBCDialect, Dialect):  # type: ignore
         if "truststore" in query_params:
             jdbc_url += f";truststore={query_params.pop('truststore')}"
         if "truststore_password" in query_params:
-            jdbc_url += f";truststore_password={query_params.pop('truststore_password')}"
+            jdbc_url += (
+                f";truststore_password={query_params.pop('truststore_password')}"
+            )
 
         # Build driver arguments
         driver_args = {}
@@ -134,8 +137,7 @@ class AvaticaDialect(BaseJDBCDialect, Dialect):  # type: ignore
             driver_args["avatica_password"] = password
 
         # Add remaining parameters
-        for key, value in query_params.items():
-            driver_args[key] = value
+        driver_args.update(query_params)
 
         return (
             driver_config.driver_class,
@@ -158,9 +160,7 @@ class AvaticaDialect(BaseJDBCDialect, Dialect):  # type: ignore
         """
         try:
             # Try to get version via JDBC metadata
-            result = connection.execute(
-                sql.text("SELECT 1")
-            ).fetchone()
+            connection.execute(sql.text("SELECT 1")).fetchone()
 
             # Avatica version is typically in JDBC metadata
             # Default to current stable version

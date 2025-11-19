@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import logging
 import re
-from pathlib import Path
 from typing import Any
 
 from sqlalchemy import exc, sql
@@ -85,7 +84,7 @@ class AccessDialect(BaseJDBCDialect, Dialect):  # type: ignore
         )
 
     @classmethod
-    def create_connect_args(cls, url):  # type: ignore
+    def create_connect_args(cls, url):  # type: ignore  # noqa: C901
         """
         Create connection arguments from URL.
 
@@ -109,7 +108,9 @@ class AccessDialect(BaseJDBCDialect, Dialect):  # type: ignore
                 database_path = f"{url.host}:"
                 if url.database:
                     database_path += url.database
-            elif url.host.startswith("\\") or (url.port is None and "/" in str(url.database or "")):
+            elif url.host.startswith("\\") or (
+                url.port is None and "/" in str(url.database or "")
+            ):
                 # UNC path: //server/share/file.accdb
                 database_path = f"//{url.host}"
                 if url.database:
@@ -123,7 +124,11 @@ class AccessDialect(BaseJDBCDialect, Dialect):  # type: ignore
             database_path = url.database
 
         # Ensure path starts with / for Unix-like paths
-        if database_path and not database_path.startswith("/") and ":" not in database_path:
+        if (
+            database_path
+            and not database_path.startswith("/")
+            and ":" not in database_path
+        ):
             database_path = "/" + database_path
 
         # Normalize the path - handle double slashes but preserve UNC paths
@@ -138,8 +143,10 @@ class AccessDialect(BaseJDBCDialect, Dialect):  # type: ignore
 
         # Validate path has valid extension
         lower_path = database_path.lower()
-        if not (lower_path.endswith(".accdb") or lower_path.endswith(".mdb")):
-            logger.warning(f"Access database should have .accdb or .mdb extension: {database_path}")
+        if not lower_path.endswith((".accdb", ".mdb")):
+            logger.warning(
+                f"Access database should have .accdb or .mdb extension: {database_path}"
+            )
 
         # Build JDBC URL
         jdbc_url = f"jdbc:ucanaccess://{database_path}"
@@ -195,9 +202,7 @@ class AccessDialect(BaseJDBCDialect, Dialect):  # type: ignore
         try:
             # UCanAccess provides version via JDBC metadata
             # We'll try to get Jackcess/UCanAccess version
-            result = connection.execute(
-                sql.text("SELECT 1")
-            ).fetchone()
+            connection.execute(sql.text("SELECT 1")).fetchone()
 
             # Default to a reasonable version
             # UCanAccess 5.x is current
@@ -220,7 +225,9 @@ class AccessDialect(BaseJDBCDialect, Dialect):  # type: ignore
             logger.debug(f"Access ping failed: {e}")
             return False
 
-    def has_table(self, connection: Connection, table_name: str, schema: str | None = None) -> bool:
+    def has_table(
+        self, connection: Connection, table_name: str, schema: str | None = None
+    ) -> bool:
         """Check if a table exists."""
         # Access doesn't have schemas, ignore schema parameter
         try:
@@ -240,13 +247,13 @@ class AccessDialect(BaseJDBCDialect, Dialect):  # type: ignore
             # Fallback: try to query the table using parameterized query
             # Note: Access doesn't support parameterized table names, so we validate
             # the table name to prevent SQL injection
-            if not re.match(r'^[a-zA-Z_][a-zA-Z0-9_ ]*$', table_name):
+            if not re.match(r"^[a-zA-Z_][a-zA-Z0-9_ ]*$", table_name):
                 logger.warning(f"Invalid table name format: {table_name}")
                 return False
 
             try:
                 connection.execute(
-                    sql.text(f"SELECT TOP 1 * FROM [{table_name}]")
+                    sql.text(f"SELECT TOP 1 * FROM [{table_name}]")  # noqa: S608
                 ).fetchone()
                 return True
             except exc.DBAPIError:
@@ -264,37 +271,45 @@ class AccessDialect(BaseJDBCDialect, Dialect):  # type: ignore
             SQLAlchemy type class
         """
         from sqlalchemy import (
-            Boolean, Date, DateTime, Float, Integer, LargeBinary,
-            Numeric, String, Text, Time
+            Boolean,
+            Date,
+            DateTime,
+            Float,
+            Integer,
+            LargeBinary,
+            Numeric,
+            String,
+            Text,
+            Time,
         )
 
         # Map JDBC types to SQLAlchemy types
         type_map = {
             # Numeric types
-            -6: Integer,      # TINYINT
-            5: Integer,       # SMALLINT
-            4: Integer,       # INTEGER
-            -5: Integer,      # BIGINT
-            6: Float,         # FLOAT
-            7: Float,         # REAL
-            8: Float,         # DOUBLE
-            2: Numeric,       # NUMERIC
-            3: Numeric,       # DECIMAL
+            -6: Integer,  # TINYINT
+            5: Integer,  # SMALLINT
+            4: Integer,  # INTEGER
+            -5: Integer,  # BIGINT
+            6: Float,  # FLOAT
+            7: Float,  # REAL
+            8: Float,  # DOUBLE
+            2: Numeric,  # NUMERIC
+            3: Numeric,  # DECIMAL
             # String types
-            1: String,        # CHAR
-            12: String,       # VARCHAR
-            -1: Text,         # LONGVARCHAR
+            1: String,  # CHAR
+            12: String,  # VARCHAR
+            -1: Text,  # LONGVARCHAR
             # Date/time types
-            91: Date,         # DATE
-            92: Time,         # TIME
-            93: DateTime,     # TIMESTAMP
+            91: Date,  # DATE
+            92: Time,  # TIME
+            93: DateTime,  # TIMESTAMP
             # Binary types
             -2: LargeBinary,  # BINARY
             -3: LargeBinary,  # VARBINARY
             -4: LargeBinary,  # LONGVARBINARY
             # Boolean
-            16: Boolean,      # BOOLEAN
-            -7: Boolean,      # BIT
+            16: Boolean,  # BOOLEAN
+            -7: Boolean,  # BIT
         }
 
         # Check type name for Access-specific types
@@ -302,20 +317,26 @@ class AccessDialect(BaseJDBCDialect, Dialect):  # type: ignore
 
         if "COUNTER" in upper_name or "AUTOINCREMENT" in upper_name:
             return Integer
-        elif "CURRENCY" in upper_name or "MONEY" in upper_name:
+        if "CURRENCY" in upper_name or "MONEY" in upper_name:
             return Numeric
-        elif "MEMO" in upper_name or "LONGCHAR" in upper_name:
+        if "MEMO" in upper_name or "LONGCHAR" in upper_name:
             return Text
-        elif "YESNO" in upper_name:
+        if "YESNO" in upper_name:
             return Boolean
-        elif "OLEOBJECT" in upper_name:
+        if "OLEOBJECT" in upper_name:
             return LargeBinary
-        elif "HYPERLINK" in upper_name:
+        if "HYPERLINK" in upper_name:
             return String
 
         return type_map.get(jdbc_type, String)
 
-    def get_columns(self, connection: Connection, table_name: str, schema: str | None = None, **kwargs: Any):  # type: ignore
+    def get_columns(
+        self,
+        connection: Connection,
+        table_name: str,
+        schema: str | None = None,
+        **kwargs: Any,
+    ):  # type: ignore
         """Get column information for a table."""
         columns = []
 
@@ -337,7 +358,9 @@ class AccessDialect(BaseJDBCDialect, Dialect):  # type: ignore
                     "type": self._jdbc_type_to_sqlalchemy(data_type, type_name),
                     "nullable": nullable,
                     "default": default,
-                    "autoincrement": "COUNTER" in type_name.upper() if type_name else False,
+                    "autoincrement": "COUNTER" in type_name.upper()
+                    if type_name
+                    else False,
                 }
                 columns.append(col_info)
 

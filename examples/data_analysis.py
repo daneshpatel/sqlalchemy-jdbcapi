@@ -10,6 +10,7 @@ from sqlalchemy import create_engine, text
 # Example 1: Pandas Integration
 # ==============================================================================
 
+
 def example_pandas_integration():
     """Example using pandas with JDBC connection."""
     print("=" * 70)
@@ -23,9 +24,7 @@ def example_pandas_integration():
         return
 
     # Create engine
-    engine = create_engine(
-        "jdbcapi+postgresql://user:password@localhost:5432/mydb"
-    )
+    engine = create_engine("jdbcapi+postgresql://user:password@localhost:5432/mydb")
 
     # Read SQL query into DataFrame
     df = pd.read_sql_query(
@@ -52,6 +51,7 @@ def example_pandas_integration():
 # Example 2: Polars Integration
 # ==============================================================================
 
+
 def example_polars_integration():
     """Example using polars with JDBC connection."""
     print("=" * 70)
@@ -65,9 +65,7 @@ def example_polars_integration():
         return
 
     # Create engine
-    engine = create_engine(
-        "jdbcapi+postgresql://user:password@localhost:5432/mydb"
-    )
+    engine = create_engine("jdbcapi+postgresql://user:password@localhost:5432/mydb")
 
     # Read SQL query into Polars DataFrame
     query = "SELECT * FROM users"
@@ -94,6 +92,7 @@ def example_polars_integration():
 # Example 3: Data Pipeline with Multiple Databases
 # ==============================================================================
 
+
 def example_data_pipeline():
     """Example data pipeline across multiple databases."""
     print("=" * 70)
@@ -112,9 +111,7 @@ def example_data_pipeline():
     )
 
     # Target: MySQL
-    target_engine = create_engine(
-        "jdbcapi+mysql://user:pass@localhost:3306/target_db"
-    )
+    target_engine = create_engine("jdbcapi+mysql://user:pass@localhost:3306/target_db")
 
     # Extract from PostgreSQL
     df = pd.read_sql_query(
@@ -156,6 +153,7 @@ def example_data_pipeline():
 # Example 4: Complex Analytics with Window Functions
 # ==============================================================================
 
+
 def example_analytics_queries():
     """Example complex analytics queries."""
     print("=" * 70)
@@ -168,9 +166,7 @@ def example_analytics_queries():
         print("⚠ Pandas not installed")
         return
 
-    engine = create_engine(
-        "jdbcapi+postgresql://user:password@localhost:5432/mydb"
-    )
+    engine = create_engine("jdbcapi+postgresql://user:password@localhost:5432/mydb")
 
     # Complex analytical query with window functions
     query = """
@@ -213,6 +209,7 @@ def example_analytics_queries():
 # Example 5: Batch Processing with Chunking
 # ==============================================================================
 
+
 def example_batch_processing():
     """Example processing large datasets in chunks."""
     print("=" * 70)
@@ -225,9 +222,7 @@ def example_batch_processing():
         print("⚠ Pandas not installed")
         return
 
-    engine = create_engine(
-        "jdbcapi+postgresql://user:password@localhost:5432/mydb"
-    )
+    engine = create_engine("jdbcapi+postgresql://user:password@localhost:5432/mydb")
 
     # Process data in chunks to avoid memory issues
     chunk_size = 10000
@@ -258,21 +253,18 @@ def example_batch_processing():
 # Example 6: Real-time Data Streaming
 # ==============================================================================
 
+
 def example_streaming_data():
     """Example streaming data from database."""
     print("=" * 70)
     print("Example 6: Streaming Data")
     print("=" * 70)
 
-    engine = create_engine(
-        "jdbcapi+postgresql://user:password@localhost:5432/mydb"
-    )
+    engine = create_engine("jdbcapi+postgresql://user:password@localhost:5432/mydb")
 
     # Use server-side cursors for streaming large result sets
     with engine.connect().execution_options(stream_results=True) as conn:
-        result = conn.execute(
-            text("SELECT * FROM very_large_table")
-        )
+        result = conn.execute(text("SELECT * FROM very_large_table"))
 
         # Process results one at a time
         for i, row in enumerate(result, 1):
@@ -291,6 +283,7 @@ def example_streaming_data():
 # Example 7: Data Validation and Quality Checks
 # ==============================================================================
 
+
 def example_data_validation():
     """Example data quality validation."""
     print("=" * 70)
@@ -303,9 +296,7 @@ def example_data_validation():
         print("⚠ Pandas not installed")
         return
 
-    engine = create_engine(
-        "jdbcapi+postgresql://user:password@localhost:5432/mydb"
-    )
+    engine = create_engine("jdbcapi+postgresql://user:password@localhost:5432/mydb")
 
     df = pd.read_sql_query("SELECT * FROM users", engine)
 
@@ -343,6 +334,7 @@ def example_data_validation():
 # Example 8: Export to Multiple Formats
 # ==============================================================================
 
+
 def example_export_formats():
     """Example exporting data to various formats."""
     print("=" * 70)
@@ -355,9 +347,7 @@ def example_export_formats():
         print("⚠ Pandas not installed")
         return
 
-    engine = create_engine(
-        "jdbcapi+postgresql://user:password@localhost:5432/mydb"
-    )
+    engine = create_engine("jdbcapi+postgresql://user:password@localhost:5432/mydb")
 
     df = pd.read_sql_query("SELECT * FROM users LIMIT 1000", engine)
 

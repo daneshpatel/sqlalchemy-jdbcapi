@@ -9,10 +9,13 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from typing import Any, Sequence
+from collections.abc import Sequence
+from typing import TYPE_CHECKING, Any
 
-from .cursor import Cursor
 from .exceptions import InterfaceError
+
+if TYPE_CHECKING:
+    from .cursor import Cursor
 
 logger = logging.getLogger(__name__)
 

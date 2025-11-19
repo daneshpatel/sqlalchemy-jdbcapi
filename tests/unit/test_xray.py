@@ -4,7 +4,6 @@ Unit tests for Database X-Ray monitoring features.
 
 from __future__ import annotations
 
-import time
 from datetime import datetime
 from unittest.mock import MagicMock
 
@@ -59,7 +58,7 @@ class TestQueryMetrics:
         metrics = QueryMetrics(
             query="SELECT * FROM users",
             execution_time=0.5,
-            timestamp=datetime.now(),
+            timestamp=datetime.now(),  # noqa: DTZ005
             success=True,
             rows_affected=10,
         )
@@ -74,7 +73,7 @@ class TestQueryMetrics:
         fast = QueryMetrics(
             query="SELECT 1",
             execution_time=0.1,
-            timestamp=datetime.now(),
+            timestamp=datetime.now(),  # noqa: DTZ005
             success=True,
         )
         assert fast.is_slow is False
@@ -82,7 +81,7 @@ class TestQueryMetrics:
         slow = QueryMetrics(
             query="SELECT * FROM large_table",
             execution_time=2.0,
-            timestamp=datetime.now(),
+            timestamp=datetime.now(),  # noqa: DTZ005
             success=True,
         )
         assert slow.is_slow is True
@@ -92,7 +91,7 @@ class TestQueryMetrics:
         metrics = QueryMetrics(
             query="SELECT * FROM nonexistent",
             execution_time=0.01,
-            timestamp=datetime.now(),
+            timestamp=datetime.now(),  # noqa: DTZ005
             success=False,
             error="Table not found",
         )
@@ -280,7 +279,7 @@ class TestDatabaseMonitor:
 
         # Should have only one normalized pattern
         assert len(stats) == 1
-        pattern = list(stats.keys())[0]
+        pattern = next(iter(stats.keys()))
         assert stats[pattern]["total_queries"] == 3
 
     def test_get_top_queries(self) -> None:

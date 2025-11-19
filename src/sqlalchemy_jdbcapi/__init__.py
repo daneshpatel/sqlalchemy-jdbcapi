@@ -41,26 +41,26 @@ __version__ = "2.2.0"
 # Public API
 from . import jdbc, xray
 from .dialects import (
-    # Existing dialects
-    DB2Dialect,
-    MariaDBDialect,
-    MSSQLDialect,
-    MySQLDialect,
-    OceanBaseDialect,
-    OracleDialect,
-    PostgreSQLDialect,
-    SQLiteDialect,
     # New dialects
     AccessDialect,
     AS400Dialect,
     AvaticaDialect,
     CalciteDialect,
+    # Existing dialects
+    DB2Dialect,
     GBase8sDialect,
     GBaseDialect,
     IBMiDialect,
     IBMiSeriesDialect,
+    MariaDBDialect,
     MSAccessDialect,
+    MSSQLDialect,
+    MySQLDialect,
+    OceanBaseDialect,
+    OracleDialect,
     PhoenixDialect,
+    PostgreSQLDialect,
+    SQLiteDialect,
 )
 
 __all__ = [

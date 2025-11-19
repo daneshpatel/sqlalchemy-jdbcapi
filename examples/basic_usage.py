@@ -13,6 +13,7 @@ from sqlalchemy.orm import DeclarativeBase, Session, mapped_column
 # Example 1: JDBC with Auto-Download (Recommended)
 # ==============================================================================
 
+
 def example_jdbc_auto_download():
     """Example using JDBC with automatic driver download."""
     print("=" * 70)
@@ -42,6 +43,7 @@ def example_jdbc_auto_download():
 # Example 2: JDBC with Manual Driver Path
 # ==============================================================================
 
+
 def example_jdbc_manual_driver():
     """Example using JDBC with manually provided driver."""
     print("=" * 70)
@@ -56,9 +58,7 @@ def example_jdbc_manual_driver():
     # Or use JDBC_DRIVER_PATH
     # os.environ["JDBC_DRIVER_PATH"] = "/path/to/postgresql-42.7.1.jar"
 
-    engine = create_engine(
-        "jdbcapi+postgresql://user:password@localhost:5432/mydb"
-    )
+    engine = create_engine("jdbcapi+postgresql://user:password@localhost:5432/mydb")
 
     # Will use driver from CLASSPATH instead of auto-downloading
 
@@ -69,6 +69,7 @@ def example_jdbc_manual_driver():
 # Example 3: ODBC Connection
 # ==============================================================================
 
+
 def example_odbc_connection():
     """Example using ODBC connection."""
     print("=" * 70)
@@ -78,9 +79,7 @@ def example_odbc_connection():
     # Requires: pip install 'sqlalchemy-jdbcapi[odbc]'
     # And ODBC driver installed on system
 
-    engine = create_engine(
-        "odbcapi+postgresql://user:password@localhost:5432/mydb"
-    )
+    engine = create_engine("odbcapi+postgresql://user:password@localhost:5432/mydb")
 
     # Will use system ODBC drivers (e.g., psqlODBC)
     # Connection string is automatically built from URL
@@ -95,6 +94,7 @@ def example_odbc_connection():
 # ==============================================================================
 # Example 4: SQLAlchemy ORM Usage
 # ==============================================================================
+
 
 class Base(DeclarativeBase):
     """Base class for ORM models."""
@@ -144,9 +144,7 @@ def example_orm_usage():
         print(f"\n✓ Created user: {new_user}")
 
         # SELECT
-        user = session.execute(
-            select(User).filter_by(username="alice")
-        ).scalar_one()
+        user = session.execute(select(User).filter_by(username="alice")).scalar_one()
 
         print(f"✓ Retrieved user: {user}")
 
@@ -168,6 +166,7 @@ def example_orm_usage():
 # ==============================================================================
 # Example 5: Multiple Database Support
 # ==============================================================================
+
 
 def example_multiple_databases():
     """Example supporting multiple databases."""
@@ -198,6 +197,7 @@ def example_multiple_databases():
 # ==============================================================================
 # Example 6: Connection Pooling and Performance
 # ==============================================================================
+
 
 def example_connection_pooling():
     """Example with connection pooling configuration."""
@@ -230,21 +230,18 @@ def example_connection_pooling():
 # Example 7: Transaction Management
 # ==============================================================================
 
+
 def example_transaction_management():
     """Example with explicit transaction management."""
     print("=" * 70)
     print("Example 7: Transaction Management")
     print("=" * 70)
 
-    engine = create_engine(
-        "jdbcapi+postgresql://user:password@localhost:5432/mydb"
-    )
+    engine = create_engine("jdbcapi+postgresql://user:password@localhost:5432/mydb")
 
     # Automatic transaction management
     with engine.begin() as conn:
-        conn.execute(
-            select(User.__table__).filter_by(username="alice")
-        )
+        conn.execute(select(User.__table__).filter_by(username="alice"))
         # Transaction commits automatically on successful exit
 
     # Manual transaction control
@@ -268,6 +265,7 @@ def example_transaction_management():
 # ==============================================================================
 # Example 8: ODBC with Custom Connection String
 # ==============================================================================
+
 
 def example_odbc_custom():
     """Example using ODBC with custom connection parameters."""

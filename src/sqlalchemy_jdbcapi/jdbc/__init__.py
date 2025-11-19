@@ -12,7 +12,6 @@ from .async_connection import AsyncConnection, async_connect
 from .async_cursor import AsyncCursor
 from .connection import Connection, connect
 from .cursor import Cursor
-from .hikari import HikariConfig, HikariConnectionPool
 from .driver_manager import (
     RECOMMENDED_JDBC_DRIVERS,
     JDBCDriver,
@@ -34,6 +33,7 @@ from .exceptions import (
     ProgrammingError,
     Warning,
 )
+from .hikari import HikariConfig, HikariConnectionPool
 from .jvm import get_classpath, is_jvm_started, shutdown_jvm, start_jvm
 from .types import (
     BINARY,

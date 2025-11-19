@@ -9,12 +9,11 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from pathlib import Path
 from typing import Any
 
 from .async_cursor import AsyncCursor
 from .connection import Connection
-from .exceptions import DatabaseError, InterfaceError
+from .exceptions import InterfaceError
 
 logger = logging.getLogger(__name__)
 

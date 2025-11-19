@@ -8,7 +8,6 @@ using the IBM Toolbox for Java JDBC driver.
 from __future__ import annotations
 
 import logging
-import re
 from typing import Any
 
 from sqlalchemy import exc, sql
@@ -132,7 +131,9 @@ class IBMiSeriesDialect(BaseJDBCDialect, Dialect):  # type: ignore
 
         # Transaction isolation
         if "transaction isolation" in query_params:
-            driver_args["transaction isolation"] = query_params.pop("transaction isolation")
+            driver_args["transaction isolation"] = query_params.pop(
+                "transaction isolation"
+            )
 
         # Add remaining query parameters as driver properties
         driver_args.update(query_params)
@@ -220,7 +221,9 @@ class IBMiSeriesDialect(BaseJDBCDialect, Dialect):  # type: ignore
             logger.debug(f"IBM iSeries ping failed: {e}")
             return False
 
-    def has_table(self, connection: Connection, table_name: str, schema: str | None = None) -> bool:
+    def has_table(
+        self, connection: Connection, table_name: str, schema: str | None = None
+    ) -> bool:
         """Check if a table exists in the specified library/schema."""
         if schema is None:
             schema = self.default_schema_name

@@ -13,7 +13,6 @@ from __future__ import annotations
 import logging
 import statistics
 import threading
-import time
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -109,7 +108,8 @@ class QueryStats:
         else:
             # Replace random element to maintain statistical properties
             import random
-            idx = random.randint(0, self.total_queries - 1)
+
+            idx = random.randint(0, self.total_queries - 1)  # noqa: S311
             if idx < self._max_samples:
                 self.execution_times[idx] = execution_time
 
@@ -118,7 +118,7 @@ class QueryStats:
         if is_slow:
             self.slow_query_count += 1
 
-        now = datetime.now()
+        now = datetime.now()  # noqa: DTZ005
         if self.first_seen is None:
             self.first_seen = now
         self.last_seen = now
@@ -210,14 +210,14 @@ class DatabaseMonitor:
         self._total_queries = 0
         self._total_errors = 0
         self._total_slow_queries = 0
-        self._start_time = datetime.now()
+        self._start_time = datetime.now()  # noqa: DTZ005
 
         # Connection tracking
         self._active_connections = 0
         self._total_connections = 0
         self._connection_errors = 0
 
-    def record_query(
+    def record_query(  # noqa: C901
         self,
         query: str,
         execution_time: float,
@@ -245,7 +245,7 @@ class DatabaseMonitor:
             metrics = QueryMetrics(
                 query=query,
                 execution_time=execution_time,
-                timestamp=datetime.now(),
+                timestamp=datetime.now(),  # noqa: DTZ005
                 success=success,
                 rows_affected=rows_affected,
                 error=error,
@@ -324,7 +324,7 @@ class DatabaseMonitor:
             Dictionary with monitoring summary
         """
         with self._lock:
-            uptime = (datetime.now() - self._start_time).total_seconds()
+            uptime = (datetime.now() - self._start_time).total_seconds()  # noqa: DTZ005
 
             return {
                 "uptime_seconds": round(uptime, 2),
@@ -332,7 +332,9 @@ class DatabaseMonitor:
                     "total": self._total_queries,
                     "errors": self._total_errors,
                     "slow": self._total_slow_queries,
-                    "queries_per_second": round(self._total_queries / max(1, uptime), 2),
+                    "queries_per_second": round(
+                        self._total_queries / max(1, uptime), 2
+                    ),
                     "error_rate": round(
                         self._total_errors / max(1, self._total_queries) * 100, 2
                     ),
@@ -381,8 +383,7 @@ class DatabaseMonitor:
                 return {}
 
             return {
-                pattern: stats.to_dict()
-                for pattern, stats in self._query_stats.items()
+                pattern: stats.to_dict() for pattern, stats in self._query_stats.items()
             }
 
     def get_top_queries(
@@ -437,7 +438,7 @@ class DatabaseMonitor:
             self._total_queries = 0
             self._total_errors = 0
             self._total_slow_queries = 0
-            self._start_time = datetime.now()
+            self._start_time = datetime.now()  # noqa: DTZ005
             self._active_connections = 0
             self._total_connections = 0
             self._connection_errors = 0
@@ -487,7 +488,7 @@ class DatabaseMonitor:
         # Sort patterns by last_seen, oldest first
         sorted_patterns = sorted(
             self._query_stats.items(),
-            key=lambda x: x[1].last_seen or datetime.min
+            key=lambda x: x[1].last_seen or datetime.min,  # noqa: DTZ901
         )
 
         # Remove oldest patterns until we're at 90% of max
