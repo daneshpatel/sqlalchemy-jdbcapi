@@ -141,11 +141,6 @@ class BaseJDBCDialect(Dialect, ABC):
         return jdbc  # type: ignore
 
     @classmethod
-    def dbapi(cls) -> type:
-        """Deprecated: Use import_dbapi() instead."""
-        return cls.import_dbapi()
-
-    @classmethod
     @abstractmethod
     def get_driver_config(cls) -> JDBCDriverConfig:
         """
